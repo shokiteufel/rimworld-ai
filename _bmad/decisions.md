@@ -15,6 +15,25 @@ Konsequenzen: ...
 
 ---
 
+## D-35: Phase-Transition PLANNING → DEV, Sprint 2 mit Story 1.1 gestartet
+Datum: 2026-04-24
+Status: accepted
+Kontext: Nach D-34 (Round-3-APPROVE) hat User am 2026-04-24 „Ja, kann starten" freigegeben. Commit `9c14b25 feat(planning): complete 3 review passes` pushed zu `https://github.com/shokiteufel/rimworld-ai.git`. Planning-Snapshot ist öffentlich archiviert; Dev-Loop kann starten.
+Entscheidung:
+1. **Phase-Transition** in `sprint-status.yaml`: `phase: PLANNING` → `phase: DEV`, `sub_phase: STORY_DRAFTING` → `sub_phase: EPIC_1_DEV`.
+2. **Sprint 2 gestartet** (2026-04-24): Goal „Epic 1 (Mod-Skeleton & Toggle) — 13 Stories 1.1-1.13 durchentwickeln mit CR+VR-Loops". Sprint-1-Commit (`9c14b25`) archiviert als `previous_sprint`.
+3. **Epic-1-Status** auf `in-progress` (≥1 Story in-progress-Regel).
+4. **Story 1.1 `mod-project-skeleton`** auf `in-progress` gesetzt — Dev-Loop beginnt.
+5. **Dev-Workflow** pro Story: dev-Implementation → code-review → fix → re-review → (bei UI-Story) visual-review → fix → re-review → done. Kein Status-Sprung ready-for-dev→done (Guardian Rule 3).
+6. **Sprint-Deadline** weiterhin offen (kein Release-Datum definiert; hängt von Dev-Velocity ab).
+Begründung: Strict BMAD-Workflow verlangt Dev-Start an Epic-1-Story-1 nach Review-APPROVE. User-Freigabe eingeholt (Commit+Push = legitimes User-Territory per CLAUDE.md).
+Konsequenzen:
+- Guardian wechselt intern die Watchdog-Konfiguration (PLANNING-Watchdogs wie epic-plan/sprint-plan bleiben always-on; DEV-spezifische Watchdogs design-critic + progress-check werden bei nächstem `/guardian`-Call aktiviert).
+- `/guardian` sollte neu getriggert werden damit Phase-Watchdog-Set für DEV aufgebaut wird.
+- Story 1.1 Review-Gate erwartet: Code-Review gegen AI-1, F-ARCH-01 (About.xml packageId); kein Visual-Review (Skeleton-Story ohne UI).
+
+---
+
 ## D-34: Re-Review Round 3 APPROVE — Dev-Gate Epic 1 offen
 Datum: 2026-04-24
 Status: accepted

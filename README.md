@@ -2,7 +2,7 @@
 
 Autonome Entscheidungs-KI als RimWorld-Mod. Führt Kolonien vom Nackt-Start bis zum Ending, mit Toggle (global + per Pawn) und Cross-Game-Lernsystem.
 
-**Status:** Planning-Phase (Pre-Dev). Kein Code bisher. Artefakt-Finalisierung läuft.
+**Status:** Dev-Phase — Sprint 2 (Epic 1: Mod-Skeleton & Toggle). 99 Stories ready-for-dev nach 3 Review-Passes. Story 1.1 (Mod-Projekt-Skeleton) in Entwicklung.
 
 ---
 
@@ -10,6 +10,15 @@ Autonome Entscheidungs-KI als RimWorld-Mod. Führt Kolonien vom Nackt-Start bis 
 
 ```
 RimWorld Bot/
+├── About/                              RimWorld Mod-Manifest
+│   ├── About.xml                       packageId, name, DLC-Deps
+│   └── Preview.png                     Mod-Icon (256×256)
+├── Source/                             C#-Source + .csproj
+│   ├── RimWorldBot.csproj              Build-Config (net472 + Krafs.Rimworld.Ref)
+│   └── Core/ModEntry.cs                Skeleton Load-Probe (Story 1.1)
+├── Assemblies/                         Build-Output (RimWorldBot.dll)
+├── LoadFolders.xml                     Multi-Version-Support (1.5 + 1.6)
+│
 ├── _bmad/                              Guardian-Hilfsmetadaten
 │   └── decisions.md                    Decision-Log (chronologisch)
 ├── _bmad-output/                       Offizielle Artefakte (Autorität)
@@ -19,7 +28,9 @@ RimWorld Bot/
 │   │   └── epics.md                    Alle 8 Epics + Critical Path
 │   └── implementation-artifacts/
 │       ├── sprint-status.yaml          Phase + Sprint + Story-Stati (Guardian-Input)
-│       └── stories/                    Dev-Stories (pro Sprint gedraftet)
+│       ├── api-reference.md            Verifizierte Vanilla-Defs
+│       ├── reviews/                    Party-Mode-Review-Reports
+│       └── stories/                    Dev-Stories (99 Stories, Epic 1-8)
 ├── CLAUDE.md                           Projekt-Kontext + BMAD-Regeln
 ├── README.md                           Diese Datei
 │
@@ -63,7 +74,7 @@ RimWorld Bot/
 | Beta | Pending | Phase 5-6, alle 12 Invariants, Caravan-Manager, Status-Overlay |
 | Release | Pending | Alle 5 Endings, DLC-Matrix getestet, Lern-System, Localization DE/EN, GitHub-Release |
 
-Detail: `_bmad/sprint-status.yaml`.
+Detail: `_bmad-output/implementation-artifacts/sprint-status.yaml`.
 
 ---
 

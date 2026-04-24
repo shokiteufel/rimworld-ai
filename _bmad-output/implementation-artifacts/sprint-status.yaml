@@ -1,5 +1,5 @@
 # Sprint-Status für RimWorld Bot Mod — BMAD-Guardian-kompatibel
-# Deadline: offen (Planning-Phase)
+# Deadline: offen (kein Release-Deadline definiert, Release-Date abhängig von Dev-Velocity)
 
 project:
   name: RimWorld Bot Mod
@@ -7,17 +7,24 @@ project:
   path: D:\SteamLibrary\steamapps\common\RimWorld\Mods\RimWorld Bot
   distribution: GitHub (primär)
 
-phase: PLANNING
-sub_phase: STORY_DRAFTING
+phase: DEV
+sub_phase: EPIC_1_DEV
 
 current_sprint:
-  number: 1
-  goal: "Alle 85 Stories (Epic 1-8) gedraftet + Party-Mode-Review → Dev-Gate für Epic 1 (D-30 All-Upfront)"
+  number: 2
+  goal: "Epic 1 (Mod-Skeleton & Toggle) — 13 Stories 1.1-1.13 durchentwickeln mit CR+VR-Loops"
   started: 2026-04-24
 
+previous_sprint:
+  number: 1
+  goal: "Alle 99 Stories (Epic 1-8) gedraftet + 3 Review-Passes → Dev-Gate für Epic 1"
+  completed: 2026-04-24
+  commit: "9c14b25 feat(planning): complete 3 review passes — 99 stories approved"
+
 # Epic-Status (konsistent mit planning-artifacts/epics.md)
-# Epic-Stati: backlog (keine Story in-progress), in-progress (≥1 Story in-progress), done (alle Stories done/optional)
-epic-1: backlog
+# Epic-Stati: backlog (keine Story aktiv), in-progress (≥1 Story in-progress ODER review), done (alle Stories done/optional)
+# Anmerkung: "review" ist semantisch aktive Arbeit am Epic → epic-Level bleibt in-progress bis Story done.
+epic-1: in-progress  # Story 1.1 dev-loop startet Sprint 2
 epic-2: backlog
 epic-3: backlog
 epic-4: backlog
@@ -30,7 +37,7 @@ epic-8: backlog
 # Stati: backlog | ready-for-dev | in-progress | review | done | optional
 development_status:
   # Epic 1 — Mod-Skeleton & Toggle (MVP, Launch-critical)
-  1-1-mod-project-skeleton: ready-for-dev
+  1-1-mod-project-skeleton: done  # CR-Loop ✓, TC-01-SKELETON PASS (RimWorld 1.6.4633, [RimWorldBot] skeleton loaded verifiziert 2026-04-24)
   1-2-harmony-bootstrap: ready-for-dev
   1-3-bot-game-component: ready-for-dev
   1-4-master-toggle-button: ready-for-dev
