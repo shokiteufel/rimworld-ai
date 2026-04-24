@@ -10,14 +10,17 @@
     <Deterministic>true</Deterministic>
     <Copyright>© 2026 mediainvita</Copyright>
     <Product>RimWorld Bot</Product>
-    <Description>Autonome Entscheidungs-KI als RimWorld-Mod (Skeleton — Story 1.1)</Description>
+    <Description>Autonome Entscheidungs-KI als RimWorld-Mod — Sprint 2 (Epic 1 in Entwicklung)</Description>
     <!-- Nullable wird in Story 1.3 (BotGameComponent) aktiviert, wenn es sinnvoll wird.
          Jetzt aus weil Krafs.Rimworld.Ref keine Nullable-Annotationen hat → Warning-Kaskaden. -->
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Lib.Harmony wird erst in Story 1.2 (Harmony-Bootstrap) referenziert. Story 1.1 ist Skeleton-only. -->
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" PrivateAssets="all" />
+    <!-- HarmonyLib als Build-Time-Reference. Runtime-Harmony-DLL wird via modDependencies
+         (brrainz.harmony) von RimWorld vor uns geladen — ExcludeAssets=runtime verhindert
+         doppeltes Bundling in Assemblies/. -->
+    <PackageReference Include="Lib.Harmony" Version="2.3.*" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>
