@@ -15,6 +15,16 @@ Konsequenzen: ...
 
 ---
 
+## D-28: Repository-Name `rimworld-ai`
+Datum: 2026-04-24
+Status: accepted
+Kontext: GitHub-Repo wurde initialisiert, Default-Vorschlag war `rimworld-bot` (Match zu packageId `mediainvita.rimworldbot`). User entschied sich für `rimworld-ai` — eigenständiger Name, nicht strikt am `packageId` gebunden.
+Entscheidung: **Repo-Name = `rimworld-ai`**, Owner = `shokiteufel`, Public, Topics: `rimworld`, `rimworld-mod`, `ai`, `csharp`, `harmony`. URL: https://github.com/shokiteufel/rimworld-ai. `packageId` bleibt `mediainvita.rimworldbot` (Architektur-Decision aus Story 1.1, TQ-S1-02 resolved) — beide Identifier müssen nicht identisch sein, `packageId` ist für RimWorld-Ingame-Mod-Resolution, Repo-Name ist für Distribution.
+Begründung: „AI" beschreibt das Kern-Feature präziser als „Bot" (Bot ist generischer, „AI" signalisiert Entscheidungs-System). User-Präferenz für eigenständige Namenswahl respektiert Scope-Autonomie. Kein Konflikt mit `packageId` — Ingame-Referenz + Distribution-URL können divergieren.
+Konsequenzen: Story 1.1 `About/About.xml` AC 2: `url`-Feld = `https://github.com/shokiteufel/rimworld-ai`. README.md bekommt Repo-URL. Keine anderen Artefakte betroffen.
+
+---
+
 ## D-27: Sub-Phase-Transition PM_ARCHITECT → STORY_DRAFTING
 Datum: 2026-04-24
 Status: accepted

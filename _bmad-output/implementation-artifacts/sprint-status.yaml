@@ -150,9 +150,9 @@ next_actions:
   - "epics.md: approved 2026-04-24 ✓"
   - "Phase-Transition PM_ARCHITECT → STORY_DRAFTING: 2026-04-24 ✓ — Decision D-27"
   - "Epic-1 Stories 1-1 bis 1-8 gedraftet, alle TBDs aufgelöst, Status ready-for-dev ✓ (2026-04-24)"
+  - "GitHub-Repo: https://github.com/shokiteufel/rimworld-ai (public) ✓ (2026-04-24) — Decision D-28"
   - "WARTEND: User-Review der 8 Stories → bei Approval kann Dev-Phase starten (Story 1.1 → in-progress)"
   - "Bei Start Dev-Phase: /guardian erneut triggern (DEV-Watchdogs design-critic + progress-check dazu)"
-  - "GitHub-Repo initialisieren (parallel möglich, kein Blocker)"
 
 decision_log: ../../_bmad/decisions.md
 runtime_spec: ../../Mod-Leitfaden.md
