@@ -1,0 +1,30 @@
+# Visual Studio / Rider / VSCode
+.vs/
+.idea/
+.vscode/
+
+# Build Output
+bin/
+obj/
+*.user
+*.suo
+*.pdb
+TestResults/
+
+# NOT ignored: Assemblies/*.dll is needed in Release-ZIP (Story 1.1)
+
+# NuGet
+packages/
+*.nupkg
+
+# Claude Code Session-local
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Backup / Temporary
+*.bak
+*.tmp
+*~

@@ -1,0 +1,161 @@
+# Sprint-Status für RimWorld Bot Mod — BMAD-Guardian-kompatibel
+# Deadline: offen (Planning-Phase)
+
+project:
+  name: RimWorld Bot Mod
+  description: Autonome Entscheidungs-KI als RimWorld-Mod
+  path: D:\SteamLibrary\steamapps\common\RimWorld\Mods\RimWorld Bot
+  distribution: GitHub (primär)
+
+phase: PLANNING
+sub_phase: STORY_DRAFTING
+
+current_sprint:
+  number: 1
+  goal: "Epic-1 Stories draften (1-1 bis 1-8), alle auf ready-for-dev bringen"
+  started: 2026-04-24
+
+# Epic-Status (konsistent mit planning-artifacts/epics.md)
+epic-1: backlog
+epic-2: backlog
+epic-3: backlog
+epic-4: backlog
+epic-5: backlog
+epic-6: backlog
+epic-7: backlog
+epic-8: backlog
+
+# Story-Status (Guardian-Schema: N-M-name: status)
+# Stati: backlog | ready-for-dev | in-progress | review | done | optional
+development_status:
+  # Epic 1 — Mod-Skeleton & Toggle (MVP, Launch-critical)
+  1-1-mod-project-skeleton: ready-for-dev
+  1-2-harmony-bootstrap: ready-for-dev
+  1-3-bot-game-component: ready-for-dev
+  1-4-master-toggle-button: ready-for-dev
+  1-5-keybinding-ctrl-k: ready-for-dev
+  1-6-per-pawn-toggle: ready-for-dev
+  1-7-settings-window: ready-for-dev
+  1-8-localization-skeleton: ready-for-dev
+
+  # Epic 2 — Map-Analyzer (MVP, Launch-critical)
+  2-1-map-cell-data-basic-scan: backlog
+  2-2-wild-plant-detection: backlog
+  2-3-hazard-scanner: backlog
+  2-4-defensibility-score: backlog
+  2-5-scoring-formula: backlog
+  2-6-cluster-analysis: backlog
+  2-7-overlay-rendering: backlog
+  2-8-caching-savegame: backlog
+  2-9-coroutine-split: backlog
+
+  # Epic 3 — Invariants + Phase 0+1 (MVP, Launch-critical)
+  3-1-invariant-framework: backlog
+  3-2-invariants-i1-i5: backlog
+  3-3-emergency-fire: backlog
+  3-4-emergency-bleed: backlog
+  3-5-emergency-food: backlog
+  3-6-emergency-shelter-temp: backlog
+  3-7-phase-0-goals: backlog
+  3-8-build-planner-mvp: backlog
+  3-9-bill-manager-mvp: backlog
+  3-10-work-assigner-basic: backlog
+  3-11-phase-1-goals: backlog
+  3-12-phase-detection: backlog
+
+  # Epic 4 — Phase-State-Machine 2-4 (Alpha)
+  4-1-research-scheduler: backlog
+  4-2-phase-2-goals: backlog
+  4-3-recruiting-logic: backlog
+  4-4-prisoner-cell-layout: backlog
+  4-5-phase-3-goals: backlog
+  4-6-phase-4-goals: backlog
+  4-7-killpoint-layout: backlog
+  4-8-invariants-i6-i12: backlog
+  4-9-emergency-i6-i12: backlog
+  4-10-skill-grinding: backlog
+
+  # Epic 5 — Combat & Raids (Alpha, parallel zu Epic 4 ab Story 5.1-5.3)
+  5-1-threat-assessment: backlog
+  5-2-raid-announce-hook: backlog
+  5-3-combat-commander-tree: backlog
+  5-4-draft-controller: backlog
+  5-5-flee-option: backlog
+  5-6-post-raid-handler: backlog
+  5-7-focused-fire-tactics: backlog
+  5-8-retreat-fallback: backlog
+
+  # Epic 6 — Industrialization Phase 5+6 (Beta)
+  6-1-power-grid-planner: backlog
+  6-2-phase-5-goals: backlog
+  6-3-hitech-workbenches: backlog
+  6-4-phase-6-goals: backlog
+  6-5-specialist-roles: backlog
+  6-6-components-factory: backlog
+  6-7-bionics-option: optional
+  6-8-flak-armor-rollout: backlog
+  6-9-turret-placement: backlog
+  6-10-mech-cluster-handler: backlog
+
+  # Epic 7 — Endings (Release, Launch-critical)
+  7-1-ending-feasibility-engine: backlog
+  7-2-feasibility-daily-recompute: backlog
+  7-3-switch-trigger-logic: backlog
+  7-4-force-option: backlog
+  7-5-phase-ship-research: backlog
+  7-6-phase-ship-bauplatz: backlog
+  7-7-phase-ship-ai-persona-core: backlog
+  7-8-phase-ship-finale: backlog
+  7-9-phase-journey-quest-watcher: backlog
+  7-10-phase-journey-caravan: backlog
+  7-11-phase-journey-worldtravel: backlog
+  7-12-phase-royal-honor-farm: backlog
+  7-13-phase-royal-stellarch: backlog
+  7-14-phase-archonexus-wealth: backlog
+  7-15-phase-archonexus-transition: backlog
+  7-16-phase-void-monolith: backlog
+  7-17-phase-void-dark-study: backlog
+  7-18-phase-void-provocation: backlog
+
+  # Epic 8 — Polish, Learning, Localization, DLC-Matrix (Release, Launch-critical)
+  8-1-learned-config-schema: backlog
+  8-2-bayesian-weight-update: backlog
+  8-3-override-evaluator: backlog
+  8-4-override-library: backlog
+  8-5-reset-button: backlog
+  8-6-localization-full-coverage: backlog
+  8-7-debug-panel: backlog
+  8-8-telemetry-logger: backlog
+  8-9-dlc-matrix-testing: backlog
+  8-10-github-release-pipeline: backlog
+
+milestones:
+  - name: MVP
+    status: planning
+    definition_of_done:
+      - PRD.md approved
+      - Architecture.md approved
+      - Epic-1 through Epic-3 with drafted stories
+      - Phase 0 + Phase 1 runtime-testable
+  - name: Alpha
+    status: pending
+  - name: Beta
+    status: pending
+  - name: Release
+    status: pending
+
+next_actions:
+  - "PRD: approved 2026-04-24 ✓"
+  - "Architecture v2.3 (Option A, 4 Review-Runden): approved 2026-04-24 ✓ — Decisions D-11 bis D-26"
+  - "epics.md: approved 2026-04-24 ✓"
+  - "Phase-Transition PM_ARCHITECT → STORY_DRAFTING: 2026-04-24 ✓ — Decision D-27"
+  - "Epic-1 Stories 1-1 bis 1-8 gedraftet, alle TBDs aufgelöst, Status ready-for-dev ✓ (2026-04-24)"
+  - "WARTEND: User-Review der 8 Stories → bei Approval kann Dev-Phase starten (Story 1.1 → in-progress)"
+  - "Bei Start Dev-Phase: /guardian erneut triggern (DEV-Watchdogs design-critic + progress-check dazu)"
+  - "GitHub-Repo initialisieren (parallel möglich, kein Blocker)"
+
+decision_log: ../../_bmad/decisions.md
+runtime_spec: ../../Mod-Leitfaden.md
+legacy_concept: ../../Mod-Konzept.md
+
+last_updated: 2026-04-24
