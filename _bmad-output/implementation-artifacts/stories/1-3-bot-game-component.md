@@ -30,6 +30,12 @@ Als **Mod-Entwickler** möchte ich **`BotGameComponent : GameComponent` und `Bot
 12. **`PhaseGoalTag`-Record** `(int PhaseIndex, string GoalId)` für Goal-Tag-Schema (§2.3b)
 13. **Savegame-Roundtrip-Test:** State speichern, laden, Werte bleiben erhalten (AC 5 Epic 1)
 14. **Schema-Migration-Test:** Savegame mit `schemaVersion = 1` laden → `Migrate()` läuft ohne Crash, `schemaVersion` auf 3 gesetzt
+15. **Migrate(v1→v2)-Details** (HIGH-Fix): in v1 war `perPawnPlayerUse: Dictionary<int thingIDNumber, bool>` — Migrate iteriert Keys, lookup via `Find.WorldPawns.AllPawnsAliveOrDead.FirstOrDefault(p => p.thingIDNumber == oldKey)?.GetUniqueLoadID()` → übernimmt gefundene Einträge in neues `Dictionary<string UniqueLoadID, bool>`, droppt nicht-findbare mit WARN-Log + `user-toast-data-loss`-DecisionLog-Entry (auto-pinned). **Toast-Trigger (MED-Fix Round-2-Stability, NEW-STAB-05):** Kombi-Threshold statt nur 25%. Toast `RimWorldBot.Migration.DataLoss.Warning` feuert wenn `dropped >= 1 AND (dropped / oldKeys.Count > 0.10 OR dropped >= 2)` — so fängt man auch Kleinkolonien (3-Pawn-Naked-Brutality mit 2 dropped = 66% ≙ 25%-Rule hätte getriggert, ok; aber auch 5-Pawn mit 2 dropped = 40% triggert; und 1-Pawn mit 1 dropped = 100% triggert). 25% allein ließe 10-Pawn-Colony mit 2 dropped unbemerkt — ungut.
+16. **Migrate(v2→v3)-Details** (HIGH-Fix): in v2 war `excludedCells` pro BotMapComponent absent — Migrate setzt `excludedCells = new HashSet<(int,int)>()` (leer; Re-Analyse bei nächstem `Map.FinalizeInit` populiert neu).
+17. **Migrate()-Test:** TC-10-MIGRATE-V1-V2-PAWN-LOOKUP — drei Szenarien gegen Kombi-Threshold-Formel aus AC 15 `dropped >= 1 AND (dropped/oldKeys.Count > 0.10 OR dropped >= 2)`:
+    - **TC-10a (kein Toast):** 10-Pawn-Save, 1 dropped (10% exakt, `dropped>=2`=false, `>10%`=false) → Migrate übernimmt 9, WARN-Log, **kein** Toast.
+    - **TC-10b (Toast via Count-Branch):** 10-Pawn-Save, 2 dropped (20%, `dropped>=2`=true) → Toast `RimWorldBot.Migration.DataLoss.Warning` feuert.
+    - **TC-10c (Toast via Percent-Branch bei Small-Colony):** 3-Pawn-Save, 1 dropped (33%, `>10%`=true) → Toast feuert (früher bei 25%-Rule wäre grenzwertig gewesen).
 
 ---
 

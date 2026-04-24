@@ -23,6 +23,7 @@ Als **Spieler** möchte ich **mit `Ctrl+K` den Master-Toggle-State zyklieren** k
 5. **Log-Eintrag identisch zu Button-Klick** (`[RimWorldBot] state changed: …` + DecisionLog)
 6. **Keine Kollision** mit Vanilla-Keybindings (`Ctrl+K` ist unbelegt in Vanilla 1.5/1.6 — prüfen)
 7. **Pause-kompatibel**: Ctrl+K funktioniert auch wenn Spiel pausiert (KeyBindingDef hat `doDesignatorInterrupt: false`)
+8. **Exception-Wrapper** (HIGH-Fix, CC-STORIES-02): `GameComponentUpdate()`-Hauptkörper inkl. KeyDownEvent-Check wrapped in try/catch → `BotErrorBudget.Report("GameComponentUpdate", ex)` → bei ≥ 2 Exceptions/min: `FallbackToOff()` (via Story 1.10 `ExceptionWrapper`-Helper). **Begründung:** Update-Loop läuft pro Frame (~60 FPS); unbehandelte Exception blockiert sonst die gesamte UI-Refresh-Pipeline. Vanilla RimWorld hat keinen Top-Level-Try dort.
 
 ---
 

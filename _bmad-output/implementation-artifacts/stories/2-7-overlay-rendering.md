@@ -16,6 +16,8 @@ Als Spieler im **AI_ADVISORY-Mode** möchte ich die **Top-3-Sites als farbige Kr
 5. Toggle-Key (eigenes KeyBinding `RimWorldBot_ToggleOverlay`, default `Alt+K`) zeigt/versteckt Overlay temporär
 6. Overlay performanz-neutral im AI_OFF/AI_ON-Mode (kein Cell-Iteration)
 7. Integration-Test: AI_ADVISORY → drei Kreise sichtbar → Hover zeigt Breakdown
+8. **Exception-Wrapper** (HIGH-Fix Round-2-Stability, CC-STORIES-02): `MapComponentOnGUI()`-Hauptkörper + Overlay-Draw-Aufrufe via Story 1.10 `ExceptionWrapper.TickHost(...)` wrappen. Bei 2 Exceptions/min → `FallbackToOff()`. Begründung: OnGUI-Loop läuft pro Frame; ungefangene Exception in Overlay-Draw blockiert Vanilla-UI.
+9. **Schema-Bump** (HIGH-Fix Round-2-Stability, CC-STORIES-01): `overlayVisible` in `BotMapComponent` via Story 1.9 `SchemaVersionRegistry` registriert; Migrate setzt `overlayVisible = true` (default).
 
 ## Tasks
 - [ ] `Source/UI/SiteMarkerOverlay.cs` als MapComponent

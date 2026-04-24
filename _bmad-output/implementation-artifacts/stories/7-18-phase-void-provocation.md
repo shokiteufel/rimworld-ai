@@ -8,25 +8,27 @@
 Als Mod-Entwickler möchte ich **Void-Provocation-Finale** (nur Anomaly): Ritual-Prep, Final-Entities-Encounter, Void-Outcome-Akzeptanz.
 
 ## Acceptance Criteria
-1. `VoidProvocationManager` aktiv nach Dark-Study-Done
-2. Ritual-Prep: Pawns, Materials, Combat-Readiness
-3. Final-Entity-Handling (Combat-intensiv)
-4. Credits-Roll-Event akzeptieren
-5. Unit-Tests
+1. **DLC-Guard** (MED-Fix, CC-STORIES-05): PhaseRunner nur aktiv wenn `DlcCapabilities.EndingAvailable(Ending.Void)` — Void-Ending ist Anomaly-gated. Bei `false` setzt PhaseRunner `inactive`-Flag.
+2. `VoidProvocationPhaseRunner` aktiv nach Dark-Study-Done
+3. Ritual-Prep: Pawns, Materials, Combat-Readiness
+4. Final-Entity-Handling (Combat-intensiv)
+5. Credits-Roll-Event akzeptieren
+6. Unit-Tests
 
 ## Tasks
-- [ ] `Source/Decision/VoidProvocationManager.cs`
+- [ ] `Source/Decision/VoidProvocationPhaseRunner.cs`
 - [ ] Ritual-Trigger
 - [ ] Unit-Tests
 
 ## Dev Notes
 **Kontext:** Ending-Pfade.md Void Provocation.
-**Vorausgesetzt:** 7.16, 7.17, 5.x (Combat).
+**Sub-Phase (Story 7.0):** Implementiert `VoidProvocation` aus `EndingSubPhaseStateMachine` (letzte Sub-Phase des Void-Endings).
+**Vorausgesetzt:** 5.x (Combat), 7.0, 7.16, 7.17.
 
 ## File List
 | Pfad | Op |
 |---|---|
-| `Source/Decision/VoidProvocationManager.cs` | create |
+| `Source/Decision/VoidProvocationPhaseRunner.cs` | create |
 
 ## Testing
 Unit: Ritual-Step-Tracking.

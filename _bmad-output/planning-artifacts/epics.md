@@ -61,6 +61,11 @@ Ein lauffähiger, leerer RimWorld-Mod mit Harmony-Init, Toggle-Button in der Top
 - Story 1.6: Per-Pawn-Toggle (ITab-Patch)
 - Story 1.7: Settings-Window
 - Story 1.8: Localization-Skeleton (DE + EN)
+- Story 1.9: Schema-Version-Registry (neu D-31, CC-STORIES-01)
+- Story 1.10: Exception-Wrapper-Pattern (neu D-31, CC-STORIES-02)
+- Story 1.11: Plan-Arbiter (AI-7 Layer-Präzedenz) (neu D-31, CC-STORIES-04)
+- Story 1.12: QuestManager-Polling-Infrastruktur (neu D-31, CC-STORIES-09)
+- Story 1.13: Test-Infrastructure (FakeSnapshotProvider, Testable Seams) (neu D-31, CC-STORIES-13)
 
 ### Dependencies
 Keine (erstes Epic).
@@ -138,6 +143,7 @@ Bot kann nackte Kolonie von Spielstart bis Phase-1-Exit autonom durchspielen. In
 - Story 3.10: WorkAssigner Basic (Skill-Matching)
 - Story 3.11: Phase 1 Goals + Exit (Hütte, Kleidung, Anbau)
 - Story 3.12: Phase-Detection (Mid-Game-Aktivierung)
+- Story 3.13: Handler-Staleness-Pattern (neu D-31, CC-STORIES-07)
 
 ### Dependencies
 Epic 1, Epic 2.
@@ -174,7 +180,14 @@ Phasen 2-4 (Food Security + Research, Winter Readiness, Stone Fortress) werden a
 - Story 4.6: Phase 4 Goals + Exit (Stone)
 - Story 4.7: Killpoint-Layout
 - Story 4.8: Invariants I6-I12
-- Story 4.9: Emergency-Handler für I6-I12
+- Story 4.9: Emergency-Handler für I6-I12 (retired D-31, gesplittet in 4.9a-g)
+- Story 4.9a: Emergency-Handler E-MOOD (neu D-31-Split)
+- Story 4.9b: Emergency-Handler E-HEALTH (neu D-31-Split)
+- Story 4.9c: Emergency-Handler E-MENTALBREAK (neu D-31-Split)
+- Story 4.9d: Emergency-Handler E-RAID (neu D-31-Split)
+- Story 4.9e: Emergency-Handler E-FOODDAYS (pro Pawn) (neu D-31-Split)
+- Story 4.9f: Emergency-Handler E-MEDICINE (neu D-31-Split)
+- Story 4.9g: Emergency-Handler E-PAWNSLEEP (neu D-31-Split)
 - Story 4.10: Skill-Grinding-Strategie
 
 ### Dependencies
@@ -258,6 +271,7 @@ Alle 5 Endings autonom erreichbar. Feasibility-Score wählt primary-Ending dynam
 6. Journey-Quest wird zuverlässig erkannt und akzeptiert
 
 ### Stories
+- Story 7.0: Ending-Sub-Phase-State-Machine (neu D-31, CC-STORIES-03)
 - Story 7.1: EndingFeasibility-Engine
 - Story 7.2: Feasibility-Daily-Recompute
 - Story 7.3: Switch-Trigger-Logik

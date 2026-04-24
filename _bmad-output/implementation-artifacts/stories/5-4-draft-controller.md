@@ -13,8 +13,10 @@ Als Mod-Entwickler möchte ich **`DraftController` als Execution-Klasse** die Dr
 3. Undraft analog
 4. Retreat-Point: wenn gesetzt, alle gedrafteten Pawns bekommen Move-Job zu RetreatPoint
 5. Skip wenn Pawn destroyed/dead/null (F-STAB-06)
-6. Unit-Tests (mit Pawn-Mock)
-7. Integration: DraftOrder mit 3 Pawns → alle gedrafted
+6. **Read-After-Write-Check** (HIGH-Fix, CC-STORIES-10, F-STAB-04): nach jeder `pawn.drafter.Drafted = targetValue`-Zuweisung sofortiges Read-Back: `if (pawn.drafter.Drafted != targetValue) → WARN-Log + Retry 1× nach 60 Ticks`. Bei 2. Mismatch: Pawn in `BotGameComponent.poisonedPawns: HashSet<string>` eintragen (F-STAB-04 Poisoned-Set analog Story 3.10) + DecisionLog `drafter-mutation-failed` (auto-pinned). Grund: Combat Extended, CAI 5000 und Simple Sidearms patchen `Pawn_DraftController.Drafted`-Setter — ohne Read-Back wäre der Bot-State desynchronisiert.
+7. Unit-Tests (mit Pawn-Mock): Draft/Undraft + Mismatch-Simulation (Mock-Setter der Wert nicht übernimmt) → Retry-Path + Poisoned-Set-Eintrag
+8. Integration: DraftOrder mit 3 Pawns → alle gedrafted, Read-Back bestätigt
+9. **Exception-Wrapper** (HIGH-Fix Round-2-Stability, CC-STORIES-02): `DraftController.Apply(order, map)`-Hauptkörper + Per-Pawn-Mutate-Loop wrapped via Story 1.10 `ExceptionWrapper.Execution(...)`. Bei 2 Exceptions/min → `FallbackToOff()`.
 
 ## Tasks
 - [ ] `Source/Execution/DraftController.cs`

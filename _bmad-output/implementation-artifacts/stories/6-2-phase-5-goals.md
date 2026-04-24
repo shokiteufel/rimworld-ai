@@ -10,7 +10,7 @@ Als Mod-Entwickler möchte ich **Phase 5 (Electrification)** Goals: Power-Grid o
 ## Acceptance Criteria
 1. `Phase5_Electrification : PhaseDefinition`
 2. Goals: G5.1 Power-Net operational, G5.2 Freezer installed, G5.3 Lights in all indoor Rooms, G5.4 Electric-Stove replaces Campfire
-3. Exit + stableCounter ≥ 2
+3. Exit: alle Goals + `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01)
 4. Launch-Critical: G5.2 (Food-Preservation)
 5. Unit-Tests
 

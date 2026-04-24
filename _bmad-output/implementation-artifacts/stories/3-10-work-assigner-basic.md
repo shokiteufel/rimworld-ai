@@ -16,6 +16,7 @@ Als Mod-Entwickler möchte ich den **`WorkPlanner` + `WorkPriorityWriter`** impl
 5. **Retry-Cap + Poisoned-Goals** (F-STAB-05): wenn Write 3× in 60s für denselben Pawn fehlschlägt → Pawn in Poisoned-Set, 10min Unlock
 6. Unit-Tests: Priority-Matrix für 3 Pawn-Skill-Profile
 7. Integration: Colony mit Work-Tab-Mod aktiv → Read-After-Write-Check greift
+8. **Exception-Wrapper** (HIGH-Fix Round-2-Stability, CC-STORIES-02): `WorkPriorityWriter.Apply(plan, map)`-Hauptkörper wrapped via Story 1.10 `ExceptionWrapper.Execution(...)`. Bei 2 Exceptions/min → `FallbackToOff()` (kontext-konsistent mit bestehendem Poisoned-Set).
 
 ## Tasks
 - [ ] `Source/Decision/WorkPlanner.cs`
@@ -42,3 +43,7 @@ Als Mod-Entwickler möchte ich den **`WorkPlanner` + `WorkPriorityWriter`** impl
 
 ## Review-Gate
 Code-Review gegen D-15, F-STAB-04, F-STAB-05.
+
+## Transient/Persistent (MED-Fix, CC-STORIES-11)
+- `poisonedPawns: HashSet<string UniqueLoadID>` in `BotGameComponent` ist **transient** — re-initialisiert bei `LoadedGame`/`StartedNewGame`. Begründung: Poisoned-State ist Mod-Konflikt-Diagnostik der laufenden Session; nach Save-Load sollen alle Pawns fresh evaluiert werden, falls User den Konflikt-Mod deaktiviert hat.
+- `unlockTimers: Dictionary<string, int>` (10min-Unlock-Tick-Targets) ebenfalls **transient**.

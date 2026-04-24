@@ -10,7 +10,7 @@ Als Mod-Entwickler möchte ich **Phase 6 (Industrialization)** Goals: Components
 ## Acceptance Criteria
 1. `Phase6_Industrialization : PhaseDefinition`
 2. Goals: G6.1 Fabrication-Bench, G6.2 Components ≥ 50 in Stockpile, G6.3 Specialists assigned
-3. Exit + stableCounter ≥ 2
+3. Exit: alle Goals + `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01)
 4. Launch-Critical: G6.2 (Ending-Blocker)
 5. Unit-Tests
 

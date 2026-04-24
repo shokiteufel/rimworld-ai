@@ -8,25 +8,27 @@
 Als Mod-Entwickler möchte ich **Stellarch-Belagerung-Management** (nur Royalty): nach Stellarch-Ankunft 7 Tage Waves abwehren, Psycaster-Reserve nutzen, Imperium-Radio-Drops.
 
 ## Acceptance Criteria
-1. `StellarchSiegeManager` aktiv nach Stellarch-Arrival-Event
-2. Prep-Phase: Killpoints mit Turrets, Ammo, Psycaster-Reserve
-3. 7-Tage-Counter
-4. Radio-Drop-Trigger bei kritischen Momenten
-5. Unit-Tests
+1. **DLC-Guard** (MED-Fix, CC-STORIES-05): `if (!DlcCapabilities.EndingAvailable(Ending.Royal)) return;` — Royal-Ending ist Royalty-gated (`Ending.Royal` erfordert `DlcCapabilities.HasRoyalty`).
+2. `StellarchSiegePhaseRunner` aktiv nach Stellarch-Arrival-Event
+3. Prep-Phase: Killpoints mit Turrets, Ammo, Psycaster-Reserve
+4. 7-Tage-Counter
+5. Radio-Drop-Trigger bei kritischen Momenten
+6. Unit-Tests
 
 ## Tasks
-- [ ] `Source/Decision/StellarchSiegeManager.cs`
+- [ ] `Source/Decision/StellarchSiegePhaseRunner.cs`
 - [ ] Radio-Drop-Logic
 - [ ] Unit-Tests
 
 ## Dev Notes
 **Kontext:** Ending-Pfade.md Royal Siege.
-**Vorausgesetzt:** 7.12, 4.7.
+**Sub-Phase (Story 7.0):** Implementiert `StellarchSiege` aus `EndingSubPhaseStateMachine` (letzte Sub-Phase des Royal-Endings).
+**Vorausgesetzt:** 4.7, 7.0, 7.12.
 
 ## File List
 | Pfad | Op |
 |---|---|
-| `Source/Decision/StellarchSiegeManager.cs` | create |
+| `Source/Decision/StellarchSiegePhaseRunner.cs` | create |
 
 ## Testing
 Unit: Counter + Radio-Drop.

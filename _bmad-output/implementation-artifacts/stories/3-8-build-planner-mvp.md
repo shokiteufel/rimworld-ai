@@ -19,6 +19,7 @@ Als Mod-Entwickler möchte ich den **`BuildPlanner`** implementieren, der basier
 5. **Plan/Apply-Trennung** (D-15): BuildPlanner mutiert keine Designations; `BlueprintPlacer.Apply(plan, map)` setzt Designations + trägt Goal-Tag ein (D-25)
 6. Unit-Tests: verschiedene Center-Positionen, Pawn-Count-Variationen
 7. Integration: Phase-0-Simulation → Plan enthält alle erwarteten Blueprints
+8. **Exception-Wrapper + Read-After-Write** (HIGH/MED-Fix Round-2-Stability, CC-STORIES-02+10): `BlueprintPlacer.Apply(plan, map)`-Hauptkörper wrapped via Story 1.10 `ExceptionWrapper.Execution(...)`. Nach `designator.DesignateSingleCell(pos)` Read-Back: `map.designationManager.DesignationOn(cell, DesignationDefOf.Build) != null` oder `map.thingGrid.ThingsListAt(cell).Any(t => t.def.defName == blueprintDefName || t is Blueprint)`. Bei Mismatch (Replace-Stuff, Mod-Blocker, Unreachable): WARN-Log + Skip + `BotGameComponent.poisonedBlueprintCells: HashSet<(int,int)>` (transient) + DecisionLog `blueprint-placement-failed`.
 
 ## Tasks
 - [ ] `Source/Decision/BuildPlanner.cs`

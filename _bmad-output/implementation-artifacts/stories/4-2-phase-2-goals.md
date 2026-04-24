@@ -10,7 +10,7 @@ Als Mod-Entwickler möchte ich **Phase 2 (Food Security + Research)** mit Goals 
 ## Acceptance Criteria
 1. `Phase2_FoodResearch : PhaseDefinition`
 2. Goals: G2.1 Cooking-Stove, G2.2 Stonecutting Research done, G2.3 FoodStockDays ≥ 30
-3. Exit: alle Goals + stableCounter ≥ 2 (D-26)
+3. Exit: alle Goals + `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01)
 4. Launch-Critical: G2.1, G2.3 (G2.2 nicht, weil Tech-Progression)
 5. Unit-Tests + Integration
 

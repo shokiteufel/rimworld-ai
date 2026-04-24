@@ -10,7 +10,7 @@ Als Mod-Entwickler möchte ich **Phase 3 (Winter Readiness)** implementieren: 90
 ## Acceptance Criteria
 1. `Phase3_WinterReadiness : PhaseDefinition`
 2. Goals: G3.1 Pemmikan/Potato-Vorrat ≥ 90 * ColonistCount Tage, G3.2 Cooler + Heater installiert, G3.3 Backup-Winterkleidung (Parka/Tuque) pro Pawn
-3. Exit: alle Goals + stableCounter ≥ 2
+3. Exit: alle Goals + `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01)
 4. Launch-Critical: G3.1, G3.3 (Überleben)
 5. Unit-Tests
 

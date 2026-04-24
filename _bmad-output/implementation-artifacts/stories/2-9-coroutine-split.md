@@ -16,6 +16,7 @@ Als Mod-Entwickler möchte ich den **Full-Map-Scan** in einen `IEnumerator`-basi
 5. Cancellation-Support: wenn Map disposed während Scan → Iterator abbrechen, partial-Summary verwerfen
 6. Integration-Test: 350×350-Map → Full-Scan dauert ~250 Ticks (~4s in-game bei 60 TPS), aber kein Single-Tick-Spike > 5ms
 7. Status-Flag `BotMapComponent.scanInProgress: bool` + `scanProgressPercent: float` für UI
+8. **Exception-Wrapper** (HIGH-Fix Round-2-Stability, CC-STORIES-02): `MapComponentTick()`-Iterator-Advance via Story 1.10 `ExceptionWrapper.TickHost(...)`. Bei Exception im Iterator-Step: Iterator abbrechen + `scanInProgress=false` + partial-Summary verwerfen; bei 2 Exceptions/min → `FallbackToOff()`.
 
 ## Tasks
 - [ ] `MapAnalyzer` refactor: `FullScan` splitten in `FullScanIterator`

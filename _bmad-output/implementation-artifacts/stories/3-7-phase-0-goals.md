@@ -16,11 +16,15 @@ Als Mod-Entwickler möchte ich **Phase 0 (Naked Start / Basic Survival)** als `P
    - G0.3: Kleidung für alle Pawns (zumindest Tribalwear)
    - G0.4: Food-Stock ≥ 3 Tage pro Pawn
 3. **Exit-Conditions** (alle erfüllt):
-   - G0.1–G0.4 done
+   - G0.1–G0.4 done (inkl. `skippedNonCriticalGoals` aus AC 5 Stuck-Pattern)
    - `stableCounter >= 2` (D-26)
-   - Kein Emergency aktiv für 2 konsekutive Eval-Ticks
+   - **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix Round-2, CC-STORIES-12-Standard-Formulierung, F-AI-01): harmonisiert mit Stories 3.11, 4.2, 4.5, 4.6, 6.2, 6.4. Ersetzt die Alt-Formulierung „Kein Emergency aktiv für 2 konsekutive Eval-Ticks" — `stableCounter >= 2` + `ActiveEmergencies.Count == 0` zum gleichen Prüf-Zeitpunkt deckt den 2-Tick-Nachweis implizit ab.
 4. **Launch-Critical-Flag** pro Goal gesetzt (F-AI-16: G0.1-G0.4 alle launch-critical)
-5. **Stuck-State-Handler** (F-AI-04): wenn Phase 0 > 5000 Ticks ohne Progress → `FallbackOnUnreachable`-Hook (nur Log-Warnung, kein Abort; Phase bleibt aktiv)
+5. **Stuck-State-Handler** (F-AI-04, HIGH-Fix): Per-Goal-Staleness-Tracking via `perGoalStaleCounter: Dictionary<string GoalId, int>` in `BotMapComponent`; inkrementiert wenn `Progress` in 500 Ticks nicht steigt. Bei `perGoalStaleCounter[goalId] >= 3` (entspricht 1500 Ticks ohne Progress):
+   - **Substitute-Goal-Trigger**: Phase-Definition liefert pro Goal optionalen `SubstituteGoal` (z. B. G0.1 Campfire → Alternativ: `Bonfire` falls Campfire-Build unreachable wegen Material-Blockade)
+   - Wenn kein Substitute: `FallbackOnUnreachable`-Hook setzt Goal auf `Skipped` und blockiert Phase-Exit-Check für dieses Goal **nur wenn `!LaunchCritical`** (launch-critical Goals dürfen nicht geskippt werden; bleiben stale mit WARN-Toast alle 5000 Ticks)
+   - DecisionLog-Entry `goal-staleness-substitute` bzw. `goal-staleness-skip` (auto-pinned)
+   - `Exit-Conditions` AC 3 erweitert: `skippedNonCriticalGoals` gilt als "done" für Exit-Check
 6. Unit-Tests: Exit-Conditions mit fake-ColonySnapshot
 7. Integration: Naked-Brutality → Phase 0 aktiv → Exit nach ~3 in-game Tage wenn Goals erreicht
 

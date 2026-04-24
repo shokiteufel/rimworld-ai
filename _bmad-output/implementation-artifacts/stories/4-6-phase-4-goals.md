@@ -10,7 +10,7 @@ Als Mod-Entwickler möchte ich **Phase 4 (Stone Fortress)** implementieren: Ston
 ## Acceptance Criteria
 1. `Phase4_StoneFortress : PhaseDefinition`
 2. Goals: G4.1 Stone-Wall-Ring um Home-Area, G4.2 Killpoint existiert (Story 4.7), G4.3 Traps platziert, G4.4 Stone-Möbel statt Wood
-3. Exit: alle Goals + stableCounter ≥ 2
+3. Exit: alle Goals + `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01)
 4. Launch-Critical: G4.1, G4.2
 5. Unit-Tests
 

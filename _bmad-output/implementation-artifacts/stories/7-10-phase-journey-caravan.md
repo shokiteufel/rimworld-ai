@@ -21,7 +21,8 @@ Als Mod-Entwickler möchte ich **Karawanen-Vorbereitung für Journey-Ending**: S
 
 ## Dev Notes
 **Kontext:** Ending-Pfade.md Journey.
-**Vorausgesetzt:** 5.5, 7.9.
+**Sub-Phase (Story 7.0):** Implementiert `CaravanPrep` aus `EndingSubPhaseStateMachine`.
+**Vorausgesetzt:** 5.5, 7.0, 7.9.
 
 ## File List
 | Pfad | Op |

@@ -15,6 +15,91 @@ Konsequenzen: ...
 
 ---
 
+## D-34: Re-Review Round 3 APPROVE — Dev-Gate Epic 1 offen
+Datum: 2026-04-24
+Status: accepted
+Kontext: Pass 3 (D-33) hat alle Round-2-Findings adressiert. Round 3 Re-Review (RimWorld + Stability) liefert zweifach **APPROVE**. Reports: `stories-re-review-round-3-rimworld-2026-04-24.md` + `stories-re-review-round-3-stability-2026-04-24.md`.
+Entscheidung: Beide Personas bestätigen alle 6 Stability-Round-2-Findings + alle 5 RimWorld-Round-2-Findings RESOLVED. Nur 2 redaktionelle LOWs (7.16 AC-Nummer-Dupe, 1.3 AC 17 Test-Wording-Drift) — per Guardian Regel 4 auch gefixt:
+1. **Epic-7 AC-Nummerierung harmonisiert** (7.6, 7.7, 7.8, 7.13, 7.16, 7.17, 7.18): Pass-2-DLC-Guard-Insert hatte „2." doppelt belassen — alle sechs Stories jetzt durchnummeriert.
+2. **Story 1.3 AC 17 Test-Fälle aktualisiert**: drei Szenarien (TC-10a/b/c) gegen die neue Kombi-Threshold-Formel aus AC 15 statt veraltetem 25%-Wording.
+Begründung: Planning-Phase für RimWorld Bot Mod ist **formell abgeschlossen**. 99 Stories ready-for-dev, Architecture v2.3 approved, PRD approved, epics.md approved, api-reference.md mit verifizierten Vanilla-Defs, 3 Review-Pässe durchlaufen mit APPROVE in Round 3. Sign-Off-Anforderungen aus D-31 erfüllt.
+Konsequenzen:
+- **Phase-Transition** `PLANNING` → `DEV`-Ready (Sub-Phase `STORY_DRAFTING` → Dev-Gate geöffnet).
+- **Sprint 2** kann mit Story 1.1 (Mod-Projekt-Skeleton) gestartet werden.
+- Sprint-Goal Sprint-2: Epic 1 komplett durchentwickelt (13 Stories mit Dev-Review-Loops).
+- `sprint-status.yaml` muss bei Dev-Start auf `phase: DEV` + `sub_phase: EPIC_1_DEV` updated werden.
+- Commit+Push der kompletten Planning-Artefakte wartet auf User-Freigabe (CLAUDE.md-Regel).
+
+---
+
+## D-33: Story-Revision Pass 3 nach Re-Review Round 2
+Datum: 2026-04-24
+Status: accepted
+Kontext: Re-Review Round 2 (min. RimWorld + Stability Personas) gegen Pass-2-Ergebnis lieferte zweifach **APPROVE-WITH-CHANGES** mit 4 neuen HIGHs + 7 neuen MEDs + LOWs. Reports: `stories-re-review-round-2-rimworld-2026-04-24.md` + `stories-re-review-round-2-stability-2026-04-24.md`. Zusätzlich Adversarial-Watchdog-Finding: DraftOrder-Record-Backwards-Compat-Bruch + api-reference.md Odyssey-packageId-Spekulation. Per Guardian Regel 4 (ALLE Findings werden gefixt) wird Pass 3 ausgeführt.
+Entscheidung: Pass 3 Korrekturen:
+1. **api-reference.md Faktenkorrekturen** (HIGH-Fix Round-2 RimWorld):
+   - IncidentDef-Sektion entfernt, durch QuestScriptDef-Sektion ersetzt: `EndGame_ShipEscape`, `EndGame_ArchonexusVictory`, `EndGame_VoidAwakening` (defNames verifiziert gegen `Core/Defs/QuestScriptDefs/Script_EndGame_*.xml`).
+   - JobDef-Source-File-Spalten korrigiert: nur 6 tatsächliche Dateien (`Jobs_Animal/Caravan/Gatherings/Joy/Misc/Work.xml`); falsche Split-Namen wie `Jobs_Firefight.xml` entfernt.
+   - ThingDefOf-Einträge mit expliziter **TBV**-Markierung + `ThingDef.Named(defName)`-Fallback (RimWorld-Version-abhängige Membership).
+   - `Campfire` Source-Correction: `Buildings_Temperature.xml` (nicht `Buildings_Production.xml`).
+   - Odyssey-packageId `Ludeon.RimWorld.Odyssey` verifiziert gegen `Data/Odyssey/About/About.xml` — TBV entfernt.
+2. **DLC-Early-Return-Guards** in 7.12 (Royal) + 7.16 (Void): Plan() beginnt mit `DlcCapabilities.EndingAvailable(...)`-Check (HIGH-Fix Round-2 RimWorld CC-STORIES-05).
+3. **Exception-Wrapper-AC** in 9 Execution-Stories via Story 1.10 (HIGH-Fix Round-2 Stability NEW-STAB-01): 2.7 (MapComponentOnGUI), 2.9 (MapComponentTick-Iterator), 3.8 (BlueprintPlacer), 3.9 (BillManager), 3.10 (WorkPriorityWriter), 4.3 (RecruitingWriter), 4.7 (via 3.8 BuildWriter-Inherit), 5.4 (DraftController), 5.7 (via 5.4 Inherit), 6.8 (OutfitWriter).
+4. **Schema-Bump-AC** in 4 Stories via Story 1.9 (HIGH-Fix Round-2 Stability NEW-STAB-02): 2.7 (`overlayVisible`), 3.9 (`botManagedBills`), 6.5 (`pawnSpecializations`), 7.9 (`journeyQuest: JourneyQuestRef?`).
+5. **MED-Fixes Round-2:**
+   - 3.8 + 3.9 Read-After-Write für BlueprintPlacer + BillManager (NEW-STAB-03) inline in AC erweitert.
+   - 3.7 Phase-Guard auf CC-STORIES-12-Standard-Formulierung harmonisiert (NEW-STAB-04).
+   - 1.3 AC 15 Data-Loss-Toast-Threshold: Kombi-Formel `dropped >= 1 AND (>10% OR >=2)` statt starrer 25% (NEW-STAB-05).
+   - 3.1 Transient/Persistent-Sektion erweitert um `pawnClaims` + `unlockTimers` + `stalenessCounter` expliziter (NEW-STAB-06 war Scan-Miss, Klassifikation existierte bereits).
+6. **Adversarial-Fixes:**
+   - Architecture §2.3a DraftOrder: `FocusedFireTargets` + `AssignedPositions` von positional-args auf `init`-Properties mit `ImmutableDictionary.Empty`-Defaults umgestellt — existierende 3-arg-Konstruktor-Calls bleiben valid.
+   - api-reference.md Offene-TBVs-Sektion erweitert um ThingDefOf-Membership-Check + Royal-EndGame-QuestScriptDef-Existenz.
+Begründung: Option A strict (D-31) + Guardian Regel 4: keine Cherry-Picks. Pass 3 ist schnell weil alle Fixes AC-Template-Appends oder api-reference.md-Edits sind; kein struktureller Umbau nötig.
+Konsequenzen:
+- Kein Story-Count-Wechsel (99 bleibt).
+- Re-Review Round 3 kann direkt starten (nur Stability-Persona reicht, da RimWorld-Konzerne alle resolved; oder beide für Completeness).
+- Nach Approve in Round 3: Dev-Gate für Epic 1 geöffnet (Story 1.1).
+
+---
+
+## D-32: Story-Revision Pass 2 Turn 2 abgeschlossen
+Datum: 2026-04-24
+Status: accepted
+Kontext: D-31 Pass-2-Revision-Plan wurde in 2 Turns durchgeführt. Turn 1 (vor-Compact): 7 neue Cross-Cutting-Stories + Story 3.1 Pawn-Lock-Framework + Story 4.9-Split in 4-9a..g. Turn 2 (nach-Compact): Epic-7-Naming-Refactor + alle HIGH/MED/LOW-Fixes + Architecture §2.3a DraftOrder-Erweiterung + api-reference.md.
+Entscheidung: Pass 2 ist inhaltlich abgeschlossen. Dokumentierte Änderungen:
+1. **epics.md** Stories-Listen erweitert um alle 14 neuen Stories (Epic 1: +5, Epic 3: +1, Epic 4: +7 Split, Epic 7: +1). Story-Count jetzt 99.
+2. **Epic-7-Naming-Refactor** (13 Stories 7.5-7.18): 6 Manager→PhaseRunner (7.8, 7.11, 7.13, 7.15, 7.16, 7.18), 4 Decision-Consistency-Renames (7.7, 7.9, 7.12, 7.14). Alle 14 Stories 7.5-7.18 haben jetzt Sub-Phase-Referenz zu Story 7.0 EndingSubPhaseStateMachine.
+3. **13 HIGH-Fixes** in einzelnen Stories: 1.3 (Migrate-Details), 1.5 (Exception-Wrapper), 2.3 (Schema-Bump + HashSet D-23), 3.4 (JobDefOf.TendPatient + Eligibility=false statt Penalty), 3.7 (Per-Goal-Staleness + Substitute-Goal), 4.3 (Plan/Apply-Split), 4.7 (D-25-Tag-Write-AC), 5.3 (CombatCommander als Sub-Planner für E-RAID), 5.4 (Read-After-Write Drafter), 5.8 (RetreatPlanner als Sub-Tree), 7.9 (QuestManager-Polling + int questId), 7.14 (Ideology-DLC-Guard), 8.1 (XXE/ReDoS-Schutz).
+4. **MED-Fixes** via Cross-Cutting-AC-Templates: CC-10 Read-After-Write in 5.7 + 6.8; CC-11 Transient/Persistent in 3.10, 5.1, 5.5; CC-12 Phase-Transition-Guard (`EmergencyResolver.ActiveEmergencies.Count == 0`) in 7 Phase-Stories (3.7, 3.11, 4.2, 4.5, 4.6, 6.2, 6.4).
+5. **DLC-Guards** (CC-05) in Epic-7-Stories 7.5, 7.6, 7.7, 7.8 (Ship=Vanilla+no-Royalty-Remove), 7.13 (Royal=Royalty), 7.17, 7.18 (Void=Anomaly).
+6. **Architecture §2.3a DraftOrder erweitert** um `FocusedFireTargets: ImmutableDictionary<string, string>` + `AssignedPositions: ImmutableDictionary<string, (int x, int z)>` (CC-14).
+7. **`api-reference.md`** angelegt mit verifizierten JobDefOf/ThingDefOf/ResearchProjectDef/IncidentDef/QuestManager/DlcCapabilities/Scribe-APIs (CC-08).
+Begründung: Option-A-strict aus D-31 erfordert alle Findings gefixt, kein Cherry-Picking. Pass 2 ist jetzt vollständig für Re-Review Round 2 ready.
+Konsequenzen:
+- `sprint-status.yaml` Story-Count steigt auf 99, alle Stories ready-for-dev.
+- Nächster Schritt: Commit + Push + Re-Review Round 2 (min. RimWorld + Stability Personas).
+- Bei Approve in Round 2: Dev-Gate für Epic 1 geöffnet.
+
+---
+
+## D-31: Story-Revision nach Party-Mode-Review Round 1 (Option A strict BMAD)
+Datum: 2026-04-24
+Status: accepted
+Kontext: Party-Mode-Review Round 1 über alle 85 Stories ergab APPROVE-WITH-CHANGES × 4 mit 15 HIGHs + 29 MEDs + 22 LOWs + 16 Cross-Cutting-Themen. User-Entscheidung: Option A = strict Revision aller Findings ohne Cherry-Picks (Guardian-Regel 4 konform). Report persistiert in `_bmad-output/implementation-artifacts/reviews/stories-party-mode-review-2026-04-24.md`.
+Entscheidung: Revision-Pass 2 umfasst:
+1. **7 neue Cross-Cutting-Stories:** 1.9 Schema-Version-Registry, 1.10 Exception-Wrapper-Pattern, 1.11 Plan-Arbiter, 1.12 QuestManager-Polling-Hook, 1.13 Test-Infrastructure, 3.13 Handler-Staleness-Pattern, 7.0 EndingSubPhaseStateMachine.
+2. **Story 3.1 erweitert** um Pawn-Exclusivity-Lock-Framework-Kontrakt (CC-STORIES-06).
+3. **Story 4.9 gesplittet** in 4-9a (E-MOOD), 4-9b (E-HEALTH), 4-9c (E-MENTALBREAK), 4-9d (E-RAID), 4-9e (E-FOODDAYS), 4-9f (E-MEDICINE), 4-9g (E-SLEEP) — jeweils S-Size.
+4. **Epic 7 Naming refaktoriert:** 13 Stories von „…Manager" → „…Planner"/"…PhaseRunner" gemäß D-15-Konvention.
+5. **Alle 15 HIGHs + 29 MEDs + 22 LOWs** in Einzelstory-AC-Erweiterungen adressiert.
+6. **Architecture §2.3a erweitert** um DraftOrder-Schema (FocusedFireTarget + AssignedPosition) für CC-STORIES-14.
+7. **`_bmad-output/implementation-artifacts/api-reference.md`** neu angelegt mit verifizierten JobDefOf/ThingDefOf-Namen für CC-STORIES-08.
+8. **Re-Review Round 2** (min. RimWorld + Stability) nach Pass 2.
+Begründung: Guardian-Regel 4 verlangt ALLE Findings gefixt, keine Cherry-Picks. Regel-5-Selbst-Finding aus vorherigem Turn (drei-Optionen-Präsentation) korrigiert — Option A ist Default, nicht „eine von mehreren Alternativen". Party-Mode-Report hat Cross-Cutting-Themen hinreichend dokumentiert, dass eine systematische Revision möglich ist.
+Konsequenzen: Story-Count: 85 → 85 + 7 (neu) + 6 (4-9-Split: -1 + 7) = **98 Stories**. Sprint 1 Goal bleibt offen bis Pass 2 durch ist. Dev-Start verschiebt sich — akzeptiert.
+
+---
+
 ## D-30: All-Upfront-Story-Drafting vor Epic-1-Dev-Start
 Datum: 2026-04-24
 Status: accepted (User-Override auf BMAD-Default)

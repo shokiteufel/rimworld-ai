@@ -151,7 +151,18 @@ public record BuildPlan(ImmutableList<BlueprintIntent> Intents);
 public record DraftOrder(
     ImmutableHashSet<string /*pawn UniqueLoadID*/> Draft,
     ImmutableHashSet<string> Undraft,
-    (int x, int z)? RetreatPoint);
+    (int x, int z)? RetreatPoint)
+{
+    // CC-STORIES-14 (Round-1-Review, 2026-04-24): Combat-Subtypen aus Stories 5.4/5.7/5.8/7.8/7.13.
+    // Init-only Properties mit Empty-Defaults — damit existierende 3-arg-Konstruktor-Aufrufe (5.3, 5.5, 5.7, 5.8, 7.8, 7.13)
+    // nicht brechen. Stories die Focused-Fire oder Assigned-Positions brauchen erzeugen via `with`-Expression:
+    //   new DraftOrder(draft, undraft, retreat) with { FocusedFireTargets = myDict }
+    public ImmutableDictionary<string /*shooter UniqueLoadID*/, string /*target UniqueLoadID*/> FocusedFireTargets { get; init; }
+        = ImmutableDictionary<string, string>.Empty;
+    // Für Killpoint-Shooter-Crews (5.3) + Ship-Defense-Positions (7.8) + Stellarch-Siege-Crew (7.13)
+    public ImmutableDictionary<string /*pawn UniqueLoadID*/, (int x, int z)> AssignedPositions { get; init; }
+        = ImmutableDictionary<string, (int x, int z)>.Empty;
+}
 
 public record CaravanPlan(
     ImmutableList<string /*pawn UniqueLoadID*/> Members,

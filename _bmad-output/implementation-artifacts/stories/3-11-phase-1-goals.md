@@ -15,7 +15,7 @@ Als Mod-Entwickler möchte ich **Phase 1 (Basic Stability)** als `PhaseDefinitio
    - G1.2: Growing-Zone (mind. 50 tiles, Potato/Rice je Biome)
    - G1.3: 2+ Pawns mit Cooking-Skill ≥ 4
    - G1.4: Stockpile-Zone mit geregelter Storage-Priority
-3. **Exit-Conditions**: G1.1–G1.4 done + `stableCounter >= 2` (D-26)
+3. **Exit-Conditions**: G1.1–G1.4 done (inkl. `skippedNonCriticalGoals` aus Story 3.7 Stuck-Pattern) UND `stableCounter >= 2` (D-26) UND **`EmergencyResolver.ActiveEmergencies.Count == 0`** (MED-Fix, CC-STORIES-12, F-AI-01: Emergency aktiv blockt Phase-Transition)
 4. **Regression-Detector** (F-AI-07): `GoalHealthMonitor` prüft alle 5000 Ticks ob completed Goals regredieren — wenn ja, Goal retriggert
 5. **Launch-Critical**: alle 4 Goals
 6. Unit-Tests Exit + Regression

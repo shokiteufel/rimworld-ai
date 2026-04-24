@@ -8,14 +8,14 @@
 Als Mod-Entwickler möchte ich den **E-BLEED-Handler** implementieren, der bei Bleed-Invariant-Violation (I3) Rettung/Behandlung des verblutenden Pawns koordiniert — mit Pawn-Exclusivity-Lock (Architecture D-16 F-AI-02-Fix) damit Doctor nicht unter aktiver Intrusion ins Raid-Feuer läuft.
 
 ## Acceptance Criteria
-1. `E_Bleed : EmergencyHandler` mit `BasePrio = 11`
-2. `Eligibility`: `I3_Bleed.Violated == true` AND ≥ 1 Doctor (Medicine ≥ 3) verfügbar
-3. `Score`: `base + (bleed_rate * 100) + (medical_supplies_available * 5)`; **−50 wenn E-INTRUSION aktiv UND Pawn außerhalb Base** (F-AI-02 kontext-sensitiv)
-4. `Claim(pawns)`: bester Doctor (höchstes Medicine-Skill) + Rescue-Target-Pawn
-5. `Apply(controller)`: `Rescue`-Job für Doctor (nur wenn Pawn unreachable sicher ist) ODER `Tend`-Job wenn bereits in Medical-Bed
-6. **Pawn-Exclusivity-Lock**: Doctor wird für 60s nicht von anderen Handlern claimable
-7. Unit-Tests: Intrusion-Context reduziert Score korrekt
-8. Integration: Raid + bleedender Pawn → E-Intrusion gewinnt wenn Pawn unreachable
+1. `E_Bleed : EmergencyHandler` mit `BasePrio = 11`, `LockPriority = 90` (aus Story 3.1 CC-STORIES-06 Matrix)
+2. `Eligibility`: `I3_Bleed.Violated == true` AND ≥ 1 Doctor (Medicine ≥ 3) verfügbar. **Eligibility = false (nicht Penalty)** (HIGH-Fix) wenn E-INTRUSION aktiv UND Target-Pawn außerhalb Base/Home-Region — damit Doctor nicht ins Raid-Feuer läuft. Penalty -50 ist zu weich, kann bei starkem Bleed-Rate übersteuert werden.
+3. `Score`: `base + (bleed_rate * 100) + (medical_supplies_available * 5)` (Modifier nur wenn Eligibility = true)
+4. `Claim(pawns)`: bester Doctor (höchstes Medicine-Skill) + Rescue-Target-Pawn via `EmergencyResolver.pawnClaims` (Story 3.1 Framework-Lock)
+5. `Apply(controller)`: **`JobDefOf.TendPatient`** (HIGH-Fix, nicht `Tend`) als Job-Def für Treatment; **`JobDefOf.Rescue`** wenn Pawn downed und nicht in Medical-Bed. `TendPatient` ist verifizierter Def-Name (nicht `Tend`, was zu Compile-Error führt — CC-STORIES-08).
+6. **Pawn-Exclusivity-Lock** via Story 3.1 CC-STORIES-06 Framework: `LockPriority = 90`, `LockDurationTicks = 3600` (60s); Re-Claim nur durch E-RAID (LockPriority=100) möglich
+7. Unit-Tests: Intrusion-Eligibility-Flip verifizieren (false statt Score-Penalty)
+8. Integration: Raid + bleedender Pawn außerhalb Base → E-BLEED Eligibility=false → Doctor bleibt bei E-RAID-Claim
 
 ## Tasks
 - [ ] `Source/Emergency/E_Bleed.cs`

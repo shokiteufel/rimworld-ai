@@ -19,6 +19,8 @@ Als Mod-Entwickler möchte ich den **`BillPlanner` + `BillManager`** implementie
 5. `BillManager.Apply(plan, map)` setzt `Bill`-Objekte via `BillStack.AddBill` + trägt Goal-Tag (D-25 `botPlacedThings` analog für Bills → eigenes `botManagedBills` in `BotMapComponent`)
 6. Unit-Tests: 3 Scenarios (leer, Food-only, full)
 7. Integration: nach BuildPlan-Apply Campfire steht → BillManager setzt Simple-Meal-Bill
+8. **Exception-Wrapper + Read-After-Write** (HIGH/MED-Fix Round-2-Stability, CC-STORIES-02+10): `BillManager.Apply(plan, map)`-Hauptkörper wrapped via Story 1.10 `ExceptionWrapper.Execution(...)`. Nach `billStack.AddBill(bill)` Read-Back: `billStack.Bills.Contains(bill) && bill.recipe.defName == targetRecipe`. Bei Mismatch (Bill-Mod-Konflikt, Workbench disposed): WARN-Log + Retry 1× nach 60 Ticks + `poisonedWorkbenches: HashSet<int thingIDNumber>` (transient).
+9. **Schema-Bump** (HIGH-Fix Round-2-Stability, CC-STORIES-01): `botManagedBills: Dictionary<int, PhaseGoalTag>` in `BotMapComponent` ist neues Feld → via Story 1.9 `SchemaVersionRegistry` registriert; Migrate setzt leeres Dict.
 
 ## Tasks
 - [ ] `Source/Decision/BillPlanner.cs`

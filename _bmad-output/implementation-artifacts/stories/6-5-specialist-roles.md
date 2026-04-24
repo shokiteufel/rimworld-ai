@@ -13,6 +13,7 @@ Als Mod-Entwickler möchte ich **Specialist-Role-Assignment**: per-Pawn Speciali
 3. `WorkPlanner` priorisiert Specialization-WorkTypes stark (8 statt 4 Priority)
 4. Settings-Panel (Story 1.7) bekommt Specialization-Dropdown pro Pawn
 5. Unit-Tests
+6. **Schema-Bump** (HIGH-Fix Round-2-Stability, CC-STORIES-01): `pawnSpecializations` in `BotGameComponent` ist neues Feld → via Story 1.9 `SchemaVersionRegistry` einen Eintrag `BotGameComponent.pawnSpecializations` anlegen; Migrate setzt leeres Dict (Specialization=None default für alle Pawns).
 
 ## Tasks
 - [ ] `Source/Data/Specialization.cs` enum

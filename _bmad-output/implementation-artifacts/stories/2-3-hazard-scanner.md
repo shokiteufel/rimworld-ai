@@ -17,6 +17,8 @@ Als Mod-Entwickler möchte ich **Hazard-Zellen (Lava, Pollution, Toxic-Terrain, 
 6. Performance: Hazard-Scan < 100ms für 250×250 Map
 7. Unit-Tests für `HazardScanner.DetectHazards` mit fake-Map-Data
 8. Integration: Biotech-Polluted-Map zeigt korrekten Exclude-Set
+9. **Schema-Bump** (HIGH-Fix): `excludedCells` in `BotMapComponent` ist neues Feld → via Story 1.9 `SchemaVersionRegistry` einen Schema-Eintrag `BotMapComponent.excludedCells` anlegen, `schemaVersion` auf 4 bumpen (falls aktueller Stand 3). Migrate v3→v4 setzt `excludedCells = new HashSet<(int,int)>()` (leer; Re-Analyse bei `Map.FinalizeInit` populiert neu).
+10. **HashSet-Scribe-Format** (HIGH-Fix, D-23-konform): `excludedCells: HashSet<(int x, int z)>` — Scribe-Serialization via hilfsweise `List<int> _excludedCellsFlat` (Paare `x₁,z₁,x₂,z₂,…`), in `ExposeData()` flatten/rehydrate. Kein `IntVec3` in Persistent-Feld (D-23 verbietet RimWorld-Runtime-Typen wo vermeidbar). Identifier-only-Pattern: `(int,int)`-Tuple ist keine RimWorld-Runtime-Ref.
 
 ## Tasks
 - [ ] `Source/Analysis/HazardScanner.cs` implementieren

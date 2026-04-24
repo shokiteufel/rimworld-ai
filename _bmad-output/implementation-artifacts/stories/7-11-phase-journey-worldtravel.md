@@ -8,25 +8,26 @@
 Als Mod-Entwickler möchte ich **Weltkarten-Reise-Management**: Ambush-Detection, Supply-Replenish, Destination-Pathing.
 
 ## Acceptance Criteria
-1. `WorldTravelManager` steuert Caravan auf Weltkarte
+1. `WorldTravelPhaseRunner` steuert Caravan auf Weltkarte
 2. Ambush-Event: auto-retreat if Ratio > 1.5, sonst fight
 3. Supply-Replenish via Settlement-Trading
 4. Destination erreicht → Credits-Roll-Event akzeptieren
 5. Unit-Tests
 
 ## Tasks
-- [ ] `Source/Decision/WorldTravelManager.cs`
+- [ ] `Source/Decision/WorldTravelPhaseRunner.cs`
 - [ ] Ambush-Handler
 - [ ] Unit-Tests
 
 ## Dev Notes
 **Kontext:** Ending-Pfade.md Journey.
-**Vorausgesetzt:** 7.10, 5.1.
+**Sub-Phase (Story 7.0):** Implementiert `WorldTravel` aus `EndingSubPhaseStateMachine` (letzte Sub-Phase des Journey-Endings).
+**Vorausgesetzt:** 5.1, 7.0, 7.10.
 
 ## File List
 | Pfad | Op |
 |---|---|
-| `Source/Decision/WorldTravelManager.cs` | create |
+| `Source/Decision/WorldTravelPhaseRunner.cs` | create |
 
 ## Testing
 Unit: Ambush-Ratio-Logic.

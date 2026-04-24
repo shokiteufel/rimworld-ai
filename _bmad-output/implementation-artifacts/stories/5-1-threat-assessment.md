@@ -34,3 +34,6 @@ Unit: 4 Bin-Cases.
 
 ## Review-Gate
 Code-Review gegen §2.2, Identifier-only-Pattern.
+
+## Transient/Persistent (MED-Fix, CC-STORIES-11)
+`ThreatReport` ist **transient** — pro-Raid-Event neu berechnet; keine Persistenz in BotGameComponent/BotMapComponent. Save-mitten-in-Raid: nach LoadedGame re-evaluiert CombatCommander die Lage via neues `ThreatAssessment.Evaluate()`-Call statt auf stale `ThreatReport` zurückzugreifen.

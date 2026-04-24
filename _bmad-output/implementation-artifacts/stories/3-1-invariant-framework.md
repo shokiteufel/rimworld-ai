@@ -14,9 +14,17 @@ Als Mod-Entwickler möchte ich das **abstrakte `Invariant`-Basis-Framework + `In
 3. `InvariantSet`-Klasse in `Source/Invariants/InvariantSet.cs` mit Liste `Invariant[]`, `CheckAll(snapshot) → InvariantResult[]`
 4. **Idempotenz-Kontrakt** (AI-2): gleicher Snapshot → gleicher InvariantResult; keine Side-Effects
 5. `EmergencyResolver` wie in Architecture §2.1: `Resolve(InvariantResult[], ColonySnapshot) → EmergencyChoice?` — wählt höchste-scorende aktive Emergency via `BasePriority + context_modifiers`
-6. `EmergencyHandler` abstract: `Score(state)`, `Eligibility(state)`, `Claim(pawns) → DraftOrder?`, `Apply(controller)`
-7. `I0_ColonyExtinct` konkret: `colonist_count == 0 → Violated=true, Severity=∞`, Handler `E_EXTINCT` setzt Bot auf OFF
-8. Unit-Tests: Invariant-Idempotenz, EmergencyResolver-Utility-Scoring mit 2 konkurrierenden Emergencies
+6. `EmergencyHandler` abstract: `Score(state)`, `Eligibility(state)`, `Claim(pawns) → DraftOrder?`, `Apply(controller)` + **`LockPriority: int`-Property** (CC-STORIES-06, default 50)
+7. **Pawn-Exclusivity-Lock-Framework** (CC-STORIES-06 aus Review Round 1):
+   - `EmergencyResolver` hat `pawnClaims: Dictionary<string UniqueLoadID, (string EmergencyId, int UnlockTick, int LockPriority)>`
+   - `Claim(pawns)` registriert für jeden claimten Pawn einen Eintrag: `UnlockTick = now + handler.LockDurationTicks` (default 3600 = 60s bei 60 TPS)
+   - **Re-Claim während aktiver Lock-Period nur erlaubt bei höherer LockPriority**
+   - Lock-Priority-Matrix (dokumentiert, nicht hardcoded): E-RAID=100, E-BLEED=90, E-HEALTH=80, E-FOODDAYS=70, E-MEDICINE=50, E-FIRE=85, E-FOOD=65, E-SHELTER=55, E-TEMP=55, E-MOOD=20, E-PAWNSLEEP=25, E-MENTALBREAK=30
+   - `ReleasePawn(string UniqueLoadID)` — explizit, z. B. bei Handler-Resolve-Complete
+   - Auto-Release bei `UnlockTick <= now`
+   - DecisionLog-Eintrag bei Lock-Konflikt (niedrigere Priority gewinnt nicht)
+8. `I0_ColonyExtinct` konkret: `colonist_count == 0 → Violated=true, Severity=∞`, Handler `E_EXTINCT` setzt Bot auf OFF
+9. Unit-Tests: Invariant-Idempotenz, EmergencyResolver-Utility-Scoring mit 2 konkurrierenden Emergencies, **Pawn-Lock-Konflikt** (LockPriority-basiert)
 
 ## Tasks
 - [ ] `Source/Invariants/Invariant.cs` abstract
@@ -48,4 +56,8 @@ Als Mod-Entwickler möchte ich das **abstrakte `Invariant`-Basis-Framework + `In
 - Integration: I0 mit ColonySnapshot.ColonistCount=0 → E_Extinct gewählt
 
 ## Review-Gate
-Code-Review gegen §2.1, D-16 (Utility statt fixe Prio), AI-2 (pure).
+Code-Review gegen §2.1, D-16 (Utility statt fixe Prio), AI-2 (pure), **CC-STORIES-06 Lock-Framework korrekt implementiert**.
+
+## Transient/Persistent
+- `pawnClaims: Dictionary<string UniqueLoadID, (string EmergencyId, int UnlockTick, int LockPriority)>` ist **transient** — re-initialisiert bei `LoadedGame`/`StartedNewGame`. Begründung: Emergency-State überlebt Save-Load nicht; neue Emergencies werden nach Load fresh detektiert. Explizit KEIN Eintrag in `SchemaVersionRegistry` (CC-STORIES-01), KEIN `Scribe_Collections.Look`-Call in `ExposeData` des EmergencyResolver.
+- `stalenessCounter` pro Handler (aus Story 3.13) ebenfalls **transient**.

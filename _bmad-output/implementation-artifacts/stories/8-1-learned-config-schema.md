@@ -16,7 +16,14 @@ Als Mod-Entwickler möchte ich **LearnedConfig-Storage-Layer** implementieren mi
 5. Read-Pattern: bei Parse-Fehler → `.corrupt-<ts>` umbenennen, `.bak` laden
 6. `LoadOrDefault()` static method
 7. `SchemaVersion = 2` Field
-8. Unit-Tests: Roundtrip, Corruption-Handling
+8. **XXE/ReDoS-Schutz im XML-Reader** (HIGH-Fix): `XmlReaderSettings` explizit mit
+   - `DtdProcessing = DtdProcessing.Prohibit` (verhindert XXE-Entity-Injection)
+   - `XmlResolver = null` (kein External-Entity-Fetch)
+   - `MaxCharactersFromEntities = 1024` (Schutz gegen Billion-Laughs)
+   - `MaxCharactersInDocument = 2_000_000` (~2 MB Hard-Cap für learned-config)
+   - `async`-Read via `XmlReader.Create(fs, settings)` mit `CancellationToken` + **15s-Timeout** (Task.Delay race; bei Timeout → `.corrupt-<ts>`-Umbenennung identisch zum Parse-Fehler-Pfad)
+   - Begründung: `learned-config.xml` liegt im User-ConfigFolder und kann durch Dritt-Tools oder absichtlich maliziös bearbeitet werden. Default `XmlReader` in älteren .NET-Versionen hat DTD-Processing aktiv.
+9. Unit-Tests: Roundtrip, Corruption-Handling, **XXE-Entity-Payload-Test** (Mock-File mit `<!DOCTYPE …>`-Entity → Parse scheitert mit XmlException → `.corrupt`-Pfad), **Billion-Laughs-Test** (tief-verschachtelte Entities → MaxCharactersFromEntities-Exception), **Timeout-Test** (bewusst langsamer FileStream → 15s-Abbruch)
 
 ## Tasks
 - [ ] `Source/Data/LearnedConfig.cs`
