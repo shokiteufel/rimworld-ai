@@ -1082,9 +1082,10 @@ RimWorldBot/
     <defName>BotControl</defName>
     <label>Bot</label>
     <description>RimWorld Bot — autonome Entscheidungs-KI</description>
-    <tabWindowClass>RimWorldBot.MainTabWindow_BotControl</tabWindowClass>
+    <tabWindowClass>RimWorldBot.UI.MainTabWindow_BotControl</tabWindowClass>
     <order>99</order>             <!-- am rechten Rand der Top-Bar -->
-    <defaultHidden>false</defaultHidden>
+    <!-- defaultHidden existiert in RimWorld 1.6 MainButtonDef nicht. -->
+    <!-- Verwende `buttonVisible` (default true, bei false wird der Button versteckt). -->
     <iconPath>UI/Buttons/BotIcon</iconPath>
     <minimized>false</minimized>
   </MainButtonDef>

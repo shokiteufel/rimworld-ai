@@ -43,6 +43,21 @@ namespace RimWorldBot.Data
         // Public Accessor damit spätere Stories (z.B. Story 1.5 Keybinding) die Queue erreichen.
         public BoundedEventQueue<BotEvent> EventQueue => eventQueue;
 
+        // Zentraler State-Change-Helper (Story 1.4 AC 4/6/7).
+        // Alle Call-Sites (TabWindow, Keybinding in 1.5, Settings in 1.7) gehen über diese Methode
+        // damit Log + DecisionLog + Persistenz konsistent laufen.
+        public void SetMasterState(ToggleState newState)
+        {
+            if (newState == masterState) return;
+            var oldState = masterState;
+            masterState = newState;
+            Log.Message($"[RimWorldBot] state changed: {oldState} → {newState}");
+            recentDecisions.Add(new DecisionLogEntry(
+                kind: "state_change",
+                reason: $"{oldState} → {newState}",
+                tick: GenTicks.TicksGame));
+        }
+
         // Konstruktor: EventQueue VOR jeder Harmony-Patch-Möglichkeit initialisieren (D-24, F-ARCH-11).
         // RimWorld 1.6 GameComponent hat parameterless Konstruktor; Game-Ref ist via Current.Game erreichbar wenn nötig.
         public BotGameComponent(Game game)

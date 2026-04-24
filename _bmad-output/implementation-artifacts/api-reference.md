@@ -125,6 +125,31 @@
 | Deep-Serialize IExposable | `Scribe_Deep.Look(ref obj, "label")` |
 | Mode-Check | `Scribe.mode == LoadSaveMode.Saving/LoadingVars/PostLoadInit` |
 
+## MainButtonDef (Top-Bar-Buttons, Story 1.4)
+
+**Wichtig** (Round-2-Fix 2026-04-24): Vanilla-MainButtonDef 1.6 hat KEIN Feld `defaultHidden` — frühere Architecture-Doku war falsch. Runtime-XML-Parse-Error bei Verwendung.
+
+Tatsächliche Felder aus `Data/Core/Defs/Misc/MainButtonDefs/MainButtons.xml` (verifiziert 2026-04-24):
+
+| Feld | Typ | Pflicht | Notiz |
+|---|---|---|---|
+| `defName` | string | ja | Vendor-Prefix empfohlen |
+| `label` | string | ja | Lokalisierbar über Language-Keys |
+| `description` | string | nein | Tooltip |
+| `tabWindowClass` | Type-FullName | für Tab-Buttons | `RimWorldBot.UI.MainTabWindow_BotControl` (Namespace!) |
+| `workerClass` | Type-FullName | optional | Alternativer Click-Handler statt TabWindow |
+| `order` | int | nein | Vanilla: 1-500. Höhere Werte = weiter rechts. Menu=500, History=80, Factions=90 |
+| `defaultHotKey` | KeyCode | nein | z. B. `Tab`, `F1`..`F9` |
+| `closesWorldView` | bool | nein | Click schließt World-View |
+| `validWithoutMap` | bool | nein | Button auch ohne aktive Map funktional |
+| `canBeTutorDenied` | bool | nein | Vanilla: Menu=false, sonst default true |
+| `minimized` | bool | nein | Bei true wird Button als Icon-only ohne Label gerendert |
+| `buttonVisible` | bool | nein | default true; bei false komplett ausgeblendet |
+| `iconPath` | string | nein | relativ zu `Textures/` (z. B. `UI/Buttons/BotIcon` → `Textures/UI/Buttons/BotIcon.png`) |
+
+**Nicht existent** (Architecture-Drift-Findings):
+- `defaultHidden` — **FALSCH**, verursacht XML-Parse-Error in 1.6. Verwende `buttonVisible` (default true).
+
 ## Persistence-Pattern (D-14, F-STAB-06)
 
 - Pawn-Persistence via `pawn.GetUniqueLoadID()` (string) statt `thingIDNumber` (int; kollidiert zwischen Save-Sessions)

@@ -16,7 +16,7 @@ Als **Spieler** möchte ich **einen Toggle-Button in der Top-Bar der RimWorld-UI
 
 ## Acceptance Criteria
 
-1. **`Defs/MainButtonDefs.xml`** existiert mit genau dem Snippet aus Architecture §10.2 (`defName: BotControl`, `tabWindowClass: RimWorldBot.MainTabWindow_BotControl`, `order: 99`, `defaultHidden: false`, `iconPath: UI/Buttons/BotIcon`)
+1. **`Defs/MainButtonDefs.xml`** existiert mit Snippet aus Architecture §10.2 (`defName: BotControl`, `tabWindowClass: RimWorldBot.UI.MainTabWindow_BotControl`, `order: 99`, `iconPath: UI/Buttons/BotIcon`, `minimized: false`). **Retroaktiv gefixt 2026-04-24:** `defaultHidden`-Feld ENTFERNT — existiert in RimWorld 1.6 MainButtonDef nicht und verursacht XML-Parse-Error. Namespace auf `RimWorldBot.UI.*` korrigiert (Folder-basierte Namespace-Konvention des Projekts).
 2. **`MainTabWindow_BotControl : MainTabWindow`** in `Source/UI/MainTabWindow_BotControl.cs` implementiert `DoWindowContents(Rect inRect)` mit:
    - Zentriertes Label „Bot State: {currentState}" (Off/Advisory/On)
    - Drei `Widgets.ButtonText`-Buttons: „Off", „Advisory", „On" (jeweils aktiv, setzen `masterState` direkt)

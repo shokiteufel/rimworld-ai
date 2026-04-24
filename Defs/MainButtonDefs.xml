@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MainButtonDef>
+    <defName>BotControl</defName>
+    <label>Bot</label>
+    <description>RimWorld Bot — autonome Entscheidungs-KI</description>
+    <tabWindowClass>RimWorldBot.UI.MainTabWindow_BotControl</tabWindowClass>
+    <order>99</order>
+    <iconPath>UI/Buttons/BotIcon</iconPath>
+    <minimized>false</minimized>
+  </MainButtonDef>
+</Defs>
