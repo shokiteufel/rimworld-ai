@@ -22,7 +22,7 @@ namespace RimWorldBot.Core
             Instance = this;
             var harmony = new Harmony("mediainvita.rimworldbot");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            Log.Message($"[RimWorldBot] initialized, Harmony patches: {harmony.GetPatchedMethods().Count()}");
+            Log.Message($"[RimWorldBot] initialized, Harmony patches: {harmony.GetPatchedMethods().Count()}, BotGameComponent registered");
         }
     }
 }
