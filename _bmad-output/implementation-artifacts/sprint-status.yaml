@@ -12,10 +12,11 @@ sub_phase: STORY_DRAFTING
 
 current_sprint:
   number: 1
-  goal: "Epic-1 Stories draften (1-1 bis 1-8), alle auf ready-for-dev bringen"
+  goal: "Alle 85 Stories (Epic 1-8) gedraftet + Party-Mode-Review → Dev-Gate für Epic 1 (D-30 All-Upfront)"
   started: 2026-04-24
 
 # Epic-Status (konsistent mit planning-artifacts/epics.md)
+# Epic-Stati: backlog (keine Story in-progress), in-progress (≥1 Story in-progress), done (alle Stories done/optional)
 epic-1: backlog
 epic-2: backlog
 epic-3: backlog
@@ -39,95 +40,95 @@ development_status:
   1-8-localization-skeleton: ready-for-dev
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
-  2-1-map-cell-data-basic-scan: backlog
-  2-2-wild-plant-detection: backlog
-  2-3-hazard-scanner: backlog
-  2-4-defensibility-score: backlog
-  2-5-scoring-formula: backlog
-  2-6-cluster-analysis: backlog
-  2-7-overlay-rendering: backlog
-  2-8-caching-savegame: backlog
-  2-9-coroutine-split: backlog
+  2-1-map-cell-data-basic-scan: ready-for-dev
+  2-2-wild-plant-detection: ready-for-dev
+  2-3-hazard-scanner: ready-for-dev
+  2-4-defensibility-score: ready-for-dev
+  2-5-scoring-formula: ready-for-dev
+  2-6-cluster-analysis: ready-for-dev
+  2-7-overlay-rendering: ready-for-dev
+  2-8-caching-savegame: ready-for-dev
+  2-9-coroutine-split: ready-for-dev
 
   # Epic 3 — Invariants + Phase 0+1 (MVP, Launch-critical)
-  3-1-invariant-framework: backlog
-  3-2-invariants-i1-i5: backlog
-  3-3-emergency-fire: backlog
-  3-4-emergency-bleed: backlog
-  3-5-emergency-food: backlog
-  3-6-emergency-shelter-temp: backlog
-  3-7-phase-0-goals: backlog
-  3-8-build-planner-mvp: backlog
-  3-9-bill-manager-mvp: backlog
-  3-10-work-assigner-basic: backlog
-  3-11-phase-1-goals: backlog
-  3-12-phase-detection: backlog
+  3-1-invariant-framework: ready-for-dev
+  3-2-invariants-i1-i5: ready-for-dev
+  3-3-emergency-fire: ready-for-dev
+  3-4-emergency-bleed: ready-for-dev
+  3-5-emergency-food: ready-for-dev
+  3-6-emergency-shelter-temp: ready-for-dev
+  3-7-phase-0-goals: ready-for-dev
+  3-8-build-planner-mvp: ready-for-dev
+  3-9-bill-manager-mvp: ready-for-dev
+  3-10-work-assigner-basic: ready-for-dev
+  3-11-phase-1-goals: ready-for-dev
+  3-12-phase-detection: ready-for-dev
 
   # Epic 4 — Phase-State-Machine 2-4 (Alpha)
-  4-1-research-scheduler: backlog
-  4-2-phase-2-goals: backlog
-  4-3-recruiting-logic: backlog
-  4-4-prisoner-cell-layout: backlog
-  4-5-phase-3-goals: backlog
-  4-6-phase-4-goals: backlog
-  4-7-killpoint-layout: backlog
-  4-8-invariants-i6-i12: backlog
-  4-9-emergency-i6-i12: backlog
-  4-10-skill-grinding: backlog
+  4-1-research-scheduler: ready-for-dev
+  4-2-phase-2-goals: ready-for-dev
+  4-3-recruiting-logic: ready-for-dev
+  4-4-prisoner-cell-layout: ready-for-dev
+  4-5-phase-3-goals: ready-for-dev
+  4-6-phase-4-goals: ready-for-dev
+  4-7-killpoint-layout: ready-for-dev
+  4-8-invariants-i6-i12: ready-for-dev
+  4-9-emergency-i6-i12: ready-for-dev
+  4-10-skill-grinding: ready-for-dev
 
   # Epic 5 — Combat & Raids (Alpha, parallel zu Epic 4 ab Story 5.1-5.3)
-  5-1-threat-assessment: backlog
-  5-2-raid-announce-hook: backlog
-  5-3-combat-commander-tree: backlog
-  5-4-draft-controller: backlog
-  5-5-flee-option: backlog
-  5-6-post-raid-handler: backlog
-  5-7-focused-fire-tactics: backlog
-  5-8-retreat-fallback: backlog
+  5-1-threat-assessment: ready-for-dev
+  5-2-raid-announce-hook: ready-for-dev
+  5-3-combat-commander-tree: ready-for-dev
+  5-4-draft-controller: ready-for-dev
+  5-5-flee-option: ready-for-dev
+  5-6-post-raid-handler: ready-for-dev
+  5-7-focused-fire-tactics: ready-for-dev
+  5-8-retreat-fallback: ready-for-dev
 
   # Epic 6 — Industrialization Phase 5+6 (Beta)
-  6-1-power-grid-planner: backlog
-  6-2-phase-5-goals: backlog
-  6-3-hitech-workbenches: backlog
-  6-4-phase-6-goals: backlog
-  6-5-specialist-roles: backlog
-  6-6-components-factory: backlog
+  6-1-power-grid-planner: ready-for-dev
+  6-2-phase-5-goals: ready-for-dev
+  6-3-hitech-workbenches: ready-for-dev
+  6-4-phase-6-goals: ready-for-dev
+  6-5-specialist-roles: ready-for-dev
+  6-6-components-factory: ready-for-dev
   6-7-bionics-option: optional
-  6-8-flak-armor-rollout: backlog
-  6-9-turret-placement: backlog
-  6-10-mech-cluster-handler: backlog
+  6-8-flak-armor-rollout: ready-for-dev
+  6-9-turret-placement: ready-for-dev
+  6-10-mech-cluster-handler: ready-for-dev
 
   # Epic 7 — Endings (Release, Launch-critical)
-  7-1-ending-feasibility-engine: backlog
-  7-2-feasibility-daily-recompute: backlog
-  7-3-switch-trigger-logic: backlog
-  7-4-force-option: backlog
-  7-5-phase-ship-research: backlog
-  7-6-phase-ship-bauplatz: backlog
-  7-7-phase-ship-ai-persona-core: backlog
-  7-8-phase-ship-finale: backlog
-  7-9-phase-journey-quest-watcher: backlog
-  7-10-phase-journey-caravan: backlog
-  7-11-phase-journey-worldtravel: backlog
-  7-12-phase-royal-honor-farm: backlog
-  7-13-phase-royal-stellarch: backlog
-  7-14-phase-archonexus-wealth: backlog
-  7-15-phase-archonexus-transition: backlog
-  7-16-phase-void-monolith: backlog
-  7-17-phase-void-dark-study: backlog
-  7-18-phase-void-provocation: backlog
+  7-1-ending-feasibility-engine: ready-for-dev
+  7-2-feasibility-daily-recompute: ready-for-dev
+  7-3-switch-trigger-logic: ready-for-dev
+  7-4-force-option: ready-for-dev
+  7-5-phase-ship-research: ready-for-dev
+  7-6-phase-ship-bauplatz: ready-for-dev
+  7-7-phase-ship-ai-persona-core: ready-for-dev
+  7-8-phase-ship-finale: ready-for-dev
+  7-9-phase-journey-quest-watcher: ready-for-dev
+  7-10-phase-journey-caravan: ready-for-dev
+  7-11-phase-journey-worldtravel: ready-for-dev
+  7-12-phase-royal-honor-farm: ready-for-dev
+  7-13-phase-royal-stellarch: ready-for-dev
+  7-14-phase-archonexus-wealth: ready-for-dev
+  7-15-phase-archonexus-transition: ready-for-dev
+  7-16-phase-void-monolith: ready-for-dev
+  7-17-phase-void-dark-study: ready-for-dev
+  7-18-phase-void-provocation: ready-for-dev
 
   # Epic 8 — Polish, Learning, Localization, DLC-Matrix (Release, Launch-critical)
-  8-1-learned-config-schema: backlog
-  8-2-bayesian-weight-update: backlog
-  8-3-override-evaluator: backlog
-  8-4-override-library: backlog
-  8-5-reset-button: backlog
-  8-6-localization-full-coverage: backlog
-  8-7-debug-panel: backlog
-  8-8-telemetry-logger: backlog
-  8-9-dlc-matrix-testing: backlog
-  8-10-github-release-pipeline: backlog
+  8-1-learned-config-schema: ready-for-dev
+  8-2-bayesian-weight-update: ready-for-dev
+  8-3-override-evaluator: ready-for-dev
+  8-4-override-library: ready-for-dev
+  8-5-reset-button: ready-for-dev
+  8-6-localization-full-coverage: ready-for-dev
+  8-7-debug-panel: ready-for-dev
+  8-8-telemetry-logger: ready-for-dev
+  8-9-dlc-matrix-testing: ready-for-dev
+  8-10-github-release-pipeline: ready-for-dev
 
 milestones:
   - name: MVP
@@ -149,10 +150,11 @@ next_actions:
   - "Architecture v2.3 (Option A, 4 Review-Runden): approved 2026-04-24 ✓ — Decisions D-11 bis D-26"
   - "epics.md: approved 2026-04-24 ✓"
   - "Phase-Transition PM_ARCHITECT → STORY_DRAFTING: 2026-04-24 ✓ — Decision D-27"
-  - "Epic-1 Stories 1-1 bis 1-8 gedraftet, alle TBDs aufgelöst, Status ready-for-dev ✓ (2026-04-24)"
-  - "GitHub-Repo: https://github.com/shokiteufel/rimworld-ai (public) ✓ (2026-04-24) — Decision D-28"
-  - "WARTEND: User-Review der 8 Stories → bei Approval kann Dev-Phase starten (Story 1.1 → in-progress)"
-  - "Bei Start Dev-Phase: /guardian erneut triggern (DEV-Watchdogs design-critic + progress-check dazu)"
+  - "Epic-1 Stories 1-1 bis 1-8 gedraftet ✓ (2026-04-24)"
+  - "GitHub-Repo: https://github.com/shokiteufel/rimworld-ai ✓ (2026-04-24) — D-28"
+  - "D-30 2026-04-24: All-Upfront-Drafting aktiviert — User-Override auf Per-Epic-BMAD-Default"
+  - "Alle 85 Stories (Epic 1-8) gedraftet + Status ready-for-dev ✓ (2026-04-24) — D-30"
+  - "LAUFEND: Party-Mode-Review über alle 85 Stories (4 Personas) → Findings-Revision → Dev-Start"
 
 decision_log: ../../_bmad/decisions.md
 runtime_spec: ../../Mod-Leitfaden.md

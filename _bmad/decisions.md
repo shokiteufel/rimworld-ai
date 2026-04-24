@@ -15,6 +15,21 @@ Konsequenzen: ...
 
 ---
 
+## D-30: All-Upfront-Story-Drafting vor Epic-1-Dev-Start
+Datum: 2026-04-24
+Status: accepted (User-Override auf BMAD-Default)
+Kontext: BMAD-Standard ist Per-Epic-Drafting — nur die aktuelle Epic-Batch draften, nach Epic-Done die nächste. Begründung dort: Story-Details ändern sich durch Erkenntnisse aus früheren Implementierungen. User hat explizit „Option 2" gewählt: alle 85 Stories (Epic 1-8) vor Epic-1-Dev-Start draften, dann einmaligen Party-Mode-Review statt 8 iterativer Review-Runden.
+Entscheidung: Sprint 1 Goal erweitert: „Alle 85 Stories (Epic 1-8) gedraftet + Party-Mode-Review → Dev-Start-Gate für Epic 1". Reihenfolge:
+1. Stories 1-1..1-8 bereits gedraftet (Epic 1)
+2. Stories 2-1..2-9, 3-1..3-12, 4-1..4-10, 5-1..5-8, 6-1..6-10, 7-1..7-18, 8-1..8-10 werden nachgezogen
+3. Party-Mode-Review über alle 85 Stories (4 Personas parallel, scoped-by-Epic)
+4. Findings eingearbeitet
+5. Sprint 1 Goal erfüllt → Dev-Phase für Story 1.1 startet
+Begründung: (a) User will einmaligen Review-Aufwand statt 8× Iteration. (b) Story-Drafting ist zu diesem Zeitpunkt bereits informiert durch die durchlaufenen 4 Architecture-Review-Runden — die Unsicherheit die Per-Epic-Drafting ursprünglich adressieren soll, ist durch die intensive Architecture-Phase stark reduziert. (c) Party-Mode-Review über alle 85 gibt Cross-Epic-Konsistenzchecks (Naming, Pattern-Anwendung, Dependency-Grafiken), die bei Per-Epic nicht entstehen würden.
+Konsequenzen: Circa 67 weitere Story-Dateien zu schreiben (Epic 2-8). Story-Format kompakter als Epic-1-Stories (Decisions-Kontext ist geteilt, weniger Inline-TBD-Erklärungen nötig). Nach Draft: Party-Mode über alle 85. Danach evtl. Revision-Runde. Das erhöht Zeit-Investment in Planning vs. Dev-Progress; User-Override akzeptiert das Tradeoff.
+
+---
+
 ## D-28: Repository-Name `rimworld-ai`
 Datum: 2026-04-24
 Status: accepted
