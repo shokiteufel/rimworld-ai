@@ -1,6 +1,6 @@
 # Story 1.8: Localization-Skeleton (DE + EN Keyed-Strings)
 
-**Status:** ready-for-dev
+**Status:** in-progress (retroactive Bug-Fix 2026-04-25)
 **Epic:** Epic 1 — Mod-Skeleton & Toggle
 **Size:** S
 **Sprint:** 1
@@ -17,7 +17,7 @@ Als **Spieler** möchte ich **alle Mod-Strings aus Stories 1.1–1.7 auf Deutsch
 ## Acceptance Criteria
 
 1. **Vollständige Key-Coverage:** Alle in Stories 1.2–1.7 hardcoded-gesetzten UI-Strings sind durch `"key".Translate()`-Calls ersetzt; keine englischen Strings mehr direkt im C#-Code
-2. **`Languages/Deutsch/Keyed/*.xml`** mit Keyed-Files:
+2. **`Languages/German (Deutsch)/Keyed/*.xml`** mit Keyed-Files:
    - `Main.xml` (Mod-Description, Button-Label, Tab-Label, generelle Texte)
    - `Settings.xml` (Settings-Panel-Labels + Tooltips + Dialog-Texte — aus Story 1.7)
    - `KeyBindings.xml` (aus Story 1.5 — zumindest der Key-Label)
@@ -29,6 +29,7 @@ Als **Spieler** möchte ich **alle Mod-Strings aus Stories 1.1–1.7 auf Deutsch
 7. **Konsistenz-Check**: Alle Keys in DE existieren auch in EN und umgekehrt — kein „Key X existiert in DE aber nicht EN"
 8. **Convention-Compliance**: Keys folgen `RimWorldBot.<Context>.<Element>`-Pattern (z. B. `RimWorldBot.MainTab.Label`, `RimWorldBot.Settings.Telemetry.Tooltip`). **Retroaktiv 2026-04-25:** Story-Spec hatte Underscore-Pattern, aber Stories 1.4-1.7 nutzen durchgängig Punkt-Convention (gängiger in modernen RimWorld-Mods, lesbarer). Story-AC angepasst statt 30+ Keys zu refaktorieren. **Ausnahme:** `RimWorldBot_ToggleMaster.label` + `.description` in `KeyBindings.xml` folgen Vanilla-RimWorld-Pflicht-Pattern `<defName>.label` für KeyBindingDef-Lookup (nicht überschreibbar).
 9. **Placeholder-Strings** (z. B. „{0}" für Pawn-Name): `"RimWorldBot_StateChanged".Translate(oldState, newState)` funktioniert korrekt in beiden Sprachen
+10. **(Retroactive 2026-04-25, D-39)** **Folder-Naming-Konvention "German (Deutsch)" mit Klammern.** RimWorld 1.6 Vanilla nutzt `Languages/German (Deutsch)/` als deutscher Sprach-Folder (analog `French (Français)`, `Italian (Italiano)` etc.). Mod-Languages-Folder MÜSSEN dieses Format matchen, sonst wird die Mod-Sprache als separate Sprach-Option angeboten ohne Vanilla-Game-Defs zu aktivieren → User wählt unsere "Deutsch" und sieht Mod-Texte deutsch + Vanilla-Texte englisch. Game-Test verifizierte den Bug 2026-04-25 (User-MT-2-Bypass-Report). Tools/check-localization-consistency.ps1 ebenfalls auf neuen Pfad migriert.
 
 ---
 
@@ -36,10 +37,10 @@ Als **Spieler** möchte ich **alle Mod-Strings aus Stories 1.1–1.7 auf Deutsch
 
 - [ ] Audit: alle Stories 1.2–1.7 File-Lists durchgehen + hardcoded-UI-Strings identifizieren
 - [ ] Refactoring: hardcoded Strings in C#-Files durch `"key".Translate()` ersetzen
-- [ ] `Languages/Deutsch/Keyed/Main.xml` anlegen (zentrale Keys)
-- [ ] `Languages/Deutsch/Keyed/Settings.xml` (ggf. aus Story 1.7 erweitert)
-- [ ] `Languages/Deutsch/Keyed/KeyBindings.xml` (aus Story 1.5 erweitert)
-- [ ] `Languages/Deutsch/Keyed/PerPawnToggle.xml` (aus Story 1.6 erweitert)
+- [ ] `Languages/German (Deutsch)/Keyed/Main.xml` anlegen (zentrale Keys)
+- [ ] `Languages/German (Deutsch)/Keyed/Settings.xml` (ggf. aus Story 1.7 erweitert)
+- [ ] `Languages/German (Deutsch)/Keyed/KeyBindings.xml` (aus Story 1.5 erweitert)
+- [ ] `Languages/German (Deutsch)/Keyed/PerPawnToggle.xml` (aus Story 1.6 erweitert)
 - [ ] `Languages/English/Keyed/*.xml` analog (4 Files)
 - [ ] `About/About.xml` Description-Block um DE-Version erweitern
 - [ ] Consistency-Check-Skript (Python oder PowerShell) das prüft: jede Keyed-File-Datei in DE hat identische Key-Liste zu EN
@@ -71,10 +72,10 @@ Als **Spieler** möchte ich **alle Mod-Strings aus Stories 1.1–1.7 auf Deutsch
 | `Source/Core/RimWorldBotMod.cs` | modify | Hardcoded Strings durch `.Translate()` ersetzen |
 | `Source/UI/*.cs` (alle) | modify | analog |
 | `Source/Data/Configuration.cs` | modify | Hilfs-Tooltips durch `.Translate()` |
-| `Languages/Deutsch/Keyed/Main.xml` | create | DE Zentrale Keys |
-| `Languages/Deutsch/Keyed/Settings.xml` | modify (aus 1.7 erweitert) | DE Settings-Keys |
-| `Languages/Deutsch/Keyed/KeyBindings.xml` | modify (aus 1.5) | DE Keybinding-Key |
-| `Languages/Deutsch/Keyed/PerPawnToggle.xml` | modify (aus 1.6) | DE Per-Pawn-Keys |
+| `Languages/German (Deutsch)/Keyed/Main.xml` | create | DE Zentrale Keys |
+| `Languages/German (Deutsch)/Keyed/Settings.xml` | modify (aus 1.7 erweitert) | DE Settings-Keys |
+| `Languages/German (Deutsch)/Keyed/KeyBindings.xml` | modify (aus 1.5) | DE Keybinding-Key |
+| `Languages/German (Deutsch)/Keyed/PerPawnToggle.xml` | modify (aus 1.6) | DE Per-Pawn-Keys |
 | `Languages/English/Keyed/Main.xml` | create | EN Zentrale Keys |
 | `Languages/English/Keyed/Settings.xml` | modify | EN Settings-Keys |
 | `Languages/English/Keyed/KeyBindings.xml` | modify | EN Keybinding-Key |

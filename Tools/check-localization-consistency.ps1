@@ -4,10 +4,13 @@
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$deDir = Join-Path $repoRoot 'Languages/Deutsch/Keyed'
+# Story 1.8 Bug-Fix 2026-04-25: RimWorld 1.6 Vanilla-Konvention erfordert "German (Deutsch)"
+# als Folder-Name (mit Klammern). "Deutsch" allein matcht die Vanilla-Sprache nicht und triggert
+# den Fallback-zu-English-Bug bei aktivierter Mod.
+$deDir = Join-Path $repoRoot 'Languages/German (Deutsch)/Keyed'
 $enDir = Join-Path $repoRoot 'Languages/English/Keyed'
 
-if (-not (Test-Path $deDir)) { Write-Error "Deutsch/Keyed dir missing: $deDir"; exit 1 }
+if (-not (Test-Path $deDir)) { Write-Error "German (Deutsch)/Keyed dir missing: $deDir"; exit 1 }
 if (-not (Test-Path $enDir)) { Write-Error "English/Keyed dir missing: $enDir"; exit 1 }
 
 function Get-KeyValuePairs($dir) {

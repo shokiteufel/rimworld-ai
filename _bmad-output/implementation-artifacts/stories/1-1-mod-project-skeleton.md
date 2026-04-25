@@ -16,7 +16,7 @@ Als **Mod-Entwickler** möchte ich **ein leeres, aber lade-fähiges Mod-Paket mi
 
 ## Acceptance Criteria
 
-1. **Mod-Paket-Struktur** entspricht Architecture §10.2 (`About/`, `Assemblies/`, `Defs/`, `Patches/`, `Languages/Deutsch/Keyed/`, `Languages/English/Keyed/`, `LoadFolders.xml`)
+1. **Mod-Paket-Struktur** entspricht Architecture §10.2 (`About/`, `Assemblies/`, `Defs/`, `Patches/`, `Languages/German (Deutsch)/Keyed/`, `Languages/English/Keyed/`, `LoadFolders.xml`). Folder-Naming "German (Deutsch)" mit Klammern ist Vanilla-RimWorld-1.6-Konvention — siehe D-39 (retroactive Story 1.8 Bug-Fix 2026-04-25).
 2. **`About/About.xml`** enthält: `name`, `packageId` (`mediainvita.rimworldbot`), `author`, `url` (GitHub-Repo), `description` (DE + EN), `supportedVersions` (`1.5`, `1.6`), `modDependencies` (Harmony: `brrainz.harmony`)
 3. **`About/Preview.png`** existiert als Platzhalter (256×256, wird in Story 8.x gegen finales Artwork ersetzt)
 4. **`Source/RimWorldBot.csproj`** kompiliert zu `Assemblies/RimWorldBot.dll` (Target: .NET Framework 4.7.2, RimWorld-Assembly-References via NuGet-Package `Krafs.Rimworld.Ref` oder Local-Refs)

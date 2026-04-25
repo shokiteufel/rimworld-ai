@@ -15,6 +15,39 @@ Konsequenzen: ...
 
 ---
 
+## D-39: Languages-Folder-Konvention "German (Deutsch)" — RimWorld 1.6 Vanilla-Match (retroactive Story 1.8 Bug-Fix)
+Datum: 2026-04-25
+Status: accepted
+Kontext: User-Bug-Report 2026-04-25: nach Aktivierung der Mod zeigt RimWorld alle Vanilla-Texte auf Englisch, obwohl Sprache auf "Deutsch" gestellt. Mod-eigene Texte erscheinen korrekt deutsch.
+
+Root-Cause-Analyse:
+- Vanilla RimWorld 1.6 Languages-Folder-Liste (verifiziert in `D:\SteamLibrary\...\Data\Core\Languages\`):
+  - English/ (ohne Klammern)
+  - German (Deutsch).tar (mit englischem Vornamen + Klammer-Eigenname)
+  - French (Français).tar
+  - Italian (Italiano).tar
+  - ... (alle Nicht-English-Sprachen mit Klammer-Notation)
+- Mod hatte `Languages/Deutsch/` (nur Eigenname).
+- RimWorld lädt unsere Folder-Texte unter dem Sprach-Tag "Deutsch" — die ist eine SEPARATE Sprach-Option in der Game-Sprachauswahl, NICHT die gleiche wie Vanilla "German (Deutsch)".
+- User wählt "Deutsch" (unsere Mod-Variante) → Vanilla-Game-Defs (alle in "German (Deutsch)") werden nicht aktiviert → Vanilla-Fallback ist English. Mod-Texte erscheinen deutsch (weil unsere Files unter "Deutsch" liegen), Vanilla-Texte englisch.
+
+Entscheidung:
+1. **Folder-Rename**: `Languages/Deutsch/` → `Languages/German (Deutsch)/` (git mv, alle 4 Keyed-Files mit).
+2. **Tools/check-localization-consistency.ps1** auf neuen Pfad migriert mit Inline-Bug-Fix-Comment.
+3. **Story 1.1 + 1.8 + PRD** entsprechend updated; neue AC-10 in Story 1.8 für Folder-Naming-Konvention.
+4. **Verifikation**: User soll MT-2 wiederholen mit neuem Folder — Sprache auf "German (Deutsch)" stellen → Vanilla-Texte deutsch + Mod-Texte deutsch erwartet.
+
+Begründung: Vanilla-Konvention ist zwingend matchend, sonst entstehen Sprach-Duplikate in der Game-Sprachauswahl mit unterschiedlichen Coverage-Sets. Inline-Eigenname allein ist nicht-konventional und bricht User-Erwartung ("warum hab ich auf einmal zwei deutsche Sprachoptionen?").
+
+Konsequenzen:
+- **Story 1.8 retroactive auf in-progress** für Re-Verifikation, dann wieder done.
+- **Epic 1 retroactive auf in-progress** weil 1.8 nicht mehr done.
+- **Story 1.6 (Per-Pawn-Toggle)** referenziert auch das Languages-DE-Folder via `PerPawnToggle.xml` — durch git mv automatisch mit-migriert, kein zusätzlicher Edit nötig.
+- **Production-DLL** unverändert, kein Code-Change. Reines Asset-Layout.
+- **MT-3 Marathon-Schritt 6 (Sprache umstellen)** erwartet jetzt: "German (Deutsch)" Option in Vanilla-Liste, klickbar, zeigt Vanilla + Mod beide deutsch.
+
+---
+
 ## D-38: Story 1.14 — Option A gewählt (Production-csproj refactor zu Game-Install-Refs)
 Datum: 2026-04-25
 Status: accepted

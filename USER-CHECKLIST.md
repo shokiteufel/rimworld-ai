@@ -2,7 +2,7 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Epic 1 komplett ✓ — Test-Marathon offen)
+**Last updated:** 2026-04-25 (Story 1.8 retroactive Bug-Fix — Sprache-Folder-Rename, MT-4 zur Verifikation)
 
 ---
 
@@ -19,6 +19,23 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 ---
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
+
+### MT-4: Sprach-Bug-Re-Verifikation — **PFLICHT vor MT-3**
+**Wann:** Jetzt, vor MT-3.
+**Warum:** Story 1.8 Bug-Fix — Languages-Folder umbenannt von `Deutsch/` auf `German (Deutsch)/` (RimWorld 1.6 Vanilla-Konvention). Dein Bug-Report war goldwert: ohne Klammer-Notation war unsere Mod-Sprache eine Schein-Option neben Vanilla-"German (Deutsch)" und hat den Sprach-Stack zerschossen.
+
+**Schritte:**
+1. RimWorld neu starten (frisch, damit Languages-Folder neu gescannt wird).
+2. Hauptmenü → Options → Sprache: **„German (Deutsch)"** wählen (NICHT mehr ein separates "Deutsch" zu sehen — falls doch, hat der Refactor was übersehen).
+3. Spiel-Texte sollten alle deutsch sein (Hauptmenü-Buttons: "Spiel laden", "Optionen", etc.).
+4. Neues Game starten — Top-Bar/Bottom-Bar deutsch.
+5. Bot-Button Bottom-Bar → State-Cycle wie vorher, jetzt mit deutschen Labels.
+6. Settings → "RimWorld Bot" → 5 Sektionen + Settings-Texte deutsch.
+7. Spiel schließen.
+
+**Erwartet:** Vanilla-Texte UND Mod-Texte beide deutsch. Nur EINE deutsche Sprach-Option in der Liste (nicht mehr zwei wie vorher).
+
+**Was zurückmelden:** „MT-4 PASS" + ggf. Player.log-Excerpt. Falls die Sprach-Liste immer noch zwei DE-Optionen zeigt, screenshot oder Folder-Liste-Output.
 
 ### MT-3: Epic-1-Test-Marathon — **PFLICHT für Sprint-3-Start (Variante A)**
 **Wann:** Vor Sprint-3-Start (deinem Wunsch nach 1.14 done).

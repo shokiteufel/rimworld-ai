@@ -180,7 +180,7 @@ Es existieren nur Assistenz-Mods (Common Sense, AllowTool, Better Pawn Control),
 **Als Spieler** will ich die Mod in Deutsch oder Englisch nutzen.
 
 **Acceptance Criteria:**
-- `Languages/Deutsch/Keyed/*.xml`
+- `Languages/German (Deutsch)/Keyed/*.xml` (Vanilla-Folder-Konvention RimWorld 1.6 — Klammer-Notation matcht die Game-Sprachoption)
 - `Languages/English/Keyed/*.xml`
 - Dropdown in ModSettings: System-Default oder explicit
 - Alle UI-Texte lokalisiert (keine Hardcoded-Strings)
