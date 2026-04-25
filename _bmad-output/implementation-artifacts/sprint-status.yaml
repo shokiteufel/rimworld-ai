@@ -54,7 +54,7 @@ development_status:
   1-14-test-runtime-infrastructure-refactor: done  # 2026-04-25: Option A umgesetzt (D-38), 68/68 Tests grün, CR R1 (2 HIGH + 3 MED + 1 LOW) → Fixes → R2 (1 HIGH-3 README-Counts) → R3 APPROVE → MT-2 User-Game-Test PASS (Player.log: [RimWorldBot] initialized, 5× State-Change-Logs, keine MissingMethodException/TypeLoadException). Epic 1 komplett.
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
-  2-1-map-cell-data-basic-scan: in-progress  # 2026-04-25: Sprint 3 Story 1, Snapshot-Foundation für Epic 2
+  2-1-map-cell-data-basic-scan: review  # 2026-04-25: Implementation + 11 neue Tests (79/79 grün), CR R1 (2 CRIT + 3 HIGH + 5 MED + 5 LOW) → Fixes (SafeTick raus, single try/catch + SafeDefault, Closure-Allocations weg, GetPawns Dedup, IsMountain-Doc, ClassifyHazard-Comment, HealthSummary-non-binding, SnapshotDebugActions für MT-5) → R2 APPROVE; wartet auf MT-5 User-Game-Test (TC-2.1-SCAN) bevor done
   2-2-wild-plant-detection: ready-for-dev
   2-3-hazard-scanner: ready-for-dev
   2-4-defensibility-score: ready-for-dev

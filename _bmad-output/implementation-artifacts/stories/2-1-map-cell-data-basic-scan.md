@@ -1,6 +1,6 @@
 # Story 2.1: MapCellData-Snapshot + Basis-Scan
 
-**Status:** in-progress
+**Status:** review
 **Epic:** Epic 2 — Map-Analyzer
 **Size:** M
 **Decisions referenced:** D-14 (Persistence-Scoping), D-23 (Identifier-only in Plan-Records, analog für Snapshots)
@@ -16,7 +16,7 @@ Als Mod-Entwickler möchte ich den grundlegenden Map-Scan-Mechanismus mit `CellS
 5. Per-Cell-Daten werden **nicht persistiert** (D-14 + Architecture §2.2: `MapAnalysisSummary` persistiert nur Top-3-Sites)
 6. Basis-Scan läuft in unter 500ms auf 250×250 Map (Performance-Budget §8 — hier noch ohne Coroutine-Split, das ist Story 2.9)
 7. Unit-Tests prüfen `CellSnapshot`-Konstruktion und Value-Equality
-8. Integration-Test: auf echter Map Scan aufrufen, Array-Länge = `map.Area`
+8. **Integration-Test (User-Game-Test MT-5)**: GetCells einmal auf echter Map triggern (DebugAction-Trigger oder einmaliger MapComponent-Initial-Scan), Player.log assert: `[RimWorldBot] GetCells scan: <N>ms for <map.Area> cells (map ..., area ...)`. Erwartet: N < 500ms auf Default-250×250 Map. Resultats-Array-Länge == map.Area implizit verifiziert via Log-Output.
 
 ## Tasks
 - [ ] `CellSnapshot` record mit allen Feldern

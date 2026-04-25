@@ -16,7 +16,27 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
 
-_(Aktuell keine offen — Sprint 3 wird neue MTs bringen sobald Stories laufen.)_
+### MT-5: Story 2.1 Snapshot-Scan-Verifikation — **PFLICHT für Story 2.1 done**
+**Wann:** Nach R2 APPROVE.
+**Warum:** Story 2.1 AC-8 fordert Integration-Test mit echter Map (Array-Länge = `map.Area`, Performance < 500ms). Statisch nicht testbar — User-Game-Test pflicht.
+
+**Schritte:**
+1. RimWorld neu starten (frischer Build).
+2. Spiel laden ODER neue Kolonie starten (irgendeine Map-Größe geht, Default 250×250 bevorzugt für Performance-Probe).
+3. Im Spiel: Dev-Mode aktiv (war schon bei MT-3) → Top-Bar **Debug-Aktionen-Menü** (3. Icon, X-Stern).
+4. Im Menü scrollen bis zur Kategorie **„RimWorldBot"** → Eintrag **„Trigger Snapshot Scan (Story 2.1)"** klicken.
+5. **Player.log** öffnen: `%APPDATA%\..\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Player.log`
+6. Erwartet (Beispiel-Output):
+   ```
+   [RimWorldBot] GetCells scan: 87ms for 62500 cells (map 1, area 62500).
+   [RimWorldBot] DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True).
+   ```
+7. Verifizieren:
+   - **`match=True`** → AC-8 PASS (Array-Länge == map.Area).
+   - **Erste Zahl in `GetCells scan`** unter 500ms → AC-6 PASS.
+   - Keine `[RimWorldBot] GetCells: cell-mapping exception` Warnings → CRIT-1 nicht getriggert.
+
+**Was zurückmelden:** „MT-5 PASS" + Player.log-Excerpt mit den 2 `[RimWorldBot]`-Lines. Falls Performance >500ms oder match=False: Player.log-Excerpt + Map-Größe (Hauptmenü → World → Map-Size, oder Save-File-Name).
 
 ---
 
