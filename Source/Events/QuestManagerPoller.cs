@@ -29,6 +29,34 @@ namespace RimWorldBot.Events
         // explizit gegen den Sentinel matchen können statt Magic-String zu duplizieren (CR LOW-1).
         public const string UnknownQuestDef = "<unknown>";
 
+        // Story 1.14 Test-Seams (D-38): injectable Quest-Source + Tick-Source fuer Tests
+        // im xUnit-Runner ohne Verse-Runtime. Quest ist Verse-Type → wir extrahieren die
+        // gebrauchten Felder (id + defName) als (int, string)-Tuple damit der Test-Code
+        // keine echten Quest-Objekte instantiieren muss.
+        // Defaults wrappen Find.QuestManager + GenTicks.TicksGame. ResetForTesting reset beide.
+        // `internal` damit InternalsVisibleTo("RimWorldBot.Tests") darauf zugreift.
+        internal static System.Func<IEnumerable<(int Id, string DefName)>> QuestSource = DefaultQuestSource;
+        internal static System.Func<int> TickProvider = () => GenTicks.TicksGame;
+
+        static IEnumerable<(int Id, string DefName)> DefaultQuestSource()
+        {
+            var qm = Find.QuestManager;
+            if (qm == null) yield break;
+            var quests = qm.QuestsListForReading;
+            if (quests == null) yield break;
+            foreach (var quest in quests)
+            {
+                if (quest == null) continue;
+                yield return (quest.id, quest.root?.defName ?? UnknownQuestDef);
+            }
+        }
+
+        internal static void ResetForTesting()
+        {
+            QuestSource = DefaultQuestSource;
+            TickProvider = () => GenTicks.TicksGame;
+        }
+
         // Aufruf aus BotGameComponent.GameComponentTick — übergibt das persistente Set + Queue.
         // lastSeenQuestIds wird hier mutiert; Persistierung passiert in BotGameComponent.ExposeData
         // (Story 1.12 Schema-Bump auf v4 in SchemaRegistry markiert).
@@ -37,28 +65,23 @@ namespace RimWorldBot.Events
             BotSafe.SafeTick(() =>
             {
                 if (lastSeenQuestIds == null || eventQueue == null) return;
-                var qm = Find.QuestManager;
-                if (qm == null) return;
 
                 // CR LOW-2: Per-Poll-Allokation akzeptiert — Static-Class kann keinen Reuse-Buffer halten,
                 // und ~60 ints alle 21s ist GC-irrelevant. Falls künftig Static→Instance refactored wird,
                 // hier einen Field-Buffer einführen.
                 var current = new HashSet<int>();
-                var quests = qm.QuestsListForReading;
-                if (quests == null) return;   // Defensive: Vanilla-Konvention ist leere Liste, aber kostet nix
-                foreach (var quest in quests)
+                int tick = TickProvider();
+                foreach (var (id, defName) in QuestSource())
                 {
-                    if (quest == null) continue;
-                    current.Add(quest.id);
+                    current.Add(id);
 
                     // Neue Quest → QuestOfferEvent
-                    if (!lastSeenQuestIds.Contains(quest.id))
+                    if (!lastSeenQuestIds.Contains(id))
                     {
-                        var defName = quest.root?.defName ?? UnknownQuestDef;
                         eventQueue.Enqueue(new QuestOfferEvent(
-                            EnqueueTick: GenTicks.TicksGame,
-                            QuestId: quest.id,
-                            QuestDefName: defName));
+                            EnqueueTick: tick,
+                            QuestId: id,
+                            QuestDefName: defName ?? UnknownQuestDef));
                     }
                 }
 
@@ -71,7 +94,7 @@ namespace RimWorldBot.Events
                 foreach (var id in removed)
                 {
                     eventQueue.Enqueue(new QuestRemovedEvent(
-                        EnqueueTick: GenTicks.TicksGame,
+                        EnqueueTick: tick,
                         QuestId: id));
                 }
 

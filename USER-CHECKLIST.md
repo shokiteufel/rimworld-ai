@@ -54,6 +54,21 @@ _(Aktuell keine offen.)_
 
 ---
 
+## 🔵 Geplant nach Epic 1 (User-Wunsch 2026-04-25)
+
+### Epic-1-Abschluss-Test-Marathon
+**Wann:** Nach Story 1.14 done (= Epic 1 komplett).
+**Was:** Du willst alle deferred + nicht-game-getesteten Stories durchprobieren bevor wir Epic 2 starten. Dazu gehören:
+
+- **MT-1** (Story 1.12 QuestManager-Polling) — Game-Test wie unten beschrieben
+- **MT-2** (Story 1.14 Production-Load) — Refactor-Verifikation
+- **Stories 1.9 + 1.10 + 1.11** — Cross-Cutting-Infra ohne UI, gemeinsam mit MT-1/MT-2 als Smoke-Test (kein Crash bei Game-Start beweist dass SchemaRegistry/BotSafe/PlanArbiter geladen werden)
+- Falls du willst: Re-Verifikation Stories 1.4-1.8 (UI-Stories) — Master-Toggle, Ctrl+K, Per-Pawn-ITab, Settings-Window, Localization DE/EN
+
+Ich erstelle pro Story einen kompakten Test-Schritt + erwartetes Player.log-Output und sammle die Liste hier in einer "MT-3"-Sektion sobald 1.14 done ist.
+
+---
+
 ## 🟢 Optionale Verbesserungen (kein Blocker)
 
 _(Aktuell keine.)_
@@ -72,6 +87,7 @@ _(Aktuell keine.)_
 - 🟡 Decisions = ich brauche deinen Input bevor ich weiterarbeiten kann
 - 🔴 Manuelle Tests = nur du kannst das ausführen (RimWorld-Game-Tests, externe Services, etc.)
 - 🟢 Optional = nice-to-have, kein Blocker
+- 🔵 User Wunsch = Wunschäußerungen deinerseits
 - ✅ Done = erledigt, Audit-Eintrag
 
 Wenn du etwas erledigt hast oder eine Entscheidung getroffen hast: sag's mir kurz im Chat („MT-1 PASS" / „D-1 Option A"). Ich update die Datei und arbeite weiter.

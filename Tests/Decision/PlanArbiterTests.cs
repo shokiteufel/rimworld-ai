@@ -259,27 +259,49 @@ namespace RimWorldBot.Tests.Decision
             Assert.Equal((50, 50), result.AssignedPositions["pawn-A"]);
         }
 
-        // Same-Layer-Conflict-Logging via RecentDecisionsBuffer ist deferred zu Story 1.14
-        // weil RecentDecisionsBuffer transitive Verse-Deps hat (IExposable + Scribe-Calls)
-        // und im xUnit-Runner unter Microsoft .NET Framework 4.7.2 mit TypeLoadException bricht.
-        // Test-Skeletton hier als Skip-Fact damit der Defer im Test-Output sichtbar ist
-        // (statt unter den Tisch zu fallen).
-        [Fact(Skip = "Defer zu Story 1.14: RecentDecisionsBuffer hat Verse-IExposable-Dep → TypeLoadException im xUnit (D-37 mscorlib-Mismatch).")]
+        // Story 1.14 (D-38): Skip-deferred Tests reaktiviert weil mscorlib-Mismatch gefixt
+        // (Production-DLL nutzt jetzt Microsoft net472 mscorlib statt Krafs-Mono-mscorlib).
+
+        [Fact]
         public void ArbitrateBuildPlan_SameLayerConflict_LogsToDecisionLog()
         {
-            // Wenn 1.14 das Type-Identity-Problem fixt:
-            //   var log = new RecentDecisionsBuffer(transientCap: 100, pinnedCap: 25);
-            //   var planA = new BuildPlan(ImmutableList.Create(new BlueprintIntent("Wall", 5, 5, 0)));
-            //   var planB = new BuildPlan(ImmutableList.Create(new BlueprintIntent("Sandbag", 5, 5, 0)));
-            //   PlanArbiter.ArbitrateBuildPlan(new[]{(planA, PlanLayer.PhaseGoal), (planB, PlanLayer.PhaseGoal)}, log);
-            //   Assert.Contains(log.Recent, e => e.Kind == "plan-arbitration-conflict");
+            var log = new RimWorldBot.Data.RecentDecisionsBuffer(transientCap: 100, pinnedCap: 25);
+            var planA = new BuildPlan(ImmutableList.Create(new BlueprintIntent("Wall", 5, 5, 0)));
+            var planB = new BuildPlan(ImmutableList.Create(new BlueprintIntent("Sandbag", 5, 5, 0)));
+
+            PlanArbiter.ArbitrateBuildPlan(new[]
+            {
+                (planA, PlanLayer.PhaseGoal),
+                (planB, PlanLayer.PhaseGoal)
+            }, log);
+
+            Assert.Contains(log.Transient, e => e.Kind == "plan-arbitration-conflict");
         }
 
-        [Fact(Skip = "Defer zu Story 1.14: RecentDecisionsBuffer hat Verse-IExposable-Dep (D-37).")]
-        public void ArbitrateDraftOrder_CrossLayerOverride_LogsOverride()
+        [Fact]
+        public void ArbitrateDraftOrder_SameLayerConflict_LogsConflict()
         {
-            // Verifiziert HIGH-1-Fix aus Story 1.11: bei layer-Override mit gegensaetzlicher
-            // Draft/Undraft-Action wird "plan-arbitration-override" geloggt (Source Z. 99-105).
+            // Same-Layer mit gegensaetzlicher Draft/Undraft-Action → "plan-arbitration-conflict".
+            // (Cross-Layer-Override-Logging in MergeDraftSet ist defensive-code fuer Race-Conditions
+            // beim manuellen Producer-Reordering; mit aktuellem SortByLayerDescending nicht
+            // erreichbar weil hoehere Layer immer zuerst processed werden.)
+            var log = new RimWorldBot.Data.RecentDecisionsBuffer();
+            var planA = new DraftOrder(
+                Draft: ImmutableHashSet.Create("pawn-A"),
+                Undraft: ImmutableHashSet<string>.Empty,
+                RetreatPoint: null);
+            var planB = new DraftOrder(
+                Draft: ImmutableHashSet<string>.Empty,
+                Undraft: ImmutableHashSet.Create("pawn-A"),
+                RetreatPoint: null);
+
+            PlanArbiter.ArbitrateDraftOrder(new[]
+            {
+                (planA, PlanLayer.PhaseGoal),
+                (planB, PlanLayer.PhaseGoal)
+            }, log);
+
+            Assert.Contains(log.Transient, e => e.Kind == "plan-arbitration-conflict");
         }
     }
 }

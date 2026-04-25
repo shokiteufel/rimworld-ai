@@ -95,9 +95,16 @@ namespace RimWorldBot.Decision
                 {
                     if (layer > existing.Layer)
                     {
-                        // Cross-Layer Override: höhere Layer gewinnt automatisch.
-                        // HIGH-1-Fix (Story 1.11 CR Round 1): bei gegensätzlicher Action loggen
-                        // damit Story 8.7 Debug-Panel den Override-Pfad sichtbar machen kann.
+                        // CR Story 1.14 MED-1: dieser Branch ist unter dem aktuellen Public-API
+                        // UNREACHABLE — SortByLayerDescending iteriert hoechste Layer zuerst,
+                        // also wird `decision[pawnId]` immer mit der hoechsten Layer eingetragen
+                        // bevor niedrigere kommen → niedrigere scheitern an `layer > existing.Layer`.
+                        // Defensive-Code-Pfad bleibt erhalten als Future-Proofing fuer den Fall
+                        // dass eine Folge-Story die Producer-Reihenfolge anders steuert (z.B.
+                        // explizite Insertion-Order via Producer-Builder). Das Logging hier waere
+                        // dann ein echter Override-Audit-Trail. Solange das nicht passiert: dead
+                        // code, aber harmless (keine Allokation im Hot-Pfad).
+                        // Gleiches gilt fuer ArbitrateBuildPlan/ArbitrateBillPlan/ArbitrateWorkPriorityPlan.
                         if (existing.Draft != draft)
                         {
                             decisionLog?.Add(new DecisionLogEntry(

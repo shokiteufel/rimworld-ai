@@ -20,7 +20,37 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" PrivateAssets="all" />
+    <!-- Story 1.14 (D-38): Krafs.Rimworld.Ref durch direkte Game-Install-Refs ersetzt.
+         Begründung: Krafs liefert Reference-Assemblies mit Mono-style mscorlib, was zu
+         Type-Identity-Mismatch im xUnit-Runner führt (D-37). Echte RimWorld-DLLs nutzen
+         Microsoft net472 mscorlib via implicit Reference-Assemblies → identische Type-Identity
+         für Test + Production. RimWorldManagedDir kommt aus Directory.Build.props (DRY).
+         Tradeoff: Build erfordert RimWorld-Install — akzeptabel weil Solo-Mod-Project. -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
     <!-- HarmonyLib als Build-Time-Reference. Runtime-Harmony-DLL wird via modDependencies
          (brrainz.harmony) von RimWorld vor uns geladen — ExcludeAssets=runtime verhindert
          doppeltes Bundling in Assemblies/. -->

@@ -1,27 +1,37 @@
 # RimWorldBot Test-Suite
 
-xUnit-Tests fuer pure-Logic-Module der RimWorldBot-Mod.
+xUnit-Tests fuer Production-Module der RimWorldBot-Mod.
 
 ## Voraussetzung
 
-**RimWorld muss installiert sein** — die Test-Assembly referenziert `Assembly-CSharp.dll` + `UnityEngine.*.dll` direkt aus dem Game-Install (nicht via Krafs.Rimworld.Ref-NuGet-Stubs, weil die Reference-Assemblies sind und xUnit-Runtime sie nicht laden kann; siehe D-37).
+**RimWorld muss installiert sein** — Story 1.14 (D-38) hat sowohl Production-csproj als auch
+Tests-csproj auf direkte Game-Install-Refs umgestellt. Ohne RimWorld-Install schlaegt der Build
+mit Resolve-Fehler fehl (eindeutiges Signal an den Dev: clone-without-game ist nicht supported).
 
 ## Default-Pfad
 
-Der Default `RimWorldManagedDir` zeigt auf:
+`Directory.Build.props` im Repo-Root setzt `RimWorldManagedDir` als zentrale Property
+(geerbt von Source/ und Tests/). Default:
 ```
 D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed
 ```
 
 ## Cross-Dev-Setup (anderer RimWorld-Pfad)
 
-Wenn dein RimWorld-Install nicht unter `D:\SteamLibrary` liegt, ueberschreibe die Property auf eine der drei Arten:
+Wenn dein RimWorld-Install nicht unter `D:\SteamLibrary` liegt, ueberschreibe die Property auf
+eine der drei Arten. Override greift fuer **beide** Builds (Production + Tests) dank zentraler
+Directory.Build.props.
 
 ### Option 1: CLI-Override pro Build
 
 ```bash
+# Tests:
 dotnet test Tests/RimWorldBot.Tests.csproj \
   -p:RimWorldManagedDir="C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed"
+
+# Production:
+dotnet build Source/RimWorldBot.csproj -c Release \
+  -p:RimWorldManagedDir="C:\Path\To\Custom\Managed"
 ```
 
 ### Option 2: Environment-Variable (persistent)
@@ -36,17 +46,11 @@ $env:MSBUILD_RIMWORLD_MANAGED_DIR = "C:\Games\RimWorld\RimWorldWin64_Data\Manage
 dotnet test Tests
 ```
 
-### Option 3: `Tests/Directory.Build.props` (NICHT committen)
+### Option 3: Lokales `Directory.Build.props.user` (NICHT committen)
 
-Erstelle eine lokale `Directory.Build.props` neben dem csproj mit deinem Pfad:
-```xml
-<Project>
-  <PropertyGroup>
-    <RimWorldManagedDir>C:\Custom\Path\Managed</RimWorldManagedDir>
-  </PropertyGroup>
-</Project>
-```
-und adde sie zur `.gitignore` damit dein Pfad nicht im Repo landet.
+Erstelle eine lokale `Directory.Build.props.user` neben dem Repo-`Directory.Build.props`,
+adde sie in deine `.gitignore`. Aktuell wird das Pattern noch nicht automatisch importiert —
+fuer einmaliges Setup bleibt CLI-Override (Option 1) oder Env-Var (Option 2) die einfachste Wahl.
 
 ## Tests laufen lassen
 
@@ -55,25 +59,41 @@ cd "d:/SteamLibrary/steamapps/common/RimWorld/Mods/RimWorld Bot/Tests"
 dotnet test --logger "console;verbosity=normal"
 ```
 
-## Aktuelle Coverage
+## Aktuelle Coverage (Stand Story 1.14)
 
-Story 1.13 deliver-Stand (siehe Story-File + D-37):
-- `Tests/Data/SchemaRegistryTests.cs` — Drift-Detection + Edge-Cases + Spec-Locks (Carry-Over Story 1.9)
-- `Tests/Decision/PlanArbiterTests.cs` — Layer-Praezedenz + Conflict-Resolution + AssignedPositions/FocusedFire (Carry-Over Story 1.11; 2 Tests Skip-deferred zu 1.14)
-- `Tests/Meta/TestFrameworkMetaTest.cs` — Discovery + Theory + ImmutableCollections-Smoke
+68 Tests gruen, 0 Skip:
 
-Deferred zu Story 1.14 (Test-Runtime-Infrastructure-Refactor):
-- BotSafeTests (Carry-Over Story 1.10)
-- QuestManagerPollerTests (Carry-Over Story 1.12)
-- BoundedEventQueueTests
-- RecentDecisionsBufferTests
-- Same-Layer-Conflict-Logging-Tests in PlanArbiter (markiert als `[Fact(Skip="...")]`)
+- `Tests/Data/SchemaRegistryTests.cs` — 9 Tests (Drift-Detection via InternalsVisibleTo,
+  Bumps-Chain, Spec-Locks fuer D-36)
+- `Tests/Data/RecentDecisionsBufferTests.cs` — 7 Tests (Add, Auto-Pin, FIFO-Cap)
+- `Tests/Decision/PlanArbiterTests.cs` — 15 Tests (Layer-Praezedenz aller 4 Arbitrate-Methoden,
+  Same-Layer-Conflict-Logging via DecisionLog)
+- `Tests/Events/BoundedEventQueueTests.cs` — 8 Tests (Critical/Normal-Queue, Staleness, Overflow)
+- `Tests/Events/QuestManagerPollerTests.cs` — 9 Tests (Diff-Detection, null-Edge-Cases via
+  Test-Seams QuestSource + TickProvider)
+- `Tests/Core/BotSafeTests.cs` — 14 Tests (SafeTick/SafeApply/Sliding-Window/Poison-Cooldown
+  via NowProvider-Mock-Clock)
+- `Tests/Meta/TestFrameworkMetaTest.cs` — 6 Cases (3 Facts + 1 Theory mit 3 InlineData:
+  Discovery, ImmutableCollections-Production-Roundtrip)
 
-Deferred zu Story 2.1 (Map-Cell-Data-Basic-Scan):
-- FakeSnapshotProvider + TestSnapshotBuilder + MockResolvers (depend on `ISnapshotProvider`)
+Summe: 9+7+15+8+9+14+6 = 68.
 
-## Hintergrund: Warum Game-Install statt NuGet-Stubs?
+Deferred zu Story 2.1 (FakeSnapshotProvider, TestSnapshotBuilder, MockResolvers):
+ISnapshotProvider + Snapshot-Records werden erst in 2.1 definiert.
 
-`Krafs.Rimworld.Ref` (das von Production verwendet wird) liefert Reference-Assemblies (`[ReferenceAssembly]`-Attribute). .NET-Runtime weigert sich solche zur Ausfuehrung zu laden — nur ReflectionOnly-Context. Tests brauchen echte DLLs mit Method-Bodies → wir nehmen sie aus dem Game-Install. Type-Identity matcht weil FullName-Identity wichtiger ist als Assembly-Sources fuer die meisten Verse-Types.
+## Hintergrund: Build-Pipeline-Refactor (Story 1.14, D-38)
 
-Das mscorlib-Type-Identity-Problem (xUnit-Microsoft-mscorlib vs. Production-Krafs-Mono-mscorlib) ist Topic von Story 1.14.
+Production-csproj wurde von `Krafs.Rimworld.Ref`-NuGet-Stubs auf direkte Game-Install-Refs
+umgestellt. Begruendung:
+- **Krafs.Rimworld.Ref** liefert Reference-Assemblies mit `[ReferenceAssembly]`-Attribute,
+  die .NET-Runtime nicht laden kann (`BadImageFormatException`).
+- Krafs lieferte zudem eine eigene Mono-style mscorlib-Stub. Production-Code wurde damit
+  gegen Mono-Type-Identity gebaut, xUnit-Runner laeuft aber unter Microsoft .NET 4.7.2 mit
+  Microsoft-mscorlib → identische Type-Namen, unterschiedliche Type-Identity →
+  `TypeLoadException` beim Laden von `Queue<T>`/`Dictionary<T>`/`HashSet<T>` aus der Production-DLL.
+
+Mit direkten Game-Install-Refs nutzt Production-Code Microsoft net472 mscorlib (via implicit
+Standard-Refs), Test-Runtime laed dieselben Types → kein Mismatch mehr.
+
+Tradeoff: Build erfordert RimWorld-Install. Akzeptabel weil RimWorld-Mod-Entwickler ohnehin
+das Game brauchen (Game-Tests, Steam-Workshop-Upload via In-Game Dev-Mode).

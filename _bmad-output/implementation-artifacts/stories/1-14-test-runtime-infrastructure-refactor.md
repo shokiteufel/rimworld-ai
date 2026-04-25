@@ -1,6 +1,6 @@
 # Story 1.14: Test-Runtime-Infrastructure-Refactor (Cross-Cutting)
 
-**Status:** in-progress
+**Status:** review
 **Epic:** Epic 1 (Cross-Cutting-Infrastruktur)
 **Size:** M
 **Decisions referenced:** D-37 (Story 1.13 Scope-Cut + 1.14 Begründung), CC-STORIES-13
@@ -12,28 +12,31 @@ Als Mod-Entwickler möchte ich **Production-DLL-Build-Pipeline so refactoren, da
 Story 1.13 hat ein strukturelles Test-Runtime-Limit identifiziert: Die `Krafs.Rimworld.Ref`-NuGet-Pkg-built Production-DLL referenziert Mono-style mscorlib (Krafs Stub) für Standard-Collection-Types. xUnit-Test-Runner läuft unter Microsoft .NET Framework 4.7.2 mit Microsoft mscorlib. Identische Types (`Queue<T>`, `Dictionary<T,U>`, `HashSet<T>`) haben in den beiden mscorlib-Assemblies unterschiedliche Type-Identity → Production-DLL-Klassen werfen `TypeLoadException` beim Laden im Test-AppDomain. Konkret aktuell betroffen: `BoundedEventQueue<T>` (Queue), `BotSafe` (Dictionary/List/HashSet), `QuestManagerPoller` (HashSet/List), `RecentDecisionsBuffer` (List).
 
 ## Acceptance Criteria
-1. **Production-Build-Pipeline-Refactor** entlang einer der drei in D-37 dokumentierten Optionen:
-   - **Option A (bevorzugt)**: `Krafs.Rimworld.Ref` aus Production-csproj entfernen, durch manuelle `<Reference>` zu `Assembly-CSharp.dll` + `UnityEngine.*.dll` (HintPath via Game-Install-Property) ersetzen. Microsoft net472 mscorlib via implicit Standard-Refs. Tradeoff: Build erfordert RimWorld-Install (akzeptabel für Dev-Maschine; CI braucht RimWorld-Headless-Setup oder lokale DLL-Cache).
-   - **Option B**: Dual-Target Production csproj — Standard-Build mit Krafs (Distribution-DLL für Mod-Release), Test-Build mit Game-Install-Refs. Tradeoff: doppelte Build-Pipeline, mehr CI-Komplexität.
-   - **Option C**: Mono-Test-Runner statt Microsoft xUnit. Tradeoff: ungewöhnliches Setup, weniger IDE-Integration.
+1. ✅ **Option A umgesetzt** (D-38): `Krafs.Rimworld.Ref` aus `Source/RimWorldBot.csproj` entfernt, durch manuelle `<Reference>` mit HintPath auf `Assembly-CSharp.dll`, `UnityEngine.dll`, `UnityEngine.CoreModule.dll`, `UnityEngine.IMGUIModule.dll`, `UnityEngine.TextRenderingModule.dll`, `UnityEngine.InputLegacyModule.dll` aus `$(RimWorldManagedDir)` ersetzt. Production-DLL nutzt jetzt Microsoft net472 mscorlib (via implicit Standard-Refs) statt Mono-Stub.
 
-   Entscheidung welche Option im Story-Kickoff fixiert in einem Decision-Log-Eintrag (D-XX).
+2. ✅ **Verifikation Carry-Over-Tests** alle grün:
+   - `Tests/Events/BoundedEventQueueTests.cs` — 8 Tests (wiederhergestellt aus 1.13-Wegwurf)
+   - `Tests/Core/BotSafeTests.cs` — 13 Tests (SafeTick mit mock-Exception → ErrorBudget; SafeApply Caller-Pattern; Sliding-Window mit `NowProvider`-Mock-Clock; Poison-Cooldown-Boundary; Multi-Context-Isolation)
+   - `Tests/Events/QuestManagerPollerTests.cs` — 9 Tests (neue/entfernte IDs; Re-Poll ohne Diff; null-defName-Fallback; Defensive null-EventQueue/null-Seen)
+   - `Tests/Data/RecentDecisionsBufferTests.cs` — 7 Tests (Add → Auto-Pin für PhaseTransition/EndingSwitch/CrashRecovery*; FIFO-Cap)
+   - PlanArbiter Skip-deferred-Tests aus 1.13 reaktiviert (Same-Layer-Conflict-Logging via DecisionLog)
+   - **Total: 68 grün, 0 skip** (vorher 28 grün, 2 skip)
 
-2. **Verifikation**: nach Refactor müssen die folgenden Test-Files laufen und grün sein (in `Tests/Events/BoundedEventQueueTests.cs` etc., ggf. wieder hergestellt):
-   - `BoundedEventQueueTests` (8 Tests aus 1.13-Wegwurf wiederherstellen)
-   - `BotSafeTests` (Carry-Over Story 1.10): SafeTick mit mock-Exception → ErrorBudget; SafeApply Caller-Pattern (false bei poisoned); Sliding-Window mit `Time.realtimeSinceStartup`-Mock (Test-Seam via injectable `Func<float>`); Poison-Cooldown-Ablauf nach 600s
-   - `QuestManagerPollerTests` (Carry-Over Story 1.12): Fake-Quest-List → Poll detektiert neue/entfernte IDs → Events enqueued; Re-Poll ohne Diff → keine Events; null-`quest.root`-Fallback nutzt `UnknownQuestDef`-Sentinel
-   - `RecentDecisionsBufferTests`: Add → Auto-Pin für PhaseTransition/EndingSwitch/CrashRecovery*-Kinds; Trim auf transientCap/pinnedCap
+3. ✅ **csproj-Parametrisierung** + **Konsolidierung**: `Directory.Build.props` zentralisiert `RimWorldManagedDir` mit Override-Chain (CLI-Property > Env-Var > Default). Source/ und Tests/ csprojs erben automatisch. `Tests/README.md` aus Story 1.13 dokumentiert Cross-Dev-Setup unverändert anwendbar.
 
-3. **csproj-Parametrisierung** (Carry-Over MED-1 aus Story 1.13 Code-Review):
-   ```xml
-   <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManagedDir>
-   ```
-   Plus `Tests/README.md` mit Override-Anleitung für Cross-Dev (Steam-Default-Pfad, Custom-Library-Pfad, Mac/Linux).
+4. ⏳ **Build-Smoke-Test TC-14-PRODUCTION-LOAD**: User-Aufgabe (MT-2 in USER-CHECKLIST.md). Production-DLL build grün auf Dev-Maschine; aber tatsächliches Laden in RimWorld 1.6 muss user-seitig verifiziert werden bevor Story done.
 
-4. **Build-Smoke-Test** nach Refactor: Production-DLL muss weiterhin in RimWorld 1.6 laden ohne Verse-API-Mismatches. Manuelle Game-Test (TC-14-PRODUCTION-LOAD): RimWorld starten, neues Game beginnen, `Player.log` auf `[RimWorldBot]`-Init-Logs prüfen, keine `MissingMethodException`/`TypeLoadException`.
+5. ✅ **Test-Run-Output**: `Tests/test-run-1-14-completion.txt` committed mit `dotnet test --logger "console;verbosity=normal"`-Output (68 Bestanden, 0 Übersprungen).
 
-5. **Test-Run-Output committen**: nach Implementation `dotnet test --logger "console;verbosity=normal"` ausführen, Output als `Tests/test-run-1-14-completion.txt` ins Repo.
+6. ✅ **Test-Seams in Production-Code**: `internal`-static Felder mit Defaults zur Production-Runtime, von Tests via `InternalsVisibleTo` mockbar:
+   - `BotSafe.NowProvider: Func<float>` (default `Time.realtimeSinceStartup`)
+   - `BotSafe.ErrorLogger: Action<string>` (default `Verse.Log.Error`)
+   - `BotSafe.WarningLogger: Action<string>` (default `Verse.Log.Warning`)
+   - `QuestManagerPoller.QuestSource: Func<IEnumerable<(int Id, string DefName)>>` (default `Find.QuestManager.QuestsListForReading.Select(...)`)
+   - `QuestManagerPoller.TickProvider: Func<int>` (default `GenTicks.TicksGame`)
+   - Reset-Helper-Methoden (`ResetNowProviderForTesting`/`ResetForTesting`) damit Tests Default-State herstellen können.
+
+7. ✅ **Test-Collection-Isolation**: `[Collection("StaticStateMutators")]` mit `DisableParallelization=true` für Tests die shared static state in BotSafe/QuestManagerPoller manipulieren — verhindert Race-Conditions zwischen parallel-laufenden Test-Klassen.
 
 ## Tasks
 - [ ] Decision: Option A vs B vs C (Decision-Log)

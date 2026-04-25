@@ -1,0 +1,12 @@
+<!-- Directory.Build.props — wird automatisch von ALLEN csprojs unterhalb dieses Verzeichnisses
+     geladen (Source/RimWorldBot.csproj + Tests/RimWorldBot.Tests.csproj).
+     Story 1.14 (D-38): zentralisiert RimWorldManagedDir-Property fuer DRY.
+     Override-Chain: CLI-Property > Env-Var > Default. Siehe Tests/README.md fuer Cross-Dev-Setup. -->
+<Project>
+
+  <PropertyGroup>
+    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == '' AND '$(MSBUILD_RIMWORLD_MANAGED_DIR)' != ''">$(MSBUILD_RIMWORLD_MANAGED_DIR)</RimWorldManagedDir>
+    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManagedDir>
+  </PropertyGroup>
+
+</Project>

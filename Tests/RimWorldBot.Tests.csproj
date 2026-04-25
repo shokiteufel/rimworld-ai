@@ -9,15 +9,8 @@
     <!-- WICHTIG: NICHT in Assemblies/ ausgeben — RimWorld würde Test-DLL als Mod-Code laden.
          Default bin/-Output ist hier korrekt. -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <!-- Pfad zum RimWorld-Game-Install fuer echte Verse/Unity-Assemblies (siehe <Reference> unten).
-         KEIN Krafs.Rimworld.Ref-PackageReference hier weil das Reference-Assemblies liefert
-         (ReferenceAssembly-Attribute, .NET-Runtime weigert sich die zu laden).
-         CR Story 1.13 MED-1: Property kann ueberschrieben werden via:
-           dotnet test -p:RimWorldManagedDir="C:\Path\To\RimWorld\RimWorldWin64_Data\Managed"
-         oder via Environment-Variable MSBUILD_RIMWORLD_MANAGED_DIR. Default ist Steam-Library
-         auf D:\ — siehe Tests/README.md fuer Cross-Dev-Setup. -->
-    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == '' AND '$(MSBUILD_RIMWORLD_MANAGED_DIR)' != ''">$(MSBUILD_RIMWORLD_MANAGED_DIR)</RimWorldManagedDir>
-    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManagedDir>
+    <!-- $(RimWorldManagedDir) kommt aus ../Directory.Build.props (Story 1.14 D-38 DRY-Konsolidierung).
+         Override via CLI-Property oder MSBUILD_RIMWORLD_MANAGED_DIR-EnvVar — siehe Tests/README.md. -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,14 +25,10 @@
     </ProjectReference>
   </ItemGroup>
 
-  <!-- Echte RimWorld-Runtime-DLLs aus Game-Install referenzieren + ins Test-bin kopieren.
-       Reference-Items mit Private=true funktionieren hier (im Gegensatz zum frueheren Versuch),
-       weil keine PackageReference dieselbe Assembly bereits beansprucht.
-       Pre-Requisite: RimWorld muss installiert sein unter $(RimWorldManagedDir). Wenn nicht,
-       schlaegt der Build mit Resolve-Fehler fehl — eindeutiges Signal an den Dev.
-       CR Story 1.13 LOW-3: aktuell genutzt nur indirekt fuer Type-Resolve der Production-DLL —
-       SchemaRegistry/PlanArbiter brauchen sie nicht direkt. Spaetere Tests (BotSafe etc., Story 1.14)
-       werden Verse-/Unity-Statics direkt aufrufen. -->
+  <!-- Story 1.14 (D-38): RimWorld-DLLs werden zum Test-bin kopiert damit Test-Runtime sie laden kann.
+       Production-csproj hat dieselben Refs aber mit Private=false (Production-DLL bundlet sie nicht
+       in Assemblies/ — RimWorld liefert die Originale zur Runtime). Tests brauchen lokale Kopien
+       weil xUnit-Runner kein RimWorld-Game ist — sind via Private=true im Test-bin. -->
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
