@@ -2,7 +2,7 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Sprint 3 / Epic 2 gestartet, Story 2.1 in-progress)
+**Last updated:** 2026-04-25 (Story 2.1 done MT-5 PASS, Story 1.4 retroactive Bug-Fix D-41, bereit für Story 2.2)
 
 ---
 
@@ -15,6 +15,10 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 ---
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
+
+_(Aktuell keine offen — Story 2.2 wird neue MTs bringen wenn nötig.)_
+
+<!-- MT-5 erledigt, archiviert weiter unten
 
 ### MT-5: Story 2.1 Snapshot-Scan-Verifikation — **PFLICHT für Story 2.1 done**
 **Wann:** Nach R2 APPROVE.
@@ -37,6 +41,7 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
    - Keine `[RimWorldBot] GetCells: cell-mapping exception` Warnings → CRIT-1 nicht getriggert.
 
 **Was zurückmelden:** „MT-5 PASS" + Player.log-Excerpt mit den 2 `[RimWorldBot]`-Lines. Falls Performance >500ms oder match=False: Player.log-Excerpt + Map-Größe (Hauptmenü → World → Map-Size, oder Save-File-Name).
+-->
 
 ---
 
@@ -55,6 +60,7 @@ _(Aktuell keine.)_
 - **2026-04-25** — **MT-4 PASS** (Story 1.8 Re-Verifikation nach D-39): Spiel + Mod beide auf Deutsch, EINE deutsche Sprach-Option. Story 1.8 → done. **Epic 1 komplett (14/14 Stories done).**
 - **2026-04-25** — **MT-3 PASS** (Epic-1-Test-Marathon, alle 8 Schritte): Toggle-Button + Ctrl+K (6× state changes), Per-Pawn-Tab (Onesan PlayerUse=True), Settings-Window (kein Crash), Quest-Polling (Bot-Code clean trotz Vanilla-Grammar-Warnings), Save-Load von 2 Saves (State persistiert). Eine LOW-Anomaly entdeckt: `RegisterforPostLoadInit DecisionLogEntry`-Doppel-Warning bei Save-Load (kosmetisch, kein Daten-Verlust, escalated für Improvement Agent). **Sprint 2 vollständig in-game verifiziert.**
 - **2026-04-25** — D-4 entschieden: **Sprint 3 starten** mit Story 2.1 (Map-Cell-Data-Basic-Scan). D-40 Sprint-Transition. Epic 2 (Map-Analyzer) in Bearbeitung.
+- **2026-04-25** — **MT-5 PASS** (Story 2.1 Snapshot-Scan): Player.log `[RimWorldBot] DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True)`. Scan unter 200ms-Log-Schwelle (deutlich unter AC-6 500ms-Limit). Story 2.1 → done. **Side-Finding** entdeckt: Story 1.4 MainTabWindow_BotControl benötigt `[StaticConstructorOnStartup]` für Texture2D-Asset-Loading → Story 1.4 retroactive auf in-progress, Fix angewendet (D-41), wieder done.
 
 ---
 

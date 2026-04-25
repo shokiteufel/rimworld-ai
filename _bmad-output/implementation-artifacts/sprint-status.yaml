@@ -40,7 +40,7 @@ development_status:
   1-1-mod-project-skeleton: done  # CR-Loop ✓, TC-01-SKELETON PASS (RimWorld 1.6.4633, [RimWorldBot] skeleton loaded verifiziert 2026-04-24)
   1-2-harmony-bootstrap: done  # CR-Loop ✓, TC-01-HARMONY PASS (2026-04-24)
   1-3-bot-game-component: done  # CR-Loop ✓, Player.log self-verified (2 Game-Cycles, 0 Exceptions, 2026-04-24)
-  1-4-master-toggle-button: done  # CR+VR-Loop ✓, TC-04-TOGGLE-BUTTON PASS (8 State-Transitions via Player.log self-verified, Runtime-Fix defaultHidden 2026-04-24)
+  1-4-master-toggle-button: done  # CR+VR-Loop ✓, TC-04-TOGGLE-BUTTON PASS (8 State-Transitions via Player.log self-verified, Runtime-Fix defaultHidden 2026-04-24). Retroactive Bug-Fix 2026-04-25 (D-41 via Story 2.1 MT-5 Side-Finding): [StaticConstructorOnStartup]-Attribute + expliziter static-Constructor statt Lazy-Init für Texture2D-Asset. Build grün, 79/79 Tests grün — Re-Verifikation in nächstem Game-Test (kein dedizierter MT — wenn Bot-Tab im Spiel öffnet ohne Crash, Fix wirkt).
   1-5-keybinding-ctrl-k: done  # CR-Loop ✓ (R1 REJECT → R2 APPROVE), TC-05-KEYBIND PASS (8 Ctrl+K-Cycles + Misc8-Collision-Log self-verified, 2026-04-25)
   1-6-per-pawn-toggle: done  # CR+VR-Loop ✓, Runtime-Fix BasePawn-XPath statt Human (Inheritance-Flattening läuft NACH PatchOps), TC-06-PER-PAWN PASS (Bot-Tab im Pawn-Inspector sichtbar, Player.log self-verified, 2026-04-25)
   1-7-settings-window: done  # CR+VR-Loop ✓, TC-07-SETTINGS PASS (User-8-Step-Walkthrough + Settings-XML zeigt persistierte Werte: endingStrategy=Forced, forcedEndingHasValue=True; 2026-04-25)
@@ -54,7 +54,7 @@ development_status:
   1-14-test-runtime-infrastructure-refactor: done  # 2026-04-25: Option A umgesetzt (D-38), 68/68 Tests grün, CR R1 (2 HIGH + 3 MED + 1 LOW) → Fixes → R2 (1 HIGH-3 README-Counts) → R3 APPROVE → MT-2 User-Game-Test PASS (Player.log: [RimWorldBot] initialized, 5× State-Change-Logs, keine MissingMethodException/TypeLoadException). Epic 1 komplett.
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
-  2-1-map-cell-data-basic-scan: review  # 2026-04-25: Implementation + 11 neue Tests (79/79 grün), CR R1 (2 CRIT + 3 HIGH + 5 MED + 5 LOW) → Fixes (SafeTick raus, single try/catch + SafeDefault, Closure-Allocations weg, GetPawns Dedup, IsMountain-Doc, ClassifyHazard-Comment, HealthSummary-non-binding, SnapshotDebugActions für MT-5) → R2 APPROVE; wartet auf MT-5 User-Game-Test (TC-2.1-SCAN) bevor done
+  2-1-map-cell-data-basic-scan: done  # 2026-04-25: Implementation + 11 neue Tests (79/79 grün), CR R1 (2 CRIT + 3 HIGH + 5 MED + 5 LOW) → Fixes → R2 APPROVE → MT-5 PASS (Player.log: "DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True)", Scan unter 200ms-Log-Schwelle, keine cell-mapping exception). Side-Finding: Story 1.4 MainTabWindow_BotControl benötigt StaticConstructorOnStartup-Attribute — wird in retroactive Bug-Fix gehandelt.
   2-2-wild-plant-detection: ready-for-dev
   2-3-hazard-scanner: ready-for-dev
   2-4-defensibility-score: ready-for-dev

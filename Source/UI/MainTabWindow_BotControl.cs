@@ -10,6 +10,11 @@ namespace RimWorldBot.UI
     // Top-Bar-Toggle-Fenster. Registriert via Defs/MainButtonDefs.xml (kein Harmony-Patch, D-13).
     // Zeigt aktuellen masterState + drei State-Buttons (Off/Advisory/On), State-Wechsel
     // geht durch BotGameComponent.SetMasterState damit Log + DecisionLog + Persistenz konsistent laufen.
+    //
+    // [StaticConstructorOnStartup]: retroactive Story 1.4 Bug-Fix (2026-04-25 via Story 2.1 MT-5
+    // Side-Finding). Vanilla-Warning bei Mod-Load: "_activeOutlineTexture: Texture2D needs main-thread
+    // asset-loading via static-constructor". Pflicht-Attribute fuer Klassen mit static Texture2D-Feld.
+    [StaticConstructorOnStartup]
     public class MainTabWindow_BotControl : MainTabWindow
     {
         const float RowHeight = 32f;
@@ -24,9 +29,16 @@ namespace RimWorldBot.UI
 
         static readonly Color ActiveOutlineColor = new Color(1f, 0.85f, 0.2f);   // volles Gelb
         // Cache um Per-Frame-Allokation in DrawBox zu vermeiden (Round-2-Review Minor-Observation).
-        static UnityEngine.Texture2D _activeOutlineTexture;
-        static UnityEngine.Texture2D ActiveOutlineTexture =>
-            _activeOutlineTexture ??= SolidColorMaterials.NewSolidColorTexture(ActiveOutlineColor);
+        // Story 1.4 retroactive 2026-04-25: static-Constructor statt Lazy-Init damit das
+        // Texture2D-Asset garantiert im Main-Thread vor erstem Render geladen wird (StaticConstructor-
+        // OnStartup-Pattern). Lazy-Init via ??= konnte beim ersten Render-Call aus einem Worker-Thread
+        // crashen — Vanilla-Warning hat genau das adressiert.
+        static readonly UnityEngine.Texture2D ActiveOutlineTexture;
+
+        static MainTabWindow_BotControl()
+        {
+            ActiveOutlineTexture = SolidColorMaterials.NewSolidColorTexture(ActiveOutlineColor);
+        }
 
         public override Vector2 RequestedTabSize => new Vector2(360f, 140f);
 

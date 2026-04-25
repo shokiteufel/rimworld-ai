@@ -1,6 +1,6 @@
 # Story 2.1: MapCellData-Snapshot + Basis-Scan
 
-**Status:** review
+**Status:** done (MT-5 PASS 2026-04-25)
 **Epic:** Epic 2 — Map-Analyzer
 **Size:** M
 **Decisions referenced:** D-14 (Persistence-Scoping), D-23 (Identifier-only in Plan-Records, analog für Snapshots)

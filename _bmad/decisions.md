@@ -15,6 +15,30 @@ Konsequenzen: ...
 
 ---
 
+## D-41: Story 1.4 retroactive Fix — StaticConstructorOnStartup für MainTabWindow_BotControl
+Datum: 2026-04-25
+Status: accepted
+Kontext: Story 2.1 MT-5 Game-Test 2026-04-25 zeigte in Player.log einen RimWorld-Vanilla-Warning:
+> "Type MainTabWindow_BotControl probably needs a StaticConstructorOnStartup attribute,
+> because it has a field _activeOutlineTexture of type Texture2D. All assets must be loaded
+> in the main thread."
+
+Root-Cause: `MainTabWindow_BotControl` hatte `static UnityEngine.Texture2D _activeOutlineTexture` mit Lazy-Init via `??=` im Property-Getter. RimWorld 1.6 erkennt das als best-practice-Verstoß weil Texture2D-Loading im Worker-Thread crashen kann (Unity-Constraint: Assets nur im Main-Thread). Die `[StaticConstructorOnStartup]`-Markierung garantiert dass der static-Constructor der Klasse im Main-Thread vor dem ersten Frame läuft.
+
+Entscheidung:
+1. **Story 1.4 retroactive auf in-progress** (Guardian Rule 4 für rückwirkende Funde).
+2. **Fix**: `[StaticConstructorOnStartup]`-Attribute auf `MainTabWindow_BotControl` + expliziter static-Constructor statt Lazy-Init via `??=`. `ActiveOutlineTexture` jetzt `static readonly` mit Init im static-ctor.
+3. **Verifikation**: Production-Build + 79/79 Tests grün. Implizite Re-Verifikation beim nächsten Game-Test (Bot-Tab öffnen muss weiter funktionieren — kein expliziter MT weil das ist Asset-Loading-Refactor, kein neues Verhalten).
+4. **Story 1.4 wieder auf done** ohne neue MT — Visual-Review-Inhalt war unverändert (gleiches Texture, gleiche Render-Logik), nur das WANN des Loadings geändert.
+
+Begründung: Vanilla-Warning ist klares Signal für RimWorld-best-practice. Lazy-Init mit `??=` war pragmatisch aber Race-Condition-anfällig wenn DoWindowContents jemals außerhalb des Main-Threads aufgerufen wird (z.B. durch zukünftige Mod-Interaktionen, Coroutine-Refactor in Story 2.9).
+
+Konsequenzen:
+- Pattern-Lesson: Mod-weit alle `static Texture2D` / `static Material` / `static AudioClip`-Felder müssen via static-Constructor geladen werden, NICHT lazy. Falls weitere UI-Klassen in Folge-Stories solche Felder bekommen (z.B. Story 2.7 Overlay-Rendering, Story 8.7 Debug-Panel), Story-AC pflicht-erweitern.
+- Memory-Eintrag (intern für nächste Sessions): "RimWorld static-Texture2D-Pflicht-Pattern".
+
+---
+
 ## D-40: Sprint-Transition Sprint 2 → Sprint 3, Epic-2-DEV-Start mit Story 2.1
 Datum: 2026-04-25
 Status: accepted
