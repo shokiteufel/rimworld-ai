@@ -4,6 +4,13 @@
   <packageId>mediainvita.rimworldbot</packageId>
   <author>mediainvita</author>
   <url>https://github.com/shokiteufel/rimworld-ai</url>
+  <!--
+    Multi-Language-Description: RimWorld 1.6 ModMetaData unterstützt KEIN <descriptionsByLanguage>-Element.
+    Verifiziert 2026-04-25 durch XML-Parse-Error zur Runtime + Vanilla-DLC-About.xml haben es nirgends.
+    Pragmatischer Workaround: Inline-Splitter zwischen DE und EN-Text in einem einzigen <description>.
+    Sprach-switchender Mod-List-Description ist mit Vanilla-1.6-API nicht erreichbar.
+    Falls Ludeon das in einem späteren Patch ergänzt, hier `<descriptionsByLanguage>` ergänzen.
+  -->
   <description>Autonome Entscheidungs-KI als RimWorld-Mod. Führt Kolonien vom Nackt-Start bis zum Ending, mit globalem Toggle und Per-Pawn-Checkbox. Map-Analyse bei Start, opportunistisches Ending-Switching, Cross-Game-Lernen. Vanilla + alle DLCs (Royalty, Ideology, Biotech, Anomaly, Odyssey).
 
 ---

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Mod-Metadaten -->
+  <RimWorldBot.Settings.Category>RimWorld Bot</RimWorldBot.Settings.Category>
+
+  <!-- Master-Toggle (Story 1.4) -->
+  <RimWorldBot.MainTab.WaitingForGame>RimWorldBot: Spielzustand wird geladen…</RimWorldBot.MainTab.WaitingForGame>
+  <RimWorldBot.MainTab.StateLabel>Bot-Status: {0}</RimWorldBot.MainTab.StateLabel>
+  <RimWorldBot.MainTab.Tooltip.Off>Bot komplett deaktiviert — keine Autonomie, kein Advisory-Overlay.</RimWorldBot.MainTab.Tooltip.Off>
+  <RimWorldBot.MainTab.Tooltip.Advisory>Bot rechnet mit, zeigt Top-3-Site-Overlay + Decision-Trail — übernimmt aber keine Pawns.</RimWorldBot.MainTab.Tooltip.Advisory>
+  <RimWorldBot.MainTab.Tooltip.On>Bot steuert Pawns autonom nach Master-Toggle + Per-Pawn-Checkbox.</RimWorldBot.MainTab.Tooltip.On>
+
+  <!-- ToggleState-Enum (Story 1.4 + 1.5) -->
+  <RimWorldBot.ToggleState.Off>Aus</RimWorldBot.ToggleState.Off>
+  <RimWorldBot.ToggleState.Advisory>Beratend</RimWorldBot.ToggleState.Advisory>
+  <RimWorldBot.ToggleState.On>An</RimWorldBot.ToggleState.On>
+
+  <!-- Migration + Stability-Toasts (Story 1.3) -->
+  <RimWorldBot.Migration.DataLoss>RimWorldBot: Migration-Datenverlust — {0} von {1} Pawn-Einstellungen konnten nicht zugeordnet werden.</RimWorldBot.Migration.DataLoss>
+  <RimWorldBot.Stability.RepeatedSessionExhaust>RimWorldBot hat sich mehrfach über Sessions hinweg selbst deaktiviert — bitte als Bug melden.</RimWorldBot.Stability.RepeatedSessionExhaust>
+
+</LanguageData>

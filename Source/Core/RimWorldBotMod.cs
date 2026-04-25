@@ -39,7 +39,8 @@ namespace RimWorldBot.Core
 
         // ----- Story 1.7 ModSettings-Overrides -----
 
-        public override string SettingsCategory() => "RimWorld Bot";
+        public override string SettingsCategory() =>
+            "RimWorldBot.Settings.Category".Translate().ToString();
 
         public override void DoSettingsWindowContents(Rect inRect)
         {

@@ -208,7 +208,7 @@ namespace RimWorldBot.Data
                 if (droppedCount >= 1 && (percentBranch || countBranch))
                 {
                     Messages.Message(
-                        $"RimWorldBot: Migration data-loss — {droppedCount} von {oldCount} per-pawn-settings konnten nicht zugeordnet werden.",
+                        "RimWorldBot.Migration.DataLoss".Translate(droppedCount, oldCount),
                         MessageTypeDefOf.CautionInput, historical: false);
                 }
             }
@@ -279,7 +279,7 @@ namespace RimWorldBot.Data
             if (consecutiveSessionBudgetExhausts >= 3)
             {
                 Messages.Message(
-                    "RimWorldBot disabled itself repeatedly across sessions — consider reporting a bug.",
+                    "RimWorldBot.Stability.RepeatedSessionExhaust".Translate(),
                     MessageTypeDefOf.CautionInput, historical: false);
             }
         }

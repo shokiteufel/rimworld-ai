@@ -44,7 +44,7 @@ development_status:
   1-5-keybinding-ctrl-k: done  # CR-Loop ✓ (R1 REJECT → R2 APPROVE), TC-05-KEYBIND PASS (8 Ctrl+K-Cycles + Misc8-Collision-Log self-verified, 2026-04-25)
   1-6-per-pawn-toggle: done  # CR+VR-Loop ✓, Runtime-Fix BasePawn-XPath statt Human (Inheritance-Flattening läuft NACH PatchOps), TC-06-PER-PAWN PASS (Bot-Tab im Pawn-Inspector sichtbar, Player.log self-verified, 2026-04-25)
   1-7-settings-window: done  # CR+VR-Loop ✓, TC-07-SETTINGS PASS (User-8-Step-Walkthrough + Settings-XML zeigt persistierte Werte: endingStrategy=Forced, forcedEndingHasValue=True; 2026-04-25)
-  1-8-localization-skeleton: ready-for-dev
+  1-8-localization-skeleton: done  # CR+VR-Loop ✓, Runtime-Fix descriptionsByLanguage Reviewer-Halluzination → Inline-Splitter, TC-08-LOCALIZATION PASS (45 Keys synchron DE/EN, About-Description DE+EN sichtbar, 0 RimWorldBot-Translation-Errors, 2026-04-25)
   # Cross-Cutting-Stories (D-31, Round-1-Review):
   1-9-schema-version-registry: ready-for-dev
   1-10-exception-wrapper-pattern: ready-for-dev

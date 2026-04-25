@@ -38,17 +38,18 @@ namespace RimWorldBot.UI
             {
                 // Defensiv: ohne laufendes Spiel (Main-Menu) wird das Fenster normalerweise nicht geöffnet,
                 // aber Vanilla kann die Klasse instantiieren. Graceful fallback-Message.
-                Widgets.Label(inRect, "RimWorldBot: waiting for game to load…");
+                Widgets.Label(inRect, "RimWorldBot.MainTab.WaitingForGame".Translate());
                 return;
             }
 
             var state = gameComp.masterState;
 
-            // Zeile 1: State-Label.
+            // Zeile 1: State-Label mit lokalisiertem State-Name (DRY: shared LocalizationHelper).
+            var stateLocalized = LocalizationHelper.TranslateEnum("RimWorldBot.ToggleState", state);
             var labelRect = new Rect(inRect.x, inRect.y + Padding, inRect.width, RowHeight);
             var prevAnchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(labelRect, $"Bot State: {state}");
+            Widgets.Label(labelRect, "RimWorldBot.MainTab.StateLabel".Translate(stateLocalized));
             Text.Anchor = prevAnchor;
 
             // Zeile 2: drei Buttons (Off, Advisory, On), aktiver State hat Umrandung.
@@ -57,18 +58,19 @@ namespace RimWorldBot.UI
             var buttonsY = labelRect.yMax + LabelToButtonsGap;
 
             DrawStateButton(new Rect(buttonsStartX, buttonsY, ButtonWidth, RowHeight),
-                "Off", "Bot komplett deaktiviert — keine Autonomie, kein Advisory-Overlay.",
                 ToggleState.Off, state, gameComp);
             DrawStateButton(new Rect(buttonsStartX + ButtonWidth + ButtonSpacing, buttonsY, ButtonWidth, RowHeight),
-                "Advisory", "Bot rechnet mit, zeigt Top-3-Site-Overlay + Decision-Trail — übernimmt aber keine Pawns.",
                 ToggleState.Advisory, state, gameComp);
             DrawStateButton(new Rect(buttonsStartX + (ButtonWidth + ButtonSpacing) * 2, buttonsY, ButtonWidth, RowHeight),
-                "On", "Bot steuert Pawns autonom nach Master-Toggle + Per-Pawn-Checkbox.",
                 ToggleState.On, state, gameComp);
         }
 
-        static void DrawStateButton(Rect rect, string label, string tooltip, ToggleState target, ToggleState current, BotGameComponent gameComp)
+        static void DrawStateButton(Rect rect, ToggleState target, ToggleState current, BotGameComponent gameComp)
         {
+            var label = LocalizationHelper.TranslateEnum("RimWorldBot.ToggleState", target);
+            var tooltipKey = $"RimWorldBot.MainTab.Tooltip.{target}";
+            var tooltip = tooltipKey.CanTranslate() ? tooltipKey.Translate().ToString() : string.Empty;
+
             var isActive = current == target;
             if (isActive)
             {
@@ -77,7 +79,10 @@ namespace RimWorldBot.UI
                 Widgets.DrawBox(outline, ActiveOutlineThickness, ActiveOutlineTexture);
             }
 
-            TooltipHandler.TipRegion(rect, tooltip);
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                TooltipHandler.TipRegion(rect, tooltip);
+            }
 
             if (Widgets.ButtonText(rect, label))
             {

@@ -60,7 +60,7 @@ namespace RimWorldBot.UI
 
             // EndingStrategy-Dropdown mit lokalisierten Labels (VR HIGH-1: nicht raw enum.ToString()).
             var strategyLabel = "RimWorldBot.Settings.Ending.Strategy.Label".Translate();
-            var strategyButtonText = TranslateEnum("RimWorldBot.EndingStrategy", config.endingStrategy);
+            var strategyButtonText = LocalizationHelper.TranslateEnum("RimWorldBot.EndingStrategy", config.endingStrategy);
             var strategyRect = listing.GetRect(28f);
             var labelRect = strategyRect.LeftPart(0.45f);
             var buttonRect = strategyRect.RightPart(0.5f);
@@ -69,9 +69,9 @@ namespace RimWorldBot.UI
             {
                 var options = new List<FloatMenuOption>
                 {
-                    new FloatMenuOption(TranslateEnum("RimWorldBot.EndingStrategy", EndingStrategy.Opportunistic),
+                    new FloatMenuOption(LocalizationHelper.TranslateEnum("RimWorldBot.EndingStrategy", EndingStrategy.Opportunistic),
                         () => config.endingStrategy = EndingStrategy.Opportunistic),
-                    new FloatMenuOption(TranslateEnum("RimWorldBot.EndingStrategy", EndingStrategy.Forced),
+                    new FloatMenuOption(LocalizationHelper.TranslateEnum("RimWorldBot.EndingStrategy", EndingStrategy.Forced),
                         () => config.endingStrategy = EndingStrategy.Forced)
                 };
                 Find.WindowStack.Add(new FloatMenu(options));
@@ -82,7 +82,7 @@ namespace RimWorldBot.UI
             {
                 var endingLabel = "RimWorldBot.Settings.Ending.Forced.Label".Translate();
                 var endingButtonText = config.ForcedEnding.HasValue
-                    ? TranslateEnum("RimWorldBot.Ending", config.ForcedEnding.Value)
+                    ? LocalizationHelper.TranslateEnum("RimWorldBot.Ending", config.ForcedEnding.Value)
                     : "RimWorldBot.Settings.Ending.Forced.NotSelected".Translate().ToString();
                 var endingRect = listing.GetRect(28f);
                 var endingLabelRect = endingRect.LeftPart(0.45f);
@@ -94,7 +94,7 @@ namespace RimWorldBot.UI
                     foreach (Ending e in Enum.GetValues(typeof(Ending)))
                     {
                         var captured = e;
-                        options.Add(new FloatMenuOption(TranslateEnum("RimWorldBot.Ending", captured),
+                        options.Add(new FloatMenuOption(LocalizationHelper.TranslateEnum("RimWorldBot.Ending", captured),
                             () => config.ForcedEnding = captured));
                     }
                     Find.WindowStack.Add(new FloatMenu(options));
@@ -102,13 +102,6 @@ namespace RimWorldBot.UI
             }
         }
 
-        // Generischer Enum-Translator: sucht Key "{prefix}.{enumValue}" in Languages-Files.
-        // Fallback bei Missing-Key: raw enum-Name (Story 1.8 wird die Coverage abschließen).
-        static string TranslateEnum<TEnum>(string keyPrefix, TEnum value) where TEnum : struct, Enum
-        {
-            var key = $"{keyPrefix}.{value}";
-            return key.CanTranslate() ? key.Translate().ToString() : value.ToString();
-        }
 
         static void DrawSectionLearning(Listing_Standard listing)
         {

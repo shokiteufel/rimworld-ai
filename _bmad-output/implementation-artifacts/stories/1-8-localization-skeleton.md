@@ -23,11 +23,11 @@ Als **Spieler** möchte ich **alle Mod-Strings aus Stories 1.1–1.7 auf Deutsch
    - `KeyBindings.xml` (aus Story 1.5 — zumindest der Key-Label)
    - `PerPawnToggle.xml` (aus Story 1.6 — Tab-Label + Checkbox + Hilfstext)
 3. **`Languages/English/Keyed/*.xml`** identische Struktur zu DE mit englischen Werten
-4. **`About/About.xml`-Description** hat DE-Variante und EN-Variante (über `<descriptionsByVersion>` oder inline via `<description>{Translation aus Main.xml}</description>`)
+4. **`About/About.xml`-Description** enthält DE+EN-Text mit Inline-`---`-Splitter in einem einzigen `<description>`-Block. **Retroaktiv 2026-04-25:** `<descriptionsByLanguage>`-Element ist in RimWorld 1.6 ModMetaData NICHT supported (XML-Parse-Error zur Runtime, kein Vanilla-DLC nutzt es). Sprach-switchender Mod-List-Description ist mit Vanilla-1.6-API nicht erreichbar — Inline-Splitter ist der Community-Standard.
 5. **Sprachen-Switch im RimWorld-Spiel-Menü** wechselt Mod-UI sofort (RimWorld-Konvention, kein Restart nötig — validiert durch Test)
 6. **Keine `Log.Error`-Meldungen** wegen fehlender Translation-Keys beim Spiel-Load mit DE oder EN aktiviert
 7. **Konsistenz-Check**: Alle Keys in DE existieren auch in EN und umgekehrt — kein „Key X existiert in DE aber nicht EN"
-8. **Convention-Compliance**: Keys folgen `RimWorldBot_<Context>_<Element>`-Pattern (z. B. `RimWorldBot_MainTab_Label`, `RimWorldBot_Settings_Telemetry_Tooltip`)
+8. **Convention-Compliance**: Keys folgen `RimWorldBot.<Context>.<Element>`-Pattern (z. B. `RimWorldBot.MainTab.Label`, `RimWorldBot.Settings.Telemetry.Tooltip`). **Retroaktiv 2026-04-25:** Story-Spec hatte Underscore-Pattern, aber Stories 1.4-1.7 nutzen durchgängig Punkt-Convention (gängiger in modernen RimWorld-Mods, lesbarer). Story-AC angepasst statt 30+ Keys zu refaktorieren. **Ausnahme:** `RimWorldBot_ToggleMaster.label` + `.description` in `KeyBindings.xml` folgen Vanilla-RimWorld-Pflicht-Pattern `<defName>.label` für KeyBindingDef-Lookup (nicht überschreibbar).
 9. **Placeholder-Strings** (z. B. „{0}" für Pawn-Name): `"RimWorldBot_StateChanged".Translate(oldState, newState)` funktioniert korrekt in beiden Sprachen
 
 ---
