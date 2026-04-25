@@ -44,6 +44,14 @@ namespace RimWorldBot.Data
         // Public Accessor damit spätere Stories (z.B. Story 1.5 Keybinding) die Queue erreichen.
         public BoundedEventQueue<BotEvent> EventQueue => eventQueue;
 
+        // Story 1.7 Hook: wird von RimWorldBotMod.WriteSettings nach jedem User-Settings-Change gerufen.
+        // F-ARCH-08: invalidiert ConfigResolver-Cache damit neue Settings ohne Restart wirken.
+        // Story-1.3-Stub: aktuell no-op weil ConfigResolver placeholder ist; echte Cache-Logik in Story 2.x.
+        public void OnSettingsChanged()
+        {
+            configResolver?.Invalidate();
+        }
+
         // Zentraler State-Change-Helper (Story 1.4 AC 4/6/7).
         // Alle Call-Sites (TabWindow, Keybinding in 1.5, Settings in 1.7) gehen über diese Methode
         // damit Log + DecisionLog + Persistenz konsistent laufen.

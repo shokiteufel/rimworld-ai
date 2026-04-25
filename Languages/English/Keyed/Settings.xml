@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot.Settings.General.Header>General</RimWorldBot.Settings.General.Header>
+  <RimWorldBot.Settings.General.PerPawnDefault.Label>New pawns default to player control</RimWorldBot.Settings.General.PerPawnDefault.Label>
+  <RimWorldBot.Settings.General.PerPawnDefault.Tooltip>When enabled, the "Player controls" checkbox is on by default for newly recruited pawns. Otherwise (default) the bot manages new pawns automatically.</RimWorldBot.Settings.General.PerPawnDefault.Tooltip>
+
+  <RimWorldBot.Settings.Ending.Header>Ending strategy</RimWorldBot.Settings.Ending.Header>
+  <RimWorldBot.Settings.Ending.Strategy.Label>Strategy</RimWorldBot.Settings.Ending.Strategy.Label>
+  <RimWorldBot.Settings.Ending.Forced.Label>Forced ending</RimWorldBot.Settings.Ending.Forced.Label>
+  <RimWorldBot.Settings.Ending.Forced.NotSelected>(Please select)</RimWorldBot.Settings.Ending.Forced.NotSelected>
+
+  <!-- Localized enum labels (Architecture-Drift-Fix vs raw enum.ToString() — Story 1.7 VR HIGH-1) -->
+  <RimWorldBot.EndingStrategy.Opportunistic>Opportunistic (bot picks dynamically)</RimWorldBot.EndingStrategy.Opportunistic>
+  <RimWorldBot.EndingStrategy.Forced>Forced (user picks)</RimWorldBot.EndingStrategy.Forced>
+
+  <RimWorldBot.Ending.Ship>Ship (Vanilla)</RimWorldBot.Ending.Ship>
+  <RimWorldBot.Ending.Journey>Empire journey (Royalty)</RimWorldBot.Ending.Journey>
+  <RimWorldBot.Ending.Royal>Stellarch (Royalty)</RimWorldBot.Ending.Royal>
+  <RimWorldBot.Ending.Archonexus>Archonexus (Ideology)</RimWorldBot.Ending.Archonexus>
+  <RimWorldBot.Ending.Void>Void (Anomaly)</RimWorldBot.Ending.Void>
+
+  <RimWorldBot.Settings.Learning.Header>Cross-game learning</RimWorldBot.Settings.Learning.Header>
+  <RimWorldBot.Settings.Learning.ResetButton>Reset learning data</RimWorldBot.Settings.Learning.ResetButton>
+  <RimWorldBot.Settings.Learning.ResetConfirm>Really reset learned data? All cross-game learning weights and override rules will be lost.</RimWorldBot.Settings.Learning.ResetConfirm>
+  <RimWorldBot.Settings.Learning.ResetSuccess>Learning data reset.</RimWorldBot.Settings.Learning.ResetSuccess>
+  <RimWorldBot.Settings.Learning.ResetFailed>Reset failed — see Player.log.</RimWorldBot.Settings.Learning.ResetFailed>
+
+  <RimWorldBot.Settings.Telemetry.Header>Telemetry</RimWorldBot.Settings.Telemetry.Header>
+  <RimWorldBot.Settings.Telemetry.Enable.Label>Enable telemetry</RimWorldBot.Settings.Telemetry.Enable.Label>
+  <RimWorldBot.Settings.Telemetry.Enable.Tooltip>Logs colony IDs only (no pawn names). Default: off. Change requires game restart.</RimWorldBot.Settings.Telemetry.Enable.Tooltip>
+  <RimWorldBot.Settings.Telemetry.RestartHint>Restart required for the telemetry setting to take effect.</RimWorldBot.Settings.Telemetry.RestartHint>
+
+  <RimWorldBot.Settings.Info.Header>Info</RimWorldBot.Settings.Info.Header>
+  <RimWorldBot.Settings.Info.Version>Mod version: {0}</RimWorldBot.Settings.Info.Version>
+  <RimWorldBot.Settings.Info.VersionUnknown>(Development build, no official version)</RimWorldBot.Settings.Info.VersionUnknown>
+  <RimWorldBot.Settings.Info.GitHubLabel>Source code + issues:</RimWorldBot.Settings.Info.GitHubLabel>
+  <RimWorldBot.Settings.Info.GitHubButton>Open in browser</RimWorldBot.Settings.Info.GitHubButton>
+
+</LanguageData>

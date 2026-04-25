@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot.Settings.General.Header>Allgemein</RimWorldBot.Settings.General.Header>
+  <RimWorldBot.Settings.General.PerPawnDefault.Label>Neue Pawns standardmäßig vom Spieler steuern</RimWorldBot.Settings.General.PerPawnDefault.Label>
+  <RimWorldBot.Settings.General.PerPawnDefault.Tooltip>Wenn aktiviert, ist die "Spieler steuert"-Checkbox für neu rekrutierte Pawns standardmäßig an. Andernfalls (Standard) übernimmt der Bot neue Pawns automatisch.</RimWorldBot.Settings.General.PerPawnDefault.Tooltip>
+
+  <RimWorldBot.Settings.Ending.Header>Ending-Strategie</RimWorldBot.Settings.Ending.Header>
+  <RimWorldBot.Settings.Ending.Strategy.Label>Strategie</RimWorldBot.Settings.Ending.Strategy.Label>
+  <RimWorldBot.Settings.Ending.Forced.Label>Erzwungenes Ending</RimWorldBot.Settings.Ending.Forced.Label>
+  <RimWorldBot.Settings.Ending.Forced.NotSelected>(Bitte wählen)</RimWorldBot.Settings.Ending.Forced.NotSelected>
+
+  <!-- Lokalisierte Enum-Labels (Architecture-Drift-Fix gegen raw enum.ToString() — Story 1.7 VR HIGH-1) -->
+  <RimWorldBot.EndingStrategy.Opportunistic>Opportunistisch (Bot wählt dynamisch)</RimWorldBot.EndingStrategy.Opportunistic>
+  <RimWorldBot.EndingStrategy.Forced>Erzwungen (User wählt)</RimWorldBot.EndingStrategy.Forced>
+
+  <RimWorldBot.Ending.Ship>Schiff (Vanilla)</RimWorldBot.Ending.Ship>
+  <RimWorldBot.Ending.Journey>Imperium-Reise (Royalty)</RimWorldBot.Ending.Journey>
+  <RimWorldBot.Ending.Royal>Stellarch (Royalty)</RimWorldBot.Ending.Royal>
+  <RimWorldBot.Ending.Archonexus>Archonexus (Ideology)</RimWorldBot.Ending.Archonexus>
+  <RimWorldBot.Ending.Void>Void (Anomaly)</RimWorldBot.Ending.Void>
+
+  <RimWorldBot.Settings.Learning.Header>Cross-Game-Lernen</RimWorldBot.Settings.Learning.Header>
+  <RimWorldBot.Settings.Learning.ResetButton>Lerndaten zurücksetzen</RimWorldBot.Settings.Learning.ResetButton>
+  <RimWorldBot.Settings.Learning.ResetConfirm>Lerndaten wirklich zurücksetzen? Alle spielübergreifend gelernten Gewichte und Override-Regeln gehen verloren.</RimWorldBot.Settings.Learning.ResetConfirm>
+  <RimWorldBot.Settings.Learning.ResetSuccess>Lerndaten zurückgesetzt.</RimWorldBot.Settings.Learning.ResetSuccess>
+  <RimWorldBot.Settings.Learning.ResetFailed>Reset fehlgeschlagen — siehe Player.log.</RimWorldBot.Settings.Learning.ResetFailed>
+
+  <RimWorldBot.Settings.Telemetry.Header>Telemetrie</RimWorldBot.Settings.Telemetry.Header>
+  <RimWorldBot.Settings.Telemetry.Enable.Label>Telemetrie aktivieren</RimWorldBot.Settings.Telemetry.Enable.Label>
+  <RimWorldBot.Settings.Telemetry.Enable.Tooltip>Loggt nur Kolonie-IDs (keine Pawn-Namen). Standard: deaktiviert. Änderung erfordert Spiel-Neustart.</RimWorldBot.Settings.Telemetry.Enable.Tooltip>
+  <RimWorldBot.Settings.Telemetry.RestartHint>Neustart erforderlich damit die Telemetrie-Einstellung wirkt.</RimWorldBot.Settings.Telemetry.RestartHint>
+
+  <RimWorldBot.Settings.Info.Header>Info</RimWorldBot.Settings.Info.Header>
+  <RimWorldBot.Settings.Info.Version>Mod-Version: {0}</RimWorldBot.Settings.Info.Version>
+  <RimWorldBot.Settings.Info.VersionUnknown>(Entwicklungs-Build, keine offizielle Version)</RimWorldBot.Settings.Info.VersionUnknown>
+  <RimWorldBot.Settings.Info.GitHubLabel>Quellcode + Issues:</RimWorldBot.Settings.Info.GitHubLabel>
+  <RimWorldBot.Settings.Info.GitHubButton>Im Browser öffnen</RimWorldBot.Settings.Info.GitHubButton>
+
+</LanguageData>
