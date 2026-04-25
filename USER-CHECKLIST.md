@@ -2,17 +2,19 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Epic 1 komplett ✓ MT-4 PASS — bereit für MT-3 Test-Marathon)
+**Last updated:** 2026-04-25 (MT-3 PASS — Epic 1 vollständig in-game verifiziert, bereit für Sprint 3)
 
 ---
 
 ## 🟡 Decisions Needed (echte User-Entscheidungen, BMAD liefert nicht die Antwort)
 
-### D-3: Sprint 3 starten oder Epic-1-Test-Marathon zuerst?
-**Was:** Epic 1 ist abgeschlossen (14/14 Stories done). Zwei Optionen wie es weitergeht:
+### D-4: Sprint 3 starten?
+**Was:** Epic 1 vollständig done + in-game verifiziert (MT-2/MT-3/MT-4 alle PASS). Bereit für **Sprint 3 = Epic 2 (Map-Analyzer)**.
 
-- **Variante A:** Erst **Epic-1-Test-Marathon** (siehe MT-3 unten) — du verifizierst alle deferred + nicht-game-getesteten Stories vor Sprint-3-Start. Dein ursprünglicher Wunsch.
-- **Variante B:** Sprint 3 sofort starten mit Epic 2 (Map-Analyzer) — Tests aufschieben.
+Epic 2 hat 9 Stories (2.1-2.9) — Map-Cell-Data-Scan, Wild-Plant-Detection, Hazard-Scanner, Defensibility-Score, Cluster-Analyse, Overlay-Rendering, Caching-Savegame, Coroutine-Split. Erste Story 2.1 fängt mit `ISnapshotProvider`-Interface + Snapshot-Records an (das ist auch der Pre-Requisite für die deferred Snapshot-Helper aus Story 1.13).
+
+- **Variante A:** „Sprint 3 mit Story 2.1 starten" → ich beginne den BMAD-Loop.
+- **Variante B:** Pause / etwas anderes → sag was.
 
 Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne stable Epic-1-Foundation Bug-Hunting brutal wird.
 
@@ -20,58 +22,7 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
 
-### MT-3: Epic-1-Test-Marathon — **PFLICHT für Sprint-3-Start (Variante A)**
-**Wann:** Vor Sprint-3-Start (deinem Wunsch nach 1.14 done).
-
-**Setup:** RimWorld einmal starten (du hast nach MT-2 RimWorld eh offen).
-
-**Schritte (reihe nach abklingen, je 1× klicken/triggern):**
-
-1. **Stories 1.1-1.3 (Init/Component):** schon implizit verifiziert via MT-2 (`[RimWorldBot] initialized` + `BotGameComponent registered` Player.log-Lines).
-
-2. **Story 1.4 Master-Toggle-Button** (Bottom-Bar „Bot"-Button, schon getestet aber Re-Verifikation wegen Refactor):
-   - 1× Bot-Button klicken → State-Change-Log in Player.log.
-   - Alle 3 States durchklicken: Off → Advisory → On → Off.
-
-3. **Story 1.5 Ctrl+K-Keybinding:**
-   - Ctrl+K drücken (Modifier zwingend, sonst kollidiert mit Vanilla Misc8).
-   - Erwartet: gleiches State-Change-Log wie Button-Klick.
-
-4. **Story 1.6 Per-Pawn-Toggle:**
-   - Einen Pawn anklicken (Inspector öffnet sich).
-   - **„Bot"-Tab** im Pawn-Inspector suchen (zwischen Health/Gear/Social).
-   - Klick → Per-Pawn-Toggle-UI mit `playerUse`-Checkbox.
-   - 1× toggle → Player.log sollte Decision-Log-Eintrag haben (oder zumindest kein Crash).
-
-5. **Story 1.7 Settings-Window:**
-   - Hauptmenü → Options → Mod Settings → "RimWorld Bot" auswählen.
-   - 5 Sektionen sichtbar (Master, Ending-Strategy, Phase, Risk, Debug).
-   - 1× Setting ändern + Apply → schließen + wieder öffnen → Wert persistiert.
-
-6. **Story 1.8 Localization DE/EN:**
-   - Sprache umstellen Hauptmenü → Options → Sprache → English.
-   - Alles sollte englisch sein (kein „MissingTranslation"-Marker).
-   - Zurück auf Deutsch.
-
-7. **Story 1.12 QuestManager-Polling (MT-1 ehemals optional):**
-   - Dev-Mode aktivieren (Options → Dev Mode).
-   - Top-Bar Debug-Menu (Käfer-Icon) → "Execute incident" → "GiveQuest_*" auswählen (egal welche).
-   - Quest-Letter erscheint.
-   - ~21s warten (Bot pollt alle 1250 Ticks).
-   - Player.log auf `QuestOfferEvent`/Quest-relevante Bot-Logs prüfen — Note: aktuell wird das nur queued, kein Consumer (Story 7.7/7.9 noch nicht da). Wichtig: **kein Crash**.
-
-8. **Smoke-Save-Load:**
-   - Save Game → Load Game.
-   - Player.log: kein `[RimWorldBot] Migrate failure` o.ä.
-   - Master-State und Per-Pawn-Toggle erhalten.
-
-**Was zurückmelden:** „MT-3 PASS" plus den letzten Player.log-Stand. Falls einzelne Schritte fehlschlagen: nur die Schritt-Nummer + relevante `[RimWorldBot]`-Logs zitieren, ich fixe es.
-
----
-
-## 🔵 Geplant nach Epic 1 (User-Wunsch 2026-04-25)
-
-_(Konsolidiert in MT-3 oben.)_
+_(Aktuell keine offen — Sprint 3 wird neue MTs bringen sobald Stories laufen.)_
 
 ---
 
@@ -88,6 +39,7 @@ _(Aktuell keine.)_
 - **2026-04-25** — **MT-2 PASS** (Story 1.14 TC-14-PRODUCTION-LOAD): Player.log clean — `[RimWorldBot] initialized`, 5× State-Change-Logs (Off↔Advisory↔On), keine `MissingMethodException`/`TypeLoadException`. Story 1.14 → done.
 - **2026-04-25** — **User-Bug-Report → D-39 Folder-Rename**: User entdeckte dass Mod-Aktivierung Vanilla-Texte auf Englisch zwang. Root-Cause: `Languages/Deutsch/` matcht nicht Vanilla-Konvention `German (Deutsch)/`. Story 1.8 retroactive zurück auf in-progress, Folder umbenannt, Specs aktualisiert.
 - **2026-04-25** — **MT-4 PASS** (Story 1.8 Re-Verifikation nach D-39): Spiel + Mod beide auf Deutsch, EINE deutsche Sprach-Option. Story 1.8 → done. **Epic 1 komplett (14/14 Stories done).**
+- **2026-04-25** — **MT-3 PASS** (Epic-1-Test-Marathon, alle 8 Schritte): Toggle-Button + Ctrl+K (6× state changes), Per-Pawn-Tab (Onesan PlayerUse=True), Settings-Window (kein Crash), Quest-Polling (Bot-Code clean trotz Vanilla-Grammar-Warnings), Save-Load von 2 Saves (State persistiert). Eine LOW-Anomaly entdeckt: `RegisterforPostLoadInit DecisionLogEntry`-Doppel-Warning bei Save-Load (kosmetisch, kein Daten-Verlust, escalated für Improvement Agent). **Sprint 2 vollständig in-game verifiziert.**
 
 ---
 
