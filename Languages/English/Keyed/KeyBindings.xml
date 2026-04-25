@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot_ToggleMaster.label>Toggle RimWorldBot master state</RimWorldBot_ToggleMaster.label>
+  <RimWorldBot_ToggleMaster.description>Cycle RimWorldBot master state Off → Advisory → On → Off (Ctrl+K when modifier held).</RimWorldBot_ToggleMaster.description>
+
+</LanguageData>

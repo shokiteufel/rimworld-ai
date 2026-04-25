@@ -22,7 +22,28 @@ namespace RimWorldBot.Core
             Instance = this;
             var harmony = new Harmony("mediainvita.rimworldbot");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            // Keybinding-Collision-Check (Story 1.5 AC 6): Log alle Vanilla KeyBindingDefs die unser
+            // defaultKeyCodeA (K) belegen. Nur Info-Log — User entscheidet via Options → Keyboard Config.
+            // LongEventHandler.QueueLongEvent verzögert bis DefDatabase populated ist.
+            LongEventHandler.QueueLongEvent(LogKeybindingCollisions, "RimWorldBot.InitKeybindingScan", false, null);
+
             Log.Message($"[RimWorldBot] initialized, Harmony patches: {harmony.GetPatchedMethods().Count()}, BotGameComponent registered");
+        }
+
+        static void LogKeybindingCollisions()
+        {
+            var ourDef = DefDatabase<KeyBindingDef>.GetNamedSilentFail("RimWorldBot_ToggleMaster");
+            if (ourDef == null) return;
+            var collisions = DefDatabase<KeyBindingDef>.AllDefsListForReading
+                .Where(d => d != ourDef
+                    && (d.defaultKeyCodeA == ourDef.defaultKeyCodeA || d.defaultKeyCodeB == ourDef.defaultKeyCodeA))
+                .Select(d => d.defName)
+                .ToList();
+            if (collisions.Count > 0)
+            {
+                Log.Message($"[RimWorldBot] Keybinding info: RimWorldBot_ToggleMaster defaultKey={ourDef.defaultKeyCodeA} shared with [{string.Join(", ", collisions)}]. Ctrl-modifier gate in code; user may rebind via Options → Keyboard Configuration.");
+            }
         }
     }
 }

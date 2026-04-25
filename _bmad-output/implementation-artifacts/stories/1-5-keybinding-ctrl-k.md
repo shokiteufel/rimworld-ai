@@ -16,14 +16,16 @@ Als **Spieler** möchte ich **mit `Ctrl+K` den Master-Toggle-State zyklieren** k
 
 ## Acceptance Criteria
 
-1. **`Defs/KeyBindingDefs.xml`** enthält einen `KeyBindingDef` mit `defName: RimWorldBot_ToggleMaster`, `defaultKeyCodeA: K`, `modifierA: Control`, Label „Toggle RimWorldBot" (lokalisierbar über Language-Keys)
+1. **`Defs/KeyBindingDefs.xml`** enthält einen `KeyBindingDef` mit `defName: RimWorldBot_ToggleMaster`, `defaultKeyCodeA: K`, `category: MainTabs`, Label „Toggle RimWorldBot master state" (lokalisierbar via Language-Keys). **Retroaktiv gefixt 2026-04-24:** `modifierA: Control` ENTFERNT — Feld existiert in RimWorld 1.6 KeyBindingDef nicht. Modifier-Check (Control) erfolgt code-seitig in `GameComponentUpdate()` via `Event.current.control`. Bekannte Collision mit Vanilla `Misc8` (beide default `K`); Misc8 ist ein leerer User-Binding-Slot, unsere Ctrl+K gatet auf Control-held damit Plain-K nur Misc8 triggert.
 2. **Keybinding-Check im Update-Loop** — in `BotGameComponent.GameComponentUpdate()` (läuft bei jedem UI-Frame, **nicht** Tick): wenn `RimWorldBot_ToggleMaster.KeyDownEvent`, cycle `masterState` via `SetMasterState` (aus Story 1.4)
 3. **Cycle-Reihenfolge identisch zum Button**: `Off → Advisory → On → Off` (AC 2 Epic 1)
 4. **Keybinding in RimWorld-Settings-Menü konfigurierbar** (`Options → Keyboard Configuration`) — User kann Key ändern, persistiert in Vanilla-KeyBindings-Save
 5. **Log-Eintrag identisch zu Button-Klick** (`[RimWorldBot] state changed: …` + DecisionLog)
 6. **Keine Kollision** mit Vanilla-Keybindings (`Ctrl+K` ist unbelegt in Vanilla 1.5/1.6 — prüfen)
 7. **Pause-kompatibel**: Ctrl+K funktioniert auch wenn Spiel pausiert (KeyBindingDef hat `doDesignatorInterrupt: false`)
-8. **Exception-Wrapper** (HIGH-Fix, CC-STORIES-02): `GameComponentUpdate()`-Hauptkörper inkl. KeyDownEvent-Check wrapped in try/catch → `BotErrorBudget.Report("GameComponentUpdate", ex)` → bei ≥ 2 Exceptions/min: `FallbackToOff()` (via Story 1.10 `ExceptionWrapper`-Helper). **Begründung:** Update-Loop läuft pro Frame (~60 FPS); unbehandelte Exception blockiert sonst die gesamte UI-Refresh-Pipeline. Vanilla RimWorld hat keinen Top-Level-Try dort.
+8. **Exception-Wrapper** (HIGH-Fix, CC-STORIES-02): `GameComponentUpdate()`-Hauptkörper inkl. KeyDownEvent-Check wrapped in try/catch → `BotErrorBudget.Report("GameComponentUpdate", ex)` → bei ≥ 2 Exceptions/min: `FallbackToOff()` (via Story 1.10 `ExceptionWrapper`-Helper). **Begründung:** Update-Loop läuft pro Frame (~60 FPS); unbehandelte Exception blockiert sonst die gesamte UI-Refresh-Pipeline. Vanilla RimWorld hat keinen Top-Level-Try dort. **Story-1.5-Interim (retroaktiv 2026-04-24):** `BotErrorBudget`/`FallbackToOff` existieren noch nicht (Story 1.10 pending). Inline `try/catch + Log.Error` als Interim, markiert mit `TODO(Story 1.10)` im Code. Wird in Story 1.10 durch `ExceptionWrapper.TickHost(...)` ersetzt, dann retroaktiv durch CR-Loop neu verifiziert.
+9. **Retroaktiv** (2026-04-24): Modifier-Check (`Input.GetKey(LeftControl/RightControl)` statt `Event.current.control`) — `GameComponentUpdate` läuft aus Unity `Update()`-Phase, nicht `OnGUI()`, daher ist `Event.current` praktisch immer null. `Input`-Polling ist der korrekte Pfad.
+10. **Retroaktiv** (2026-04-24): `KeyBindingDef`-Lookup via `DefDatabase<KeyBindingDef>.GetNamedSilentFail(...)` statt `KeyBindingDef.Named(...)` — letzteres wirft bei Missing-Def statt null zurückzugeben.
 
 ---
 
@@ -33,7 +35,7 @@ Als **Spieler** möchte ich **mit `Ctrl+K` den Master-Toggle-State zyklieren** k
 - [ ] `BotGameComponent.GameComponentUpdate()` implementieren (override) mit `KeyBindingDef.Named("RimWorldBot_ToggleMaster").KeyDownEvent`-Check
 - [ ] `Languages/Deutsch/Keyed/KeyBindings.xml` + `Languages/English/Keyed/KeyBindings.xml` mit Label-Keys (Vorgriff auf Story 1.8, minimale Sprach-Strings hier)
 - [ ] Integration-Test TC-05-KEYBIND: Ctrl+K → State wechselt → TabWindow-Display aktualisiert
-- [ ] Kollisions-Check: alle Vanilla KeyBindingDefs auflisten (via `DefDatabase<KeyBindingDef>.AllDefs`) → prüfen dass keine `Ctrl+K` hat
+- [x] Kollisions-Check (2026-04-24): `RimWorldBotMod.LogKeybindingCollisions` iteriert `DefDatabase<KeyBindingDef>.AllDefsListForReading` und loggt Defs die unseren `defaultKeyCodeA=K` teilen. Befund statisch: Vanilla `Misc8` hat `K` — da Misc8 kein eigenes Verhalten hat (leerer User-Binding-Slot) und unser Handler auf Control-held gatet, ist das akzeptabel. User kann rebinden via Options → Keyboard Configuration.
 
 ---
 

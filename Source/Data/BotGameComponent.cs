@@ -5,6 +5,7 @@ using RimWorld;
 using RimWorldBot.Core;
 using RimWorldBot.Events;
 using RimWorldBot.Phases;
+using UnityEngine;
 using Verse;
 
 namespace RimWorldBot.Data
@@ -272,6 +273,46 @@ namespace RimWorldBot.Data
                 Messages.Message(
                     "RimWorldBot disabled itself repeatedly across sessions — consider reporting a bug.",
                     MessageTypeDefOf.CautionInput, historical: false);
+            }
+        }
+
+        // KeyDown-Handler für Ctrl+K-Toggle (Story 1.5).
+        // Läuft pro Frame (~60 FPS) aus Unity Update()-Phase, damit KeyDownEvents auch im Pause-State erkannt werden.
+        //
+        // WICHTIG — Event.current ist hier NULL: `GameComponentUpdate` kommt aus Unity's Update(),
+        // nicht aus OnGUI(). `Event.current` lebt nur im IMGUI-OnGUI-Dispatch. Modifier-Check deshalb
+        // via `Input.GetKey(LeftControl/RightControl)`-Polling statt `Event.current.control`.
+        //
+        // Modifier-Check ist code-seitig — RimWorld 1.6 KeyBindingDef hat kein modifierA-XML-Feld.
+        public override void GameComponentUpdate()
+        {
+            try
+            {
+                // GetNamedSilentFail: gibt null zurück bei fehlender Def statt zu werfen (Guard gegen Def-Load-Order).
+                var def = DefDatabase<KeyBindingDef>.GetNamedSilentFail("RimWorldBot_ToggleMaster");
+                if (def == null) return;
+                if (!def.KeyDownEvent) return;
+
+                // Control-Gate damit Plain-K (Vanilla Misc8 default) uns nicht ungewollt triggert.
+                if (!Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.RightControl)) return;
+
+                // Cycle Off → Advisory → On → Off (Story 1.5 AC 3, identisch zum Button in Story 1.4).
+                var next = masterState switch
+                {
+                    ToggleState.Off => ToggleState.Advisory,
+                    ToggleState.Advisory => ToggleState.On,
+                    ToggleState.On => ToggleState.Off,
+                    _ => ToggleState.Off
+                };
+                SetMasterState(next);
+            }
+            catch (Exception ex)
+            {
+                // Interim-Exception-Isolation bis Story 1.10 (ExceptionWrapper + BotErrorBudget
+                // + FallbackToOff bei ≥2 Exceptions/min) vollständig integriert ist.
+                // Update-Loop läuft pro Frame — ungefangene Exception würde die UI-Refresh-Pipeline blockieren.
+                // TODO(Story 1.10): ersetzen durch `ExceptionWrapper.TickHost(() => { ... })`.
+                Log.Error($"[RimWorldBot] GameComponentUpdate failure: {ex}");
             }
         }
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    RimWorld 1.6 KeyBindingDef unterstützt KEIN `modifierA`-Feld im XML.
+    Modifier (Ctrl/Shift/Alt) werden code-seitig in GameComponentUpdate() via Event.current.control etc.
+    geprüft (siehe Source/Data/BotGameComponent.cs SetMasterState-Trigger).
+
+    Kollisions-Hinweis: Vanilla `Misc8` hat ebenfalls `<defaultKeyCodeA>K</defaultKeyCodeA>`.
+    Misc8 ist ein leerer User-Binding-Slot (no-op, wird nur aktiv wenn User einen Mod daran hängt).
+    Unser Ctrl+K triggert über Control-Gate; Plain-K löst nur Misc8 aus (no-op). User kann Misc8
+    alternativ in Options → Keyboard Configuration umbinden.
+  -->
+
+  <KeyBindingDef>
+    <defName>RimWorldBot_ToggleMaster</defName>
+    <label>Toggle RimWorldBot master state</label>
+    <description>Cycle RimWorldBot master state Off → Advisory → On → Off (Ctrl+K when modifier held).</description>
+    <category>MainTabs</category>
+    <defaultKeyCodeA>K</defaultKeyCodeA>
+  </KeyBindingDef>
+
+</Defs>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot_ToggleMaster.label>RimWorldBot Status zyklieren</RimWorldBot_ToggleMaster.label>
+  <RimWorldBot_ToggleMaster.description>RimWorldBot Master-Status zyklieren: Aus → Beratend → An → Aus (Ctrl+K bei gedrücktem Modifier).</RimWorldBot_ToggleMaster.description>
+
+</LanguageData>

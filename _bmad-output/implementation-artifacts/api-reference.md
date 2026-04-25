@@ -125,6 +125,36 @@
 | Deep-Serialize IExposable | `Scribe_Deep.Look(ref obj, "label")` |
 | Mode-Check | `Scribe.mode == LoadSaveMode.Saving/LoadingVars/PostLoadInit` |
 
+## KeyBindingDef (Story 1.5)
+
+Vanilla-Defs aus `Data/Core/Defs/Misc/KeyBindings/KeyBindings.xml` verifiziert 2026-04-24.
+
+| Feld | Typ | Pflicht | Notiz |
+|---|---|---|---|
+| `defName` | string | ja | Vendor-Prefix empfohlen |
+| `label` | string | ja | Lokalisierbar |
+| `description` | string | nein | |
+| `category` | KeyBindingCategoryDef-defName | nein (default: `GameMapCamera` evtl.) | z. B. `MainTabs`, `GameMapCamera`, `Commands`, `Designator`, `ModifierKeys` |
+| `defaultKeyCodeA` | `UnityEngine.KeyCode` | nein | Primäre Tastenbelegung |
+| `defaultKeyCodeB` | `UnityEngine.KeyCode` | nein | Sekundäre Tastenbelegung |
+
+**Nicht existent** (Architecture-Drift-Findings):
+- `modifierA` — **FALSCH**, gibt es in 1.6 nicht. Modifier (Ctrl/Shift/Alt) werden code-seitig via `Event.current.control` / `.shift` / `.alt` in `GameComponentUpdate()` geprüft.
+
+**Pattern für modifier-basierte Keybindings:**
+
+```csharp
+public override void GameComponentUpdate() {
+    var def = KeyBindingDef.Named("MyKeybind");
+    if (def != null && def.KeyDownEvent && Event.current?.control == true) {
+        // Ctrl+<defaultKey> gedrückt
+        Event.current.Use();  // konsumiert Event für Vanilla-Handler
+    }
+}
+```
+
+**Collision-Check:** Mehrere KeyBindingDefs mit gleichem `defaultKeyCodeA` sind erlaubt (RimWorld zeigt Warning, User kann rebinden in Options → Keyboard Configuration). Vanilla Misc1..Misc12 sind User-freie Slots für Mods.
+
 ## MainButtonDef (Top-Bar-Buttons, Story 1.4)
 
 **Wichtig** (Round-2-Fix 2026-04-24): Vanilla-MainButtonDef 1.6 hat KEIN Feld `defaultHidden` — frühere Architecture-Doku war falsch. Runtime-XML-Parse-Error bei Verwendung.
