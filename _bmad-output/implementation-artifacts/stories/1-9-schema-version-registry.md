@@ -9,24 +9,31 @@
 Als Mod-Entwickler möchte ich ein **zentrales Schema-Version-Registry** für BotGameComponent + BotMapComponent, damit alle Folge-Stories (Story 2.3, 3.9, 4.3, 6.5 etc.) konsistent Schema-Felder bumpen + Migration-Pfade dokumentieren.
 
 ## Acceptance Criteria
-1. `BotGameComponent` hat `const int CurrentSchemaVersion = 3` + `Migrate()` (bereits aus 1.3)
-2. **`BotMapComponent` bekommt ebenfalls `const int CurrentSchemaVersion = 1`** + `Migrate()` (war in 1.3 implizit gelassen)
-3. `SchemaRegistry`-Klasse in `Source/Data/SchemaRegistry.cs` dokumentiert alle Schema-Bumps als `record SchemaBump(int FromVersion, int ToVersion, string ComponentName, string FieldChanges)` — kompiliert zu Migration-Tests
-4. **Pflicht-AC-Template** für Feature-Stories die Schema erweitern:
+1. `BotGameComponent` hat `const int CurrentSchemaVersion = 3` + `Migrate()` (bereits aus Story 1.3, v1→v2 perPawnPlayerUse-keying, v2→v3 no-op)
+2. **`BotMapComponent` hat `const int CurrentSchemaVersion = 3`** + `Migrate()` (bereits aus Story 1.3, v3 = +excludedCells). **Retroaktiv 2026-04-25:** Story-AC sagte v1, das wurde bereits in 1.3 vorgezogen. `SchemaRegistry` dokumentiert die History.
+3. `SchemaRegistry`-Klasse in `Source/Data/SchemaRegistry.cs` dokumentiert alle Schema-Bumps als `record SchemaBump(string ComponentName, int FromVersion, int ToVersion, string FieldChanges, string Reason)` — IReadOnlyList als statisches Single-Source-of-Truth.
+4. **Pflicht-AC-Template** für Feature-Stories die Schema erweitern (zur Aufnahme in Stories 2.3, 2.7, 3.9, 4.3, 6.5, 7.9):
    - „Feature-Feld X hinzugefügt — `CurrentSchemaVersion` auf N+1 bumpen"
    - „Migration-Pfad: alte Saves ohne Feld → Default-Wert Y"
+   - „SchemaRegistry-Eintrag in Source/Data/SchemaRegistry.cs hinzugefügt"
    - „TC: Savegame-Roundtrip v(N)→v(N+1) ohne Data-Loss"
-5. **Retroaktive Schema-Bumps** für bereits gedraftete Stories: 2.3 (v3→v4 `excludedCells`), 3.9 (v4→v5 `botManagedBills`), 4.3 (v5→v6 `botManagedGuests`), 6.5 (v6→v7 `pawnSpecializations`), 2.7 (v7→v8 `overlayVisible`), 7.9 (v8→v9 `journeyQuest`)
-6. Migrations sind idempotent (mehrfach angewendet → gleicher Zustand)
-7. Unit-Tests: jeder Migration-Pfad einzeln + kaskadiert (v1→v9)
+5. **Geplante Schema-Bumps** als planned-Einträge in SchemaRegistry (werden in den Stories selbst auf "applied" umgestellt). Sequenz konsistent mit Code in `Source/Data/SchemaRegistry.cs`:
+   - BotMapComponent v3 `excludedCells` (Story 2.3 — bereits in v3 enthalten via Story 1.3, kein weiterer Bump nötig)
+   - BotMapComponent v3→v4 `botManagedBills` (Story 3.9)
+   - BotMapComponent v4→v5 `overlayVisible` (Story 2.7)
+   - BotGameComponent v3→v4 `botManagedGuests` (Story 4.3)
+   - BotGameComponent v4→v5 `pawnSpecializations` (Story 6.5)
+   - BotGameComponent v5→v6 `journeyQuest` (Story 7.9)
+6. Migrations sind idempotent (mehrfach angewendet → gleicher Zustand) — schemaVersion-Field schützt vor Doppel-Apply
+7. ~~Unit-Tests~~ — verschoben auf Story 1.13 (Test-Infrastructure liefert FakeSnapshotProvider + Save-Roundtrip-Helpers); Story 1.9 dokumentiert Test-Plan in `Source/Data/SchemaRegistry.cs`-Kommentar.
 
 ## Tasks
-- [ ] `Source/Data/SchemaRegistry.cs` mit Records
-- [ ] `BotMapComponent.ExposeData` + `Migrate()` ergänzen (Story 1.3 File-Edit)
-- [ ] Migration-Chains für v1→v2→…→v9
-- [ ] Unit-Tests pro Migration
-- [ ] Integration-Test: v1-Fake-Save → v9 geladen
-- [ ] Cross-Story-Documentation in allen betroffenen Feature-Stories (2.3, 3.9, 4.3, 6.5, 2.7, 7.9)
+- [x] `Source/Data/SchemaRegistry.cs` mit `record SchemaBump` + statische Bumps-Liste
+- [x] `BotMapComponent.ExposeData` + `Migrate()` (bereits aus Story 1.3, hier nur Cross-Reference)
+- [x] Migration-Chains v1→v2→v3 für beide Components (bereits in Story 1.3 implementiert; geplante Bumps v4-v6 als "planned" markiert)
+- [ ] **Unit-Tests verschoben auf Story 1.13** (Test-Infrastructure liefert FakeSnapshotProvider + Save-Roundtrip-Helpers; Test-Plan im SchemaRegistry-Kommentar dokumentiert)
+- [ ] **Integration-Test verschoben auf Story 1.13** analog
+- [ ] Cross-Story-Documentation: in den 6 Feature-Stories (2.3, 3.9, 4.3, 6.5, 2.7, 7.9) wird beim Implement `SchemaRegistry.Bumps`-Eintrag von "planned" auf "applied" umgestellt + Schema-Bump-AC ergänzt
 
 ## Dev Notes
 **Architektur-Kontext:** D-14 + CC-STORIES-01. Dies ist die **zentrale Story** für Schema-Konsistenz — ohne sie leaken 6+ andere Feature-Stories Daten bei Mod-Update.
@@ -42,8 +49,11 @@ Als Mod-Entwickler möchte ich ein **zentrales Schema-Version-Registry** für Bo
 | Dependent Stories (2.3, 3.9, 4.3, 6.5, 2.7, 7.9) | reference |
 
 ## Testing
-- Unit: Migration-Chain v1..v9
-- Integration: Fake-Save v1 → geladen als v9
+**Verschoben auf Story 1.13 (Test-Infrastructure):**
+- Unit: pro Migration-Bump einzeln (Fake-Save mit `FromVersion` → Migrate → assert Felder == Defaults)
+- Unit: kaskadiert (Fake-Save mit ältester Version → Migrate → assert alle Felder migriert)
+- Unit: Doppel-Apply (Migrate zweimal → idempotenter Endzustand, Schutz via schemaVersion-Check)
+- Integration: Fake-v1-Save → geladen als latest-Version
 
 ## Review-Gate
 Code-Review gegen D-14, Migration-Sauberkeit, Integration mit 6 Feature-Stories.
