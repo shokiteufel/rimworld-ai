@@ -25,6 +25,17 @@
          (brrainz.harmony) von RimWorld vor uns geladen — ExcludeAssets=runtime verhindert
          doppeltes Bundling in Assemblies/. -->
     <PackageReference Include="Lib.Harmony" Version="2.3.*" PrivateAssets="all" ExcludeAssets="runtime" />
+    <!-- System.Collections.Immutable für Plan-Records (Architecture §2.3a F-ARCH-17 Immutability).
+         net472 hat das nicht im Framework, deshalb NuGet-Pull. Bundlt in Assemblies/:
+           - System.Collections.Immutable.dll (~253KB, Haupt-Dep)
+           - System.Buffers.dll (~20KB, transitive)
+           - System.Memory.dll (~142KB, transitive)
+           - System.Numerics.Vectors.dll (~116KB, transitive)
+           - System.Runtime.CompilerServices.Unsafe.dll (~18KB, transitive)
+         Total ~545KB. RimWorld-Vanilla hat keine davon → Bundle ist nötig.
+         Konflikt-Risiko nur mit anderen Mods die unterschiedliche Versions bundeln (Community-Standard,
+         akzeptiert wie HugsLib + Combat Extended + Vanilla Expanded). -->
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
