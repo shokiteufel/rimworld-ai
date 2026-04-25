@@ -55,7 +55,7 @@ development_status:
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
   2-1-map-cell-data-basic-scan: done  # 2026-04-25: Implementation + 11 neue Tests (79/79 grün), CR R1 (2 CRIT + 3 HIGH + 5 MED + 5 LOW) → Fixes → R2 APPROVE → MT-5 PASS (Player.log: "DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True)", Scan unter 200ms-Log-Schwelle, keine cell-mapping exception). Side-Finding: Story 1.4 MainTabWindow_BotControl benötigt StaticConstructorOnStartup-Attribute — wird in retroactive Bug-Fix gehandelt.
-  2-2-wild-plant-detection: review  # 2026-04-25: Implementation + 17 neue Tests (97/97 grün), CR R1 (2 CRIT + 2 HIGH + 3 MED + 3 LOW) → Fixes (Odyssey-Doku-Truth, D-42 11→10, ClassifyCellThings single-pass, HashSet-Spec-Lock, Other-Foundation-Doku, int[]-DebugAction-Aggregation, VerifiedDefNameCount-API) → R2 (1 NEW-MED XML-Pfad-Drift) → fix → wartet auf MT-6 User-Game-Test (Wild-Plant-Counts auf Temperate-Forest)
+  2-2-wild-plant-detection: done  # 2026-04-25: Implementation + 17 neue Tests (97/97 grün), CR R1 (2 CRIT + 2 HIGH + 3 MED + 3 LOW) → Fixes → R2 (1 NEW-MED XML-Pfad) → fix → MT-6 PASS (Player.log: "DebugAction WildPlants: 260 cells with WildPlant — Berries=132, Healroot=128"; visuelle Bestätigung "Wilde Heilwurzel" auf der Map). Bonus: D-41 Static-Constructor-Fix verifiziert (keine MainTabWindow-Warning mehr).
   2-3-hazard-scanner: ready-for-dev
   2-4-defensibility-score: ready-for-dev
   2-5-scoring-formula: ready-for-dev

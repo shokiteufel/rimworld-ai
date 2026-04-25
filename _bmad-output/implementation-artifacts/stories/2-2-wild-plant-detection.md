@@ -1,6 +1,6 @@
 # Story 2.2: Wilde-Pflanzen-Erkennung (Berries, Healroot, Agave)
 
-**Status:** review
+**Status:** done (MT-6 PASS 2026-04-25)
 **Epic:** Epic 2 — Map-Analyzer
 **Size:** S
 

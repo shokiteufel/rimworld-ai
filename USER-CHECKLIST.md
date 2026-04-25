@@ -2,7 +2,7 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Story 2.2 review-ready, MT-6 wartet auf User-Game-Test)
+**Last updated:** 2026-04-25 (Story 2.2 done MT-6 PASS, bereit für Story 2.3)
 
 ---
 
@@ -15,6 +15,10 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 ---
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
+
+_(Aktuell keine offen — Story 2.3 bringt evtl. neue MTs.)_
+
+<!-- MT-6 erledigt, archiviert weiter unten
 
 ### MT-6: Story 2.2 Wild-Plant-Detection — **PFLICHT für Story 2.2 done**
 **Wann:** Nach R2 APPROVE (jetzt).
@@ -35,6 +39,7 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 **Pass-Kriterium:** Mindestens eine `WildPlants`-Line erscheint (egal mit `>0 cells` oder `0 cells with WildPlant on this map`). Kein Crash.
 
 **Was zurückmelden:** „MT-6 PASS" + die `WildPlants`-Line aus Player.log. Falls 0 Cells obwohl Map klar Berries hat: Map-Biome + Saison nennen.
+-->
 
 <!-- MT-5 erledigt, archiviert weiter unten
 
@@ -79,6 +84,7 @@ _(Aktuell keine.)_
 - **2026-04-25** — **MT-3 PASS** (Epic-1-Test-Marathon, alle 8 Schritte): Toggle-Button + Ctrl+K (6× state changes), Per-Pawn-Tab (Onesan PlayerUse=True), Settings-Window (kein Crash), Quest-Polling (Bot-Code clean trotz Vanilla-Grammar-Warnings), Save-Load von 2 Saves (State persistiert). Eine LOW-Anomaly entdeckt: `RegisterforPostLoadInit DecisionLogEntry`-Doppel-Warning bei Save-Load (kosmetisch, kein Daten-Verlust, escalated für Improvement Agent). **Sprint 2 vollständig in-game verifiziert.**
 - **2026-04-25** — D-4 entschieden: **Sprint 3 starten** mit Story 2.1 (Map-Cell-Data-Basic-Scan). D-40 Sprint-Transition. Epic 2 (Map-Analyzer) in Bearbeitung.
 - **2026-04-25** — **MT-5 PASS** (Story 2.1 Snapshot-Scan): Player.log `[RimWorldBot] DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True)`. Scan unter 200ms-Log-Schwelle (deutlich unter AC-6 500ms-Limit). Story 2.1 → done. **Side-Finding** entdeckt: Story 1.4 MainTabWindow_BotControl benötigt `[StaticConstructorOnStartup]` für Texture2D-Asset-Loading → Story 1.4 retroactive auf in-progress, Fix angewendet (D-41), wieder done.
+- **2026-04-25** — **MT-6 PASS** (Story 2.2 Wild-Plant-Detection): Player.log `[RimWorldBot] DebugAction WildPlants: 260 cells with WildPlant — Berries=132, Healroot=128`. Visuelle Bestätigung „Wilde Heilwurzel" auf Map-Hover. Story 2.2 → done. Bonus: D-41 verifiziert (keine MainTabWindow-StaticConstructor-Warning mehr im Player.log).
 
 ---
 
