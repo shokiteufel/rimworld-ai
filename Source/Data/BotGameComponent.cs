@@ -237,6 +237,7 @@ namespace RimWorldBot.Data
         {
             eventQueue?.Clear();                                 // F-STAB-20: alte Tick-Stamps verwerfen
             configResolver?.Invalidate();
+            BotSafe.Clear();                                     // Story 1.10: ErrorBudget + Poison-Cooldown re-init
             if (controller == null) BuildController();
             ReconcilePendingPhase();
             ReconcilePhaseGoalOrphans();
@@ -247,6 +248,7 @@ namespace RimWorldBot.Data
         {
             eventQueue?.Clear();
             configResolver?.Invalidate();
+            BotSafe.Clear();                                     // Story 1.10
             if (controller == null) BuildController();
         }
 
@@ -292,9 +294,10 @@ namespace RimWorldBot.Data
         // via `Input.GetKey(LeftControl/RightControl)`-Polling statt `Event.current.control`.
         //
         // Modifier-Check ist code-seitig — RimWorld 1.6 KeyBindingDef hat kein modifierA-XML-Feld.
+        // Exception-Handling via Story 1.10 BotSafe.SafeTick (ErrorBudget + 10min-Poison bei ≥2 Exceptions/min).
         public override void GameComponentUpdate()
         {
-            try
+            BotSafe.SafeTick(() =>
             {
                 // GetNamedSilentFail: gibt null zurück bei fehlender Def statt zu werfen (Guard gegen Def-Load-Order).
                 var def = DefDatabase<KeyBindingDef>.GetNamedSilentFail("RimWorldBot_ToggleMaster");
@@ -313,15 +316,7 @@ namespace RimWorldBot.Data
                     _ => ToggleState.Off
                 };
                 SetMasterState(next);
-            }
-            catch (Exception ex)
-            {
-                // Interim-Exception-Isolation bis Story 1.10 (ExceptionWrapper + BotErrorBudget
-                // + FallbackToOff bei ≥2 Exceptions/min) vollständig integriert ist.
-                // Update-Loop läuft pro Frame — ungefangene Exception würde die UI-Refresh-Pipeline blockieren.
-                // TODO(Story 1.10): ersetzen durch `ExceptionWrapper.TickHost(() => { ... })`.
-                Log.Error($"[RimWorldBot] GameComponentUpdate failure: {ex}");
-            }
+            }, context: "BotGameComponent.GameComponentUpdate");
         }
 
         public override void GameComponentTick()

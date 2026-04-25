@@ -47,7 +47,7 @@ development_status:
   1-8-localization-skeleton: done  # CR+VR-Loop ✓, Runtime-Fix descriptionsByLanguage Reviewer-Halluzination → Inline-Splitter, TC-08-LOCALIZATION PASS (45 Keys synchron DE/EN, About-Description DE+EN sichtbar, 0 RimWorldBot-Translation-Errors, 2026-04-25)
   # Cross-Cutting-Stories (D-31, Round-1-Review):
   1-9-schema-version-registry: done  # CR APPROVE-WITH-CHANGES (2 MED + 3 LOW) → Fixes (BumpStatus enum, Story-AC sync, Test-Plan-Doc) → Konsistenz selbst-verifiziert (BotGame+BotMap const=3 matcht LatestAppliedVersion); Unit-Tests verschoben auf 1.13. Kein Game-Test nötig (Cross-Cutting-Infra). 2026-04-25
-  1-10-exception-wrapper-pattern: ready-for-dev
+  1-10-exception-wrapper-pattern: done  # CR APPROVE-WITH-CHANGES (2 HIGH + 2 MED + LOW) → Fixes (Time.realtimeSinceStartup statt GenTicks für Pause-resistente Sliding-Windows, AC 6 Unit-Tests verschoben auf 1.13 als Carry-Over, AI-4-Doku, Caller-Pattern, LogOnceWarning) → R2 APPROVE; retroaktive Migration Story 1.5 GameComponentUpdate auf BotSafe.SafeTick, BotSafe.Clear-Hook in LoadedGame/StartedNewGame. 2026-04-25
   1-11-plan-arbiter: ready-for-dev
   1-12-quest-manager-polling: ready-for-dev
   1-13-test-infrastructure: ready-for-dev

@@ -18,7 +18,12 @@ Als Mod-Entwickler möchte ich ein **einheitliches Exception-Wrapper-Pattern** f
    - „Hauptkörper wrapt via `BotSafe.SafeTick/SafeApply(..., context)`"
    - „Unit-Test: wirft im Happy-Path nichts, fängt in Error-Path, BotErrorBudget wird dekrementiert"
 5. **Retroaktive Pflicht-Edits in Stories:** 1.4 (SetMasterState), 1.5 (GameComponentUpdate), 2.7 (MapComponentOnGUI), 2.9 (Tick-Iterator), 5.4 (DraftController.Apply), 5.7 (Focused-Fire-Apply), alle Planner-Apply-Stories
-6. Unit-Tests für BotSafe.SafeTick + SafeApply mit mock-Exception
+6. ~~Unit-Tests für BotSafe.SafeTick + SafeApply mit mock-Exception~~ — **verschoben auf Story 1.13 (Test-Infrastructure)**. Begründung: kein Test-Framework etabliert, FakeSnapshotProvider + Test-Builder kommen in 1.13. Test-Plan-Dokumentation als Code-Kommentar in BotSafe.cs.
+
+## Retroaktive Drift-Fixes (2026-04-25)
+
+- **AC-Voraussetzung**: Story sagte „BotSafe existiert (Story 1.3)" — war falsch, BotSafe gab's nicht. Komplett neu in 1.10 erstellt statt nur erweitern.
+- **Time-Reference HIGH-Bug**: Initial-Implementation nutzte `GenTicks.TicksGame` als Time-Reference. GenTicks friert in Pause ein, Unity Update() läuft aber weiter → Sliding-Window kollabiert in Pause. Fix: `Time.realtimeSinceStartup` (Unity, sekunden-genau, läuft auch in Pause). Konstanten auf Sekunden-Basis (60s Window, 600s Cooldown).
 
 ## Tasks
 - [ ] `BotSafe.cs` um `SafeTick` / `SafeApply` erweitern
