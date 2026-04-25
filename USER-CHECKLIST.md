@@ -2,19 +2,13 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (MT-3 PASS — Epic 1 vollständig in-game verifiziert, bereit für Sprint 3)
+**Last updated:** 2026-04-25 (Sprint 3 / Epic 2 gestartet, Story 2.1 in-progress)
 
 ---
 
 ## 🟡 Decisions Needed (echte User-Entscheidungen, BMAD liefert nicht die Antwort)
 
-### D-4: Sprint 3 starten?
-**Was:** Epic 1 vollständig done + in-game verifiziert (MT-2/MT-3/MT-4 alle PASS). Bereit für **Sprint 3 = Epic 2 (Map-Analyzer)**.
-
-Epic 2 hat 9 Stories (2.1-2.9) — Map-Cell-Data-Scan, Wild-Plant-Detection, Hazard-Scanner, Defensibility-Score, Cluster-Analyse, Overlay-Rendering, Caching-Savegame, Coroutine-Split. Erste Story 2.1 fängt mit `ISnapshotProvider`-Interface + Snapshot-Records an (das ist auch der Pre-Requisite für die deferred Snapshot-Helper aus Story 1.13).
-
-- **Variante A:** „Sprint 3 mit Story 2.1 starten" → ich beginne den BMAD-Loop.
-- **Variante B:** Pause / etwas anderes → sag was.
+_(Aktuell keine offen — Sprint 3 mit Story 2.1 läuft.)_
 
 Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne stable Epic-1-Foundation Bug-Hunting brutal wird.
 
@@ -40,6 +34,7 @@ _(Aktuell keine.)_
 - **2026-04-25** — **User-Bug-Report → D-39 Folder-Rename**: User entdeckte dass Mod-Aktivierung Vanilla-Texte auf Englisch zwang. Root-Cause: `Languages/Deutsch/` matcht nicht Vanilla-Konvention `German (Deutsch)/`. Story 1.8 retroactive zurück auf in-progress, Folder umbenannt, Specs aktualisiert.
 - **2026-04-25** — **MT-4 PASS** (Story 1.8 Re-Verifikation nach D-39): Spiel + Mod beide auf Deutsch, EINE deutsche Sprach-Option. Story 1.8 → done. **Epic 1 komplett (14/14 Stories done).**
 - **2026-04-25** — **MT-3 PASS** (Epic-1-Test-Marathon, alle 8 Schritte): Toggle-Button + Ctrl+K (6× state changes), Per-Pawn-Tab (Onesan PlayerUse=True), Settings-Window (kein Crash), Quest-Polling (Bot-Code clean trotz Vanilla-Grammar-Warnings), Save-Load von 2 Saves (State persistiert). Eine LOW-Anomaly entdeckt: `RegisterforPostLoadInit DecisionLogEntry`-Doppel-Warning bei Save-Load (kosmetisch, kein Daten-Verlust, escalated für Improvement Agent). **Sprint 2 vollständig in-game verifiziert.**
+- **2026-04-25** — D-4 entschieden: **Sprint 3 starten** mit Story 2.1 (Map-Cell-Data-Basic-Scan). D-40 Sprint-Transition. Epic 2 (Map-Analyzer) in Bearbeitung.
 
 ---
 

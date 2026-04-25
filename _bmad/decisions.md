@@ -15,6 +15,25 @@ Konsequenzen: ...
 
 ---
 
+## D-40: Sprint-Transition Sprint 2 → Sprint 3, Epic-2-DEV-Start mit Story 2.1
+Datum: 2026-04-25
+Status: accepted
+Kontext: Sprint 2 (Epic 1) vollständig abgeschlossen + in-game verifiziert via MT-2 (Story 1.14 Production-Load), MT-3 (alle 8 Epic-1-Test-Marathon-Schritte), MT-4 (Story 1.8 Localization-Bug-Fix). Alle 14 Stories 1.1-1.14 done. User-Decision D-4 2026-04-25: "Weiter mit Sprint 3".
+
+Entscheidung:
+1. **Phase-Transition** in `sprint-status.yaml`: `sub_phase: EPIC_1_DEV` → `sub_phase: EPIC_2_DEV`. Phase bleibt `DEV`.
+2. **Sprint 3 gestartet** (2026-04-25): Goal "Epic 2 (Map-Analyzer) — 9 Stories 2.1-2.9 durchentwickeln mit CR+VR-Loops". Sprint-2-Commit (`7eccfc8`) archiviert als previous_sprint.
+3. **Epic 2** auf `in-progress` (≥1 Story in-progress).
+4. **Story 2.1** (`map-cell-data-basic-scan`) atomar auf `in-progress` (Sprint-Plan-Watchdog-Korrektur ab Story 1.13: separater Commit für in-progress vor Implementation).
+5. **Side-Effect**: Story 2.1 definiert `ISnapshotProvider` + `ColonySnapshot`/`PawnSnapshot`/`CellSnapshot`-Records → unblockt Snapshot-Helper-Defer aus Story 1.13 (D-37). Sobald 2.1 done: Story 1.13 Carry-Over für `FakeSnapshotProvider`/`TestSnapshotBuilder`/`MockResolvers` kann angegangen werden, falls relevant.
+Begründung: Strict BMAD verlangt sequentiellen Sprint-Start nach Approval. Sprint-Goal definiert klar Epic 2 als Scope. Story 2.1 ist Critical Path-Foundation (alle weiteren Epic-2-Stories bauen auf CellSnapshot/ISnapshotProvider auf).
+Konsequenzen:
+- Sprint 3 wird signifikant kleiner als Sprint 2 (9 Stories vs 14), weil weniger Cross-Cutting nötig.
+- Story-Order: 2.1 → 2.2 (Wild-Plant-Detection, baut auf CellSnapshot) → 2.3 (Hazard-Scanner) → 2.4 (Defensibility-Score) → 2.5 (Scoring-Formula) → 2.6 (Cluster-Analyse) → 2.7 (Overlay-Rendering, UI-Story → CR+VR-Loop) → 2.8 (Caching-Savegame, persistent state) → 2.9 (Coroutine-Split, Performance).
+- Game-Tests (MTs) wahrscheinlich für 2.7 (Overlay-Visual) und 2.9 (Performance) — Sammlung in USER-CHECKLIST.
+
+---
+
 ## D-39: Languages-Folder-Konvention "German (Deutsch)" — RimWorld 1.6 Vanilla-Match (retroactive Story 1.8 Bug-Fix)
 Datum: 2026-04-25
 Status: accepted

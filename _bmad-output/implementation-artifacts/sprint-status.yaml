@@ -8,24 +8,24 @@ project:
   distribution: GitHub (primär)
 
 phase: DEV
-sub_phase: EPIC_1_DEV
+sub_phase: EPIC_2_DEV
 
 current_sprint:
-  number: 2
-  goal: "Epic 1 (Mod-Skeleton & Toggle) — 14 Stories 1.1-1.14 durchentwickeln mit CR+VR-Loops (1.14 hinzugefügt 2026-04-25 via D-37)"
-  started: 2026-04-24
+  number: 3
+  goal: "Epic 2 (Map-Analyzer) — 9 Stories 2.1-2.9 durchentwickeln mit CR+VR-Loops"
+  started: 2026-04-25
 
 previous_sprint:
-  number: 1
-  goal: "Alle 99 Stories (Epic 1-8) gedraftet + 3 Review-Passes → Dev-Gate für Epic 1"
-  completed: 2026-04-24
-  commit: "9c14b25 feat(planning): complete 3 review passes — 99 stories approved"
+  number: 2
+  goal: "Epic 1 (Mod-Skeleton & Toggle) — 14 Stories 1.1-1.14 (1.14 hinzugefügt via D-37 Story 1.13 Scope-Cut)"
+  completed: 2026-04-25
+  commit: "7eccfc8 chore(mt-3): Epic-1-Test-Marathon PASS, Sprint 2 in-game verifiziert"
 
 # Epic-Status (konsistent mit planning-artifacts/epics.md)
 # Epic-Stati: backlog (keine Story aktiv), in-progress (≥1 Story in-progress ODER review), done (alle Stories done/optional)
 # Anmerkung: "review" ist semantisch aktive Arbeit am Epic → epic-Level bleibt in-progress bis Story done.
 epic-1: done  # 2026-04-25: alle 14 Stories 1.1-1.14 done (Story 1.8 nach D-39 Bug-Fix MT-4 PASS), Sprint 2 abgeschlossen
-epic-2: backlog
+epic-2: in-progress  # 2026-04-25: Sprint 3 startet mit Story 2.1
 epic-3: backlog
 epic-4: backlog
 epic-5: backlog
@@ -54,7 +54,7 @@ development_status:
   1-14-test-runtime-infrastructure-refactor: done  # 2026-04-25: Option A umgesetzt (D-38), 68/68 Tests grün, CR R1 (2 HIGH + 3 MED + 1 LOW) → Fixes → R2 (1 HIGH-3 README-Counts) → R3 APPROVE → MT-2 User-Game-Test PASS (Player.log: [RimWorldBot] initialized, 5× State-Change-Logs, keine MissingMethodException/TypeLoadException). Epic 1 komplett.
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
-  2-1-map-cell-data-basic-scan: ready-for-dev
+  2-1-map-cell-data-basic-scan: in-progress  # 2026-04-25: Sprint 3 Story 1, Snapshot-Foundation für Epic 2
   2-2-wild-plant-detection: ready-for-dev
   2-3-hazard-scanner: ready-for-dev
   2-4-defensibility-score: ready-for-dev
