@@ -2,7 +2,7 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Story 1.8 retroactive Bug-Fix — Sprache-Folder-Rename, MT-4 zur Verifikation)
+**Last updated:** 2026-04-25 (Epic 1 komplett ✓ MT-4 PASS — bereit für MT-3 Test-Marathon)
 
 ---
 
@@ -19,23 +19,6 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 ---
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
-
-### MT-4: Sprach-Bug-Re-Verifikation — **PFLICHT vor MT-3**
-**Wann:** Jetzt, vor MT-3.
-**Warum:** Story 1.8 Bug-Fix — Languages-Folder umbenannt von `Deutsch/` auf `German (Deutsch)/` (RimWorld 1.6 Vanilla-Konvention). Dein Bug-Report war goldwert: ohne Klammer-Notation war unsere Mod-Sprache eine Schein-Option neben Vanilla-"German (Deutsch)" und hat den Sprach-Stack zerschossen.
-
-**Schritte:**
-1. RimWorld neu starten (frisch, damit Languages-Folder neu gescannt wird).
-2. Hauptmenü → Options → Sprache: **„German (Deutsch)"** wählen (NICHT mehr ein separates "Deutsch" zu sehen — falls doch, hat der Refactor was übersehen).
-3. Spiel-Texte sollten alle deutsch sein (Hauptmenü-Buttons: "Spiel laden", "Optionen", etc.).
-4. Neues Game starten — Top-Bar/Bottom-Bar deutsch.
-5. Bot-Button Bottom-Bar → State-Cycle wie vorher, jetzt mit deutschen Labels.
-6. Settings → "RimWorld Bot" → 5 Sektionen + Settings-Texte deutsch.
-7. Spiel schließen.
-
-**Erwartet:** Vanilla-Texte UND Mod-Texte beide deutsch. Nur EINE deutsche Sprach-Option in der Liste (nicht mehr zwei wie vorher).
-
-**Was zurückmelden:** „MT-4 PASS" + ggf. Player.log-Excerpt. Falls die Sprach-Liste immer noch zwei DE-Optionen zeigt, screenshot oder Folder-Liste-Output.
 
 ### MT-3: Epic-1-Test-Marathon — **PFLICHT für Sprint-3-Start (Variante A)**
 **Wann:** Vor Sprint-3-Start (deinem Wunsch nach 1.14 done).
@@ -102,7 +85,9 @@ _(Aktuell keine.)_
 
 - **2026-04-25** — D-1 entschieden: **Option A** (Production-csproj refactoren mit Game-Install-Refs, Krafs.Rimworld.Ref weg). Begründung: Standard-Setup für RimWorld-Mods, was getestet wird = was published wird.
 - **2026-04-25** — D-2 implizit entschieden: **Variante A** (Story 1.14 sofort starten). MT-1 (Story 1.12 Game-Test) bleibt optional.
-- **2026-04-25** — **MT-2 PASS** (Story 1.14 TC-14-PRODUCTION-LOAD): Player.log clean — `[RimWorldBot] initialized`, 5× State-Change-Logs (Off↔Advisory↔On), keine `MissingMethodException`/`TypeLoadException`. Story 1.14 → done. **Epic 1 komplett (14/14 Stories done).**
+- **2026-04-25** — **MT-2 PASS** (Story 1.14 TC-14-PRODUCTION-LOAD): Player.log clean — `[RimWorldBot] initialized`, 5× State-Change-Logs (Off↔Advisory↔On), keine `MissingMethodException`/`TypeLoadException`. Story 1.14 → done.
+- **2026-04-25** — **User-Bug-Report → D-39 Folder-Rename**: User entdeckte dass Mod-Aktivierung Vanilla-Texte auf Englisch zwang. Root-Cause: `Languages/Deutsch/` matcht nicht Vanilla-Konvention `German (Deutsch)/`. Story 1.8 retroactive zurück auf in-progress, Folder umbenannt, Specs aktualisiert.
+- **2026-04-25** — **MT-4 PASS** (Story 1.8 Re-Verifikation nach D-39): Spiel + Mod beide auf Deutsch, EINE deutsche Sprach-Option. Story 1.8 → done. **Epic 1 komplett (14/14 Stories done).**
 
 ---
 

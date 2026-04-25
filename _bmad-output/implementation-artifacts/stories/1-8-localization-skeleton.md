@@ -1,6 +1,6 @@
 # Story 1.8: Localization-Skeleton (DE + EN Keyed-Strings)
 
-**Status:** in-progress (retroactive Bug-Fix 2026-04-25)
+**Status:** done (retroactive Bug-Fix 2026-04-25 MT-4 PASS)
 **Epic:** Epic 1 — Mod-Skeleton & Toggle
 **Size:** S
 **Sprint:** 1
