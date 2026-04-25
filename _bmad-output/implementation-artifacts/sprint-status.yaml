@@ -50,7 +50,7 @@ development_status:
   1-10-exception-wrapper-pattern: done  # CR APPROVE-WITH-CHANGES (2 HIGH + 2 MED + LOW) → Fixes (Time.realtimeSinceStartup statt GenTicks für Pause-resistente Sliding-Windows, AC 6 Unit-Tests verschoben auf 1.13 als Carry-Over, AI-4-Doku, Caller-Pattern, LogOnceWarning) → R2 APPROVE; retroaktive Migration Story 1.5 GameComponentUpdate auf BotSafe.SafeTick, BotSafe.Clear-Hook in LoadedGame/StartedNewGame. 2026-04-25
   1-11-plan-arbiter: done  # CR APPROVE-WITH-CHANGES (1 HIGH + 2 MED + 2 LOW) → Fixes (Cross-Layer-Override-Log, BuildPlan-Comment, WorkPriority-Perf-Comment, TODO-Marker, csproj-DLL-Liste) → R2 APPROVE; Plan-Records aus §2.3a vorgezogen + System.Collections.Immutable bundled (~545KB). Unit-Tests Carry-Over auf 1.13. 2026-04-25
   1-12-quest-manager-polling: done  # CR APPROVE-WITH-CHANGES (2 HIGH + 3 MED + 5 LOW) → Fixes (PollIntervalTicks 2500→1250 vs StalenessThreshold, defensive null-init in Tick, UnknownQuestDef-Konstante, UnionWith-Idiom, Story-AC-Reformulierung Producer-Scope+Test-Defer, SchemaRegistry v3→v4 Slot-Reorganisation D-36) → R2 APPROVE; Game-Test deferred (Quest-Trigger-Workflow). Unit-Tests Carry-Over auf 1.13. 2026-04-25
-  1-13-test-infrastructure: ready-for-dev
+  1-13-test-infrastructure: in-progress  # 2026-04-25: gestartet nach 1.12-Push, Carry-Over aus 1.9 (Schema-Tests) + 1.10 (BotSafe-Tests) + 1.12 (Quest-Poller-Tests)
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
   2-1-map-cell-data-basic-scan: ready-for-dev

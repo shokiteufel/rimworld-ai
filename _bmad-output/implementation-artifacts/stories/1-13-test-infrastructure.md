@@ -1,6 +1,6 @@
 # Story 1.13: Test-Infrastructure (FakeSnapshotProvider + TestSnapshotBuilder, Cross-Cutting)
 
-**Status:** ready-for-dev
+**Status:** in-progress
 **Epic:** Epic 1 (Cross-Cutting-Infrastruktur)
 **Size:** S
 **Decisions referenced:** F-ARCH-10, CC-STORIES-13
