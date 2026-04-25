@@ -1,6 +1,6 @@
 # Story 2.3: Hazard-Scanner (Lava, Pollution, Toxic, Radiation)
 
-**Status:** ready-for-dev
+**Status:** in-progress
 **Epic:** Epic 2 — Map-Analyzer
 **Size:** M
 **Decisions referenced:** D-09 (Hazard-Score W_HAZARD=0.30), Architecture TQ-01 (TerrainDef-Namen aus XML extrahieren)
