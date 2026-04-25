@@ -55,7 +55,7 @@ development_status:
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
   2-1-map-cell-data-basic-scan: done  # 2026-04-25: Implementation + 11 neue Tests (79/79 grün), CR R1 (2 CRIT + 3 HIGH + 5 MED + 5 LOW) → Fixes → R2 APPROVE → MT-5 PASS (Player.log: "DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True)", Scan unter 200ms-Log-Schwelle, keine cell-mapping exception). Side-Finding: Story 1.4 MainTabWindow_BotControl benötigt StaticConstructorOnStartup-Attribute — wird in retroactive Bug-Fix gehandelt.
-  2-2-wild-plant-detection: ready-for-dev
+  2-2-wild-plant-detection: in-progress  # 2026-04-25: Sprint 3 Story 2 (Wild-Plant-Detection für Scoring-W_FOOD)
   2-3-hazard-scanner: ready-for-dev
   2-4-defensibility-score: ready-for-dev
   2-5-scoring-formula: ready-for-dev
