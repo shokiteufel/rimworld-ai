@@ -15,6 +15,31 @@ Konsequenzen: ...
 
 ---
 
+## D-42: Story 2.2 AC-Korrektur — GlowyMushroom existiert nicht, Ambrosia ist Core
+Datum: 2026-04-25
+Status: accepted
+Kontext: Story 2.2 Pre-Implementation Vanilla-XML-Verifikation (Memory-Pattern aus
+`reference_vanilla_xml_verify.md`) zeigte zwei AC-Drift-Findings:
+
+1. **AC-1 nennt `GlowyMushroom`-Enum-Wert.** Aber: keine `Plant_GlowyMushroom`-Def in Vanilla RimWorld 1.6 (verifiziert in `D:\SteamLibrary\...\Data\Core\Defs\ThingDefs_Plants\`, auch nicht in Royalty/Ideology/Biotech/Anomaly/Odyssey). Die nächste Anomaly-Special-Plant ist `Plant_TreeHarbinger` (nicht essbar). Story-Author hatte vermutlich aus Gedächtnis geschrieben — Pilz-Tier-Reference falsch (RimWorld hat keine wild-spawnbaren essbaren Pilze).
+
+2. **AC-4 behauptet Ambrosia = Biotech-DLC-spezifisch.** Aber: `Plant_Ambrosia` ist in `Data/Core/Defs/ThingDefs_Plants/Plants_Special.xml` (Core-Vanilla), kein DLC-Guard nötig. Story-Author hatte Plant mit Biotech-Mechaniken (Ambrosia-Sprout-Incident) verwechselt — Plant selbst ist Core.
+
+Entscheidung:
+1. **AC-1 reformuliert**: GlowyMushroom-Enum-Wert entfernt. Verbleibende Werte: `Berries, Healroot, Agave, AmbrosiaBush, PsychoidPlant, Smokeleaf, Other`.
+2. **AC-3 erweitert**: explizite Vanilla-defName-Liste pro Enum-Wert. **CR-Korrektur 2026-04-25**: 7 defNames sind Core, 3 sind Odyssey-DLC (`Plant_Berry_Leafless`, `Plant_Psychoid_Wild`, `Plant_Smokeleaf_Wild`) — total 10 defNames. Erstinitialisierung des Decision-Logs hatte fälschlich „11" geschrieben (Doppel-Zähl-Fehler), und die Odyssey-Zugehörigkeit war übersehen.
+3. **AC-4 reformuliert**: kein Biotech-Guard für Ambrosia (ist Core). Auch kein expliziter Odyssey-`ModsConfig.IsActive`-Guard für die 3 Odyssey-Defs nötig: String-Whitelist gegen ungespawnte Defs ist no-op (kein Match wenn Plant nie spawnt). DLC-Guards bleiben als Pattern-Reservation für künftige DLC-Wild-Plants die echten Code-Pfad brauchen (z.B. Anomaly hat noch keine essbaren).
+4. **Implementation entsprechend**: WildPlantKind-Enum ohne GlowyMushroom; WildPlantRegistry mit den **10** verifizierten Core+Odyssey-defNames (CR-Korrektur — vorher fälschlich „11"); kein DLC-Guard-Code für Ambrosia oder Odyssey-Plants in 2.2.
+
+Begründung: Memory-Pattern `reference_vanilla_xml_verify.md` ist genau für solche Fälle eingerichtet — Pre-Implementation XML-Cross-Check hat das vor dem Implementation-Aufwand gefunden. Wenn implementiert worden wäre wie in der Original-AC, hätte der Build vermutlich kompiliert (Enum-Werte sind nur strings) aber zur Runtime würde GlowyMushroom-Enum nie matchen → toter Code. Bessere Variante: gar nicht erst einbauen.
+
+Konsequenzen:
+- Story 2.2 startet mit korrekter AC-Basis. Implementation kann gegen verifizierte defNames bauen.
+- Folge-Stories die `WildPlantKind` konsumieren (Story 2.5 Scoring-Formula W_FOOD) bekommen ein konsistentes Enum ohne fiktive Werte.
+- Memory-Eintrag aktualisiert nicht nötig — Pattern hat funktioniert wie designed.
+
+---
+
 ## D-41: Story 1.4 retroactive Fix — StaticConstructorOnStartup für MainTabWindow_BotControl
 Datum: 2026-04-25
 Status: accepted

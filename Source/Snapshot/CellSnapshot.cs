@@ -17,6 +17,8 @@ namespace RimWorldBot.Snapshot
     //     + Drop-Pod-Block + Mountain-Base-Strategy. CR Story 2.1 HIGH-2 — Naming-Disambiguation.
     //   - HasResources: schnelle "Cell hat mineable Thing (Stein/Mineral)"-Flag (Story 2.x Mining-Planner).
     //   - ChokepointScore: 0.0..1.0, von Story 2.4 DefensibilityScore gefüllt; default 0 in 2.1.
+    //   - WildPlant: nullable enum (Story 2.2). null = keine wilde Ess-/Medizinal-Pflanze auf der Cell.
+    //     Story 2.5 Scoring W_FOOD-Beitrag konsumiert das.
     //
     // Persistence (D-14): NICHT persistiert. Per-Tick recomputable. MapAnalysisSummary persistiert
     // separat nur Top-3-Sites pro Map.
@@ -29,5 +31,6 @@ namespace RimWorldBot.Snapshot
         bool HasRoof,
         bool IsMountain,
         bool HasResources,
-        float ChokepointScore);
+        float ChokepointScore,
+        WildPlantKind? WildPlant = null);
 }

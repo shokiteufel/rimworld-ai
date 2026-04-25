@@ -2,7 +2,7 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Story 2.1 done MT-5 PASS, Story 1.4 retroactive Bug-Fix D-41, bereit für Story 2.2)
+**Last updated:** 2026-04-25 (Story 2.2 review-ready, MT-6 wartet auf User-Game-Test)
 
 ---
 
@@ -16,7 +16,25 @@ Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
 
-_(Aktuell keine offen — Story 2.2 wird neue MTs bringen wenn nötig.)_
+### MT-6: Story 2.2 Wild-Plant-Detection — **PFLICHT für Story 2.2 done**
+**Wann:** Nach R2 APPROVE (jetzt).
+**Warum:** Story 2.2 AC-6 fordert Integration-Test auf Map mit Wild-Plants — DebugAction loggt Aggregation pro WildPlantKind.
+
+**Schritte:**
+1. RimWorld neu starten (frischer Build).
+2. Spiel laden ODER neue Kolonie auf **Temperate Forest**-Biome (Default-Tutorial-Spawn ist Temperate, also irgendein neues Game oder dein bestehendes).
+3. Im Spiel: Debug-Aktionen-Menü (3. Top-Bar-Icon, X-Stern) → **„RimWorldBot"** → **„Trigger Snapshot Scan (Story 2.1)"** klicken (gleicher Trigger wie MT-5, jetzt mit Wild-Plant-Output erweitert).
+4. **Player.log** öffnen.
+5. Erwartet (Beispiel auf Temperate Forest):
+   ```
+   [RimWorldBot] DebugAction Snapshot: 62500 cells via GetCells (expected 62500, match=True).
+   [RimWorldBot] DebugAction WildPlants: 47 cells with WildPlant — Berries=42, Healroot=5.
+   ```
+   Auf Arid Shrubland: `Agave=N` zu erwarten. Auf 100% Eis: vermutlich `0 cells with WildPlant`.
+
+**Pass-Kriterium:** Mindestens eine `WildPlants`-Line erscheint (egal mit `>0 cells` oder `0 cells with WildPlant on this map`). Kein Crash.
+
+**Was zurückmelden:** „MT-6 PASS" + die `WildPlants`-Line aus Player.log. Falls 0 Cells obwohl Map klar Berries hat: Map-Biome + Saison nennen.
 
 <!-- MT-5 erledigt, archiviert weiter unten
 

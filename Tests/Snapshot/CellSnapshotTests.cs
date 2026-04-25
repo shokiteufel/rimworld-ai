@@ -19,6 +19,7 @@ namespace RimWorldBot.Tests.Snapshot
                 IsMountain: false,
                 HasResources: false,
                 ChokepointScore: 0f);
+                // WildPlant default null via optionalem Konstruktor-Parameter (Story 2.2).
 
         [Fact]
         public void EqualValues_ProduceEqualRecords()
@@ -75,6 +76,25 @@ namespace RimWorldBot.Tests.Snapshot
             Assert.Equal(a.Position, b.Position);
             Assert.Equal(10, a.Position.X);
             Assert.Equal(20, a.Position.Z);
+        }
+
+        // Story 2.2: WildPlant ist optional (default null) — Konstruktor-Compat preserved.
+        [Fact]
+        public void WildPlant_DefaultNull_ViaOptionalParam()
+        {
+            var snap = MakeDefault();
+            Assert.Null(snap.WildPlant);
+        }
+
+        [Fact]
+        public void WildPlant_WithExpression_PreservesOtherFields()
+        {
+            var none = MakeDefault();
+            var withBerries = none with { WildPlant = WildPlantKind.Berries };
+            Assert.Equal(WildPlantKind.Berries, withBerries.WildPlant);
+            Assert.Null(none.WildPlant);
+            Assert.Equal(none.Position, withBerries.Position);
+            Assert.Equal(none.TerrainDefName, withBerries.TerrainDefName);
         }
     }
 }

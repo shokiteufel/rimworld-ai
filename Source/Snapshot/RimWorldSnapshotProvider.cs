@@ -26,6 +26,7 @@ namespace RimWorldBot.Snapshot
     {
         // Default-Snapshot bei Cell-Mapping-Exception (CRIT-1 Fix). Stellt sicher dass Consumer
         // niemals null-CellSnapshot konsumieren. Position bleibt korrekt fuer Index-Lookup.
+        // Story 2.2: WildPlant default null (= keine wilde Pflanze).
         static CellSnapshot SafeDefault(IntVec3 cell) => new(
             Position: (cell.x, cell.z),
             TerrainDefName: "Unknown",
@@ -35,7 +36,8 @@ namespace RimWorldBot.Snapshot
             HasRoof: false,
             IsMountain: false,
             HasResources: false,
-            ChokepointScore: 0f);
+            ChokepointScore: 0f,
+            WildPlant: null);
 
         public CellSnapshot[] GetCells(Map map)
         {
@@ -63,6 +65,10 @@ namespace RimWorldBot.Snapshot
                 try
                 {
                     var terrain = terrainGrid?.TerrainAt(cell);
+                    // CR Story 2.2 HIGH-1 Fix: single-pass thingGrid-Iteration statt
+                    // HasMineableResource + ClassifyWildPlant separat aufzurufen (war 2× ThingsListAtFast-
+                    // Iteration pro Cell = 125k Loops auf 250×250-Map). Jetzt 1 Loop pro Cell.
+                    ClassifyCellThings(thingGrid, cell, out bool hasResources, out WildPlantKind? wildPlant);
                     snap = new CellSnapshot(
                         Position: (cell.x, cell.z),
                         TerrainDefName: terrain?.defName ?? "Unknown",
@@ -71,8 +77,9 @@ namespace RimWorldBot.Snapshot
                         HazardKind: ClassifyHazard(terrain),
                         HasRoof: roofGrid?.Roofed(cell) ?? false,
                         IsMountain: (roofGrid?.RoofAt(cell)?.isThickRoof) ?? false,
-                        HasResources: HasMineableResource(thingGrid, cell),
-                        ChokepointScore: 0f);   // Story 2.4 füllt das später
+                        HasResources: hasResources,
+                        ChokepointScore: 0f,    // Story 2.4 füllt das später
+                        WildPlant: wildPlant);
                 }
                 catch (Exception ex)
                 {
@@ -149,18 +156,42 @@ namespace RimWorldBot.Snapshot
             return HazardKind.None;
         }
 
-        static bool HasMineableResource(ThingGrid thingGrid, IntVec3 cell)
+        // CR Story 2.2 HIGH-1: single-pass Refactor — eine ThingsListAtFast-Iteration pro Cell
+        // mit zwei out-Outputs statt zwei separaten Helper-Methoden. Spart 50% Lookups auf 250×250
+        // (62500 statt 125000 Iterationen). Allokationsfrei (List<T>.GetEnumerator ist struct,
+        // out-bool/out-nullable sind Stack-Werte).
+        //
+        // CR Story 2.2 MED-3 Doku: Multi-Plant-Cell (Cell mit mehreren Wild-Plants übereinander)
+        // ist in Vanilla nicht möglich (ThingDef.passability + plant.choosesNeighbor verhindert das),
+        // aber Mods können es brechen. Aktuell: erstes Wild-Plant-Match in ThingsListAtFast gewinnt.
+        // Deterministische Priorität (z.B. Healroot > Berries > Drugs) ist Story-2.5-Scoring-Concern.
+        static void ClassifyCellThings(
+            ThingGrid thingGrid, IntVec3 cell,
+            out bool hasMineable, out WildPlantKind? wildPlant)
         {
-            if (thingGrid == null) return false;
-            // ThingsListAtFast ist intern List<Thing>; foreach allokiert keinen Enumerator
-            // (List<T>.GetEnumerator ist struct). Allokationsfrei.
+            hasMineable = false;
+            wildPlant = null;
+            if (thingGrid == null) return;
             var things = thingGrid.ThingsListAtFast(cell);
-            if (things == null) return false;
+            if (things == null) return;
+
             foreach (var thing in things)
             {
-                if (thing?.def?.mineable == true) return true;
+                var def = thing?.def;
+                if (def == null) continue;
+
+                if (!hasMineable && def.mineable)
+                {
+                    hasMineable = true;
+                }
+                if (!wildPlant.HasValue)
+                {
+                    var kind = WildPlantRegistry.TryClassify(def.defName);
+                    if (kind.HasValue) wildPlant = kind;
+                }
+                // Early-exit wenn beide Outputs gesetzt sind (Allokations- + Branch-frei).
+                if (hasMineable && wildPlant.HasValue) return;
             }
-            return false;
         }
     }
 }
