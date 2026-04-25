@@ -18,7 +18,18 @@ namespace RimWorldBot.Events
     public sealed record DraftedEvent(int EnqueueTick, string PawnUniqueLoadId)
         : BotEvent(EnqueueTick, IsCritical: false);
 
-    // Quest-Dialog geöffnet (für Journey/Royal/Archonexus-Endings relevant).
+    // Quest-Offer detektiert via QuestManager-Polling (Story 1.12, CC-STORIES-09).
+    // Critical weil Quest-Offer-Akzeptanz-Zeitfenster limited (Vanilla-Quest läuft i.d.R. 60 Tage ab).
+    // questDefName = Quest.root.defName für Identifier-only-Pattern (D-23) — kein Quest-Runtime-Ref.
+    public sealed record QuestOfferEvent(int EnqueueTick, int QuestId, string QuestDefName)
+        : BotEvent(EnqueueTick, IsCritical: true);
+
+    // Quest verschwunden aus QuestManager (expired/failed/completed). Consumers cleanen ihre State auf.
+    public sealed record QuestRemovedEvent(int EnqueueTick, int QuestId)
+        : BotEvent(EnqueueTick, IsCritical: false);
+
+    // Legacy-Event für Dialog_NodeTree-basierte Quest-Windows (z.B. Ship-Start-Finale).
+    // Bleibt erhalten für H6-Hook (Story 7.x), nicht mehr Primary-Pfad für moderne Quests.
     public sealed record QuestWindowEvent(int EnqueueTick, int QuestId)
         : BotEvent(EnqueueTick, IsCritical: false);
 

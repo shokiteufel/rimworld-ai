@@ -21,9 +21,10 @@ Als Mod-Entwickler möchte ich ein **zentrales Schema-Version-Registry** für Bo
    - BotMapComponent v3 `excludedCells` (Story 2.3 — bereits in v3 enthalten via Story 1.3, kein weiterer Bump nötig)
    - BotMapComponent v3→v4 `botManagedBills` (Story 3.9)
    - BotMapComponent v4→v5 `overlayVisible` (Story 2.7)
-   - BotGameComponent v3→v4 `botManagedGuests` (Story 4.3)
-   - BotGameComponent v4→v5 `pawnSpecializations` (Story 6.5)
-   - BotGameComponent v5→v6 `journeyQuest` (Story 7.9)
+   - BotGameComponent v3→v4 `lastSeenQuestIds` (Story 1.12 — Applied 2026-04-24, D-36)
+   - BotGameComponent v4→v5 `botManagedGuests` (Story 4.3)
+   - BotGameComponent v5→v6 `pawnSpecializations` (Story 6.5)
+   - BotGameComponent v6→v7 `journeyQuest` (Story 7.9)
 6. Migrations sind idempotent (mehrfach angewendet → gleicher Zustand) — schemaVersion-Field schützt vor Doppel-Apply
 7. ~~Unit-Tests~~ — verschoben auf Story 1.13 (Test-Infrastructure liefert FakeSnapshotProvider + Save-Roundtrip-Helpers); Story 1.9 dokumentiert Test-Plan in `Source/Data/SchemaRegistry.cs`-Kommentar.
 

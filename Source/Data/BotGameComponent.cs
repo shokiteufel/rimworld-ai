@@ -14,7 +14,7 @@ namespace RimWorldBot.Data
     // AI-4: einziger statischer Singleton ist RimWorldBotMod.Instance; BotGameComponent ist per-Game-Instanz.
     public class BotGameComponent : GameComponent
     {
-        const int CurrentSchemaVersion = 3;
+        const int CurrentSchemaVersion = 4;   // Story 1.12: +lastSeenQuestIds (Schema-Bump v3→v4)
         int schemaVersion = CurrentSchemaVersion;
 
         // --- Private Runtime-Felder (F-ARCH-15) ---
@@ -40,6 +40,9 @@ namespace RimWorldBot.Data
         public List<PhaseGoal> completedGoals = new();
         public Dictionary<string, bool> perPawnPlayerUse = new();   // D-14: UniqueLoadID → playerUse
         public RecentDecisionsBuffer recentDecisions = new(transientCap: 100, pinnedCap: 25);
+        // Story 1.12: Quest-IDs die der Poller zuletzt gesehen hat. Persistent damit nach Save-Load
+        // nicht alle aktiven Quests fälschlich als "neu" detektiert werden.
+        public HashSet<int> lastSeenQuestIds = new();
 
         // Public Accessor damit spätere Stories (z.B. Story 1.5 Keybinding) die Queue erreichen.
         public BoundedEventQueue<BotEvent> EventQueue => eventQueue;
@@ -97,12 +100,14 @@ namespace RimWorldBot.Data
                 Scribe_Collections.Look(ref completedGoals, "completedGoals", LookMode.Deep);
                 Scribe_Collections.Look(ref perPawnPlayerUse, "perPawnPlayerUse", LookMode.Value, LookMode.Value);
                 Scribe_Deep.Look(ref recentDecisions, "recentDecisions");
+                Scribe_Collections.Look(ref lastSeenQuestIds, "lastSeenQuestIds", LookMode.Value);
 
                 if (Scribe.mode == LoadSaveMode.PostLoadInit)
                 {
                     completedGoals ??= new List<PhaseGoal>();
                     perPawnPlayerUse ??= new Dictionary<string, bool>();
                     recentDecisions ??= new RecentDecisionsBuffer(transientCap: 100, pinnedCap: 25);
+                    lastSeenQuestIds ??= new HashSet<int>();
                     if (schemaVersion < CurrentSchemaVersion) Migrate();
                 }
             }
@@ -127,11 +132,14 @@ namespace RimWorldBot.Data
             completedGoals = new List<PhaseGoal>();
             perPawnPlayerUse = new Dictionary<string, bool>();
             recentDecisions = new RecentDecisionsBuffer(transientCap: 100, pinnedCap: 25);
+            lastSeenQuestIds = new HashSet<int>();
             schemaVersion = CurrentSchemaVersion;
         }
 
         // Migrate läuft nur in PostLoadInit nachdem alle Felder geladen sind.
-        // Aktuell: v1→v2 perPawnPlayerUse-Keying (thingIDNumber→UniqueLoadID), v2→v3 no-op (BotMapComponent handled excludedCells separat).
+        // v1→v2: perPawnPlayerUse-Keying (thingIDNumber→UniqueLoadID).
+        // v2→v3: no-op (BotMapComponent handled excludedCells separat).
+        // v3→v4: +lastSeenQuestIds (Story 1.12 QuestManager-Polling).
         void Migrate()
         {
             int from = schemaVersion;
@@ -139,6 +147,7 @@ namespace RimWorldBot.Data
             {
                 if (schemaVersion < 2) MigrateV1ToV2();
                 if (schemaVersion < 3) MigrateV2ToV3();
+                if (schemaVersion < 4) MigrateV3ToV4();
                 schemaVersion = CurrentSchemaVersion;
                 recentDecisions.Add(new DecisionLogEntry(
                     kind: "schema-migration",
@@ -219,6 +228,15 @@ namespace RimWorldBot.Data
         void MigrateV2ToV3()
         {
             Log.Message("[RimWorldBot] v2→v3 migrate: no-op in BotGameComponent (excludedCells handled in BotMapComponent).");
+        }
+
+        // v3→v4 (Story 1.12): +lastSeenQuestIds initialisiert leer. Existierende Quests im
+        // QuestManager werden beim ersten Poll als "neu" detektiert und Events ausgelöst — das ist
+        // intendiert (Bot kennt sie noch nicht aus seiner Sicht), Consumer-Stories filtern selbst.
+        void MigrateV3ToV4()
+        {
+            lastSeenQuestIds ??= new HashSet<int>();
+            Log.Message("[RimWorldBot] v3→v4 migrate: +lastSeenQuestIds (empty, will populate on first QuestManagerPoller.Poll).");
         }
 
         public override void FinalizeInit()
@@ -321,9 +339,26 @@ namespace RimWorldBot.Data
 
         public override void GameComponentTick()
         {
+            int tick = GenTicks.TicksGame;
+
+            // Story 1.12: QuestManager-Polling alle 1250 Ticks (~21s @ 60TPS).
+            // Reihenfolge: Poll VOR dem 60000er-Cleanup damit der nachfolgende
+            // `if (tick % 60000 != 0) return;` den Poll nicht überspringt.
+            // CR HIGH-2: defensives ??= weil Reflection-Construction (Save-Load-Pfad ohne Ctor)
+            // Field-Initializer überspringen kann; eventQueue-Null-Check + lastSeenQuestIds-Init
+            // hier statt nur in PostLoadInit damit GameComponentTick robust gegen jeden Init-Pfad ist.
+            if (tick % QuestManagerPoller.PollIntervalTicks == 0)
+            {
+                lastSeenQuestIds ??= new HashSet<int>();
+                if (eventQueue != null)
+                {
+                    QuestManagerPoller.Poll(lastSeenQuestIds, eventQueue);
+                }
+            }
+
             // perPawnPlayerUse-Cleanup alle 60000 Ticks (§5, F-STAB-19) — defensiv gegen Map-Dispose-Races.
             // Läuft controller-unabhängig.
-            if (GenTicks.TicksGame % 60000 != 0) return;
+            if (tick % 60000 != 0) return;
             if (perPawnPlayerUse == null || perPawnPlayerUse.Count == 0) return;
 
             var validIds = Find.Maps

@@ -19,6 +19,10 @@ Als Mod-Entwickler möchte ich **Test-Helper-Infrastruktur** (FakeSnapshotProvid
 4. `MockEmergencyResolver` + `MockConfigResolver` für Planner-Tests (ConfigResolver.Get liefert konfigurierbare Werte)
 5. Alle Test-Helpers im separaten Assembly `RimWorldBot.Testing.dll` (kein Ship-Dependency)
 6. Unit-Tests für die Test-Helper selbst (meta-tests)
+7. **Carry-Over aus vorherigen Stories** (deren Unit-Test-ACs auf 1.13 verschoben wurden):
+   - **Story 1.9 SchemaRegistry**: Migration-Chain v1→v2→v3→v4 pro Component, kaskadiert (Fake-Save mit ältester Version → Migrate → assert alle Felder migriert), Doppel-Apply-Idempotenz, `LatestAppliedVersion` matcht `CurrentSchemaVersion`-const
+   - **Story 1.10 BotSafe**: SafeTick mit mock-Exception → ErrorBudget inkrementiert; SafeApply-Caller-Pattern (returns false bei poisoned); Sliding-Window mit `Time.realtimeSinceStartup`-Mock; Poison-Cooldown-Ablauf nach 600s
+   - **Story 1.12 QuestManagerPoller**: Fake-QuestManager mit konfigurierbarer `QuestsListForReading`; Poll detektiert neue Quest-IDs → enqueue `QuestOfferEvent` (Critical); entfernte IDs → `QuestRemovedEvent` (Normal); `lastSeenQuestIds`-State korrekt aktualisiert; Re-Poll ohne Diff → keine Events; null-`quest.root`-Fallback nutzt `UnknownQuestDef`-Sentinel
 
 ## Tasks
 - [ ] `Source/Testing/FakeSnapshotProvider.cs`

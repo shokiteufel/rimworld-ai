@@ -15,6 +15,29 @@ Konsequenzen: ...
 
 ---
 
+## D-36: Story 1.12 AC-Anpassungen (Test-Defer + Producer-Scope) und Schema-Slot-Reservierung
+Datum: 2026-04-24
+Status: accepted
+Kontext: Code-Review Story 1.12 (QuestManager-Polling) hat drei AC-Drift-Findings (MED-1, MED-2, MED-3) gemeldet:
+- File-List der Story spezifizierte separate Dateien `QuestOfferEvent.cs` und `QuestRemovedEvent.cs`, Implementierung hat Records aber konsolidiert in `BotEvent.cs` (konsistent mit allen anderen Event-Records).
+- AC-6 fordert Unit-Tests, aber das Projekt hat noch keine Test-Infrastruktur — die wird in Story 1.13 (Test-Infrastructure) etabliert.
+- AC-5 fordert Consumer-Integration (7.7/7.9), die strukturell nicht in 1.12-Scope gehört (separate Epic-7-Stories).
+Zusätzlich nahm 1.12 den Schema-Slot v3→v4 für `lastSeenQuestIds` ein, der zuvor in `SchemaRegistry` als "Planned" für Story 4.3 (botManagedGuests) reserviert war.
+Entscheidung:
+1. **Story 1.12 File-List** updated auf konsolidierte Variante (Records in `BotEvent.cs`). Pattern-Konsistenz mit `MapFinalizedEvent`/`RaidEvent`/etc. ist wichtiger als die ursprüngliche separate-File-Spec.
+2. **AC-6 (Unit-Tests)** explizit deferred zu Story 1.13. Story 1.13 trägt damit Carry-Over aus 1.9 (Schema-Tests), 1.10 (BotSafe-Tests) und 1.12 (Quest-Poller-Tests).
+3. **AC-5 (Consumer)** umformuliert auf Producer-Scope: 1.12 stellt nur die Event-Records + Poller bereit; Consumer-Integration wandert vollständig in 7.7 + 7.9.
+4. **SchemaRegistry-Slot-Verschiebung**: BotGame v3→v4 = Story 1.12 (Applied); botManagedGuests (4.3) auf v4→v5 verschoben; pawnSpecializations (6.5) auf v5→v6; journeyQuest (7.9) auf v6→v7.
+5. **CR HIGH-1 Fix**: PollIntervalTicks 2500 → 1250 (halbe StalenessThreshold). Verhindert dass Critical-QuestOfferEvents zwischen Enqueue und Dequeue stale werden.
+6. **CR HIGH-2 Fix**: Defensive `??=` für `lastSeenQuestIds` in GameComponentTick (vor Poll-Aufruf), Null-Check für `eventQueue` — Schutz gegen Reflection-Construction-Pfad ohne Ctor-Init.
+Begründung: Strict BMAD heißt: Story-File ist Spec, aber Spec-Drift wird erkannt + dokumentiert + gefixt — nicht stillschweigend implementiert. Schema-Slot-Reorganisation ist deterministisch (Story-Order-Push), keine Konflikte mit anderen geplanten Stories. Test-Defer ist legitim weil 1.13 explizit als Test-Infrastructure-Story angelegt wurde.
+Konsequenzen:
+- Story 1.13 erweitert sein Carry-Over-Set um QuestManagerPoller-Tests.
+- Stories 4.3, 6.5, 7.9 müssen ihre Schema-Bump-References auf die neuen Versionen updaten wenn implementiert (TODO in jeweiligen Story-Files).
+- Quest-Detection-Latenz halbiert von ~42s auf ~21s — geringe CPU-Cost (1 HashSet-Diff alle 21s), Nutzen: Critical-Events zuverlässig dequeue-bar.
+
+---
+
 ## D-35: Phase-Transition PLANNING → DEV, Sprint 2 mit Story 1.1 gestartet
 Datum: 2026-04-24
 Status: accepted
