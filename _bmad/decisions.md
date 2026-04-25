@@ -15,6 +15,33 @@ Konsequenzen: ...
 
 ---
 
+## D-38: Story 1.14 — Option A gewählt (Production-csproj refactor zu Game-Install-Refs)
+Datum: 2026-04-25
+Status: accepted
+Kontext: Story 1.14 (Test-Runtime-Infrastructure-Refactor) bot drei Optionen aus D-37:
+- Option A: Production-csproj refactoren — `Krafs.Rimworld.Ref` weg, manuelle `<Reference>` zu `Assembly-CSharp.dll` + `UnityEngine.*.dll` aus Game-Install
+- Option B: Dual-Target Production csproj (Krafs für Distribution, Game-Refs für Tests)
+- Option C: Mono-Test-Runner statt Microsoft xUnit
+Entscheidung wurde dem User vorgelegt (echte Architektur-Wahl, Tradeoffs Distribution-Portabilität vs Build-Pipeline-Komplexität). User-Antwort 2026-04-25: "Definitiv Variante A".
+
+Entscheidung:
+1. **Option A umgesetzt**: Production-`Source/RimWorldBot.csproj` refactoren — `Krafs.Rimworld.Ref` PackageReference entfernen; manuelle `<Reference>` mit `HintPath` auf `Assembly-CSharp.dll`, `UnityEngine.dll`, `UnityEngine.CoreModule.dll`, `UnityEngine.IMGUIModule.dll`, `0Harmony.dll` aus `$(RimWorldManagedDir)`.
+2. **Pfad-Property**: `RimWorldManagedDir` mit Override-Chain analog Tests/csproj — Default `D:\SteamLibrary\...`, Override via CLI-Property oder `MSBUILD_RIMWORLD_MANAGED_DIR`-EnvVar.
+3. **Konsolidierung**: Property in `Directory.Build.props` ziehen damit Source/ und Tests/ csprojs dieselbe Quelle nutzen — DRY.
+4. **Microsoft net472 mscorlib** wird automatisch via Microsoft.NETFramework.ReferenceAssemblies-implicit verwendet (kein Krafs-Stub mehr) → identische Type-Identity zur Test-Laufzeit.
+5. **Carry-Over-Tests aktivieren**: BoundedEventQueueTests (8), BotSafeTests (mit `internal static Func<float>` Test-Seam für `Time.realtimeSinceStartup`-Mock), QuestManagerPollerTests (mit Test-Seam für QuestSource), RecentDecisionsBufferTests.
+6. **Game-Test TC-14-PRODUCTION-LOAD** Pflicht: User muss verifizieren dass die refactored Production-DLL weiterhin in RimWorld 1.6 lädt ohne `MissingMethodException`/`TypeLoadException`.
+
+Begründung User: "fürs Publizieren auf Steam am sinnvollsten" — Option A ist Standard-Setup für RimWorld-Mods (Combat Extended, Vanilla Expanded etc.), Production = Test (was getestet wird ist was Steam bekommt), und kein Mismatch-Risiko zwischen Distribution und Test-Variante.
+
+Konsequenzen:
+- Build erfordert ab sofort RimWorld-Install auf jeder Dev-Maschine (acceptable: wer modded ohne Game?).
+- Story 8.10 (GitHub-Release-Pipeline) braucht später RimWorld-Refs als Cached-Artifact im CI — separate Story, nicht 1.14-Scope.
+- Tests/csproj kann auf die manuellen Game-Install-Refs verzichten weil ProjectReference auf Source/ jetzt automatisch passende Types liefert; oder wir ziehen die Refs in Directory.Build.props für DRY.
+- Distribution auf Steam-Workshop unverändert (Mod-DLL wird genauso published).
+
+---
+
 ## D-37: Story 1.13 Scope-Cut — Test-Runtime-Limit + AC-Defer zu 2.1 + neue Story 1.14
 Datum: 2026-04-25
 Status: accepted
