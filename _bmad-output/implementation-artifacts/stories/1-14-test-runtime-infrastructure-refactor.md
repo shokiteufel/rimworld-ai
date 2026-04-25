@@ -1,6 +1,6 @@
 # Story 1.14: Test-Runtime-Infrastructure-Refactor (Cross-Cutting)
 
-**Status:** review
+**Status:** done
 **Epic:** Epic 1 (Cross-Cutting-Infrastruktur)
 **Size:** M
 **Decisions referenced:** D-37 (Story 1.13 Scope-Cut + 1.14 Begründung), CC-STORIES-13

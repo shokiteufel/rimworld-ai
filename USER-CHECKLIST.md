@@ -2,70 +2,76 @@
 
 **Was du als User noch machen musst.** Diese Datei wird vom Agent jedes Mal aktualisiert wenn etwas Neues für dich anfällt. Watchdog-Noise im Chat → hier nachschauen statt scrollen.
 
-**Last updated:** 2026-04-25 (Session: Story 1.14 in Implementation, Option A)
+**Last updated:** 2026-04-25 (Epic 1 komplett ✓ — Test-Marathon offen)
 
 ---
 
 ## 🟡 Decisions Needed (echte User-Entscheidungen, BMAD liefert nicht die Antwort)
 
-_(Aktuell keine offen.)_
+### D-3: Sprint 3 starten oder Epic-1-Test-Marathon zuerst?
+**Was:** Epic 1 ist abgeschlossen (14/14 Stories done). Zwei Optionen wie es weitergeht:
+
+- **Variante A:** Erst **Epic-1-Test-Marathon** (siehe MT-3 unten) — du verifizierst alle deferred + nicht-game-getesteten Stories vor Sprint-3-Start. Dein ursprünglicher Wunsch.
+- **Variante B:** Sprint 3 sofort starten mit Epic 2 (Map-Analyzer) — Tests aufschieben.
+
+Empfehlung: **Variante A**, weil du es so wolltest und weil mit Epic-2-Code ohne stable Epic-1-Foundation Bug-Hunting brutal wird.
 
 ---
 
 ## 🔴 Manuelle Tests (du bist der einzige der das ausführen kann)
 
-### MT-1: Story 1.12 Game-Test (QuestManager-Polling) — **OPTIONAL**
-**Wann:** Bevor Sprint 2 Epic 1 als komplett abgeschlossen gilt, ODER wenn du Story 1.12 zusätzlich validieren willst.
+### MT-3: Epic-1-Test-Marathon — **PFLICHT für Sprint-3-Start (Variante A)**
+**Wann:** Vor Sprint-3-Start (deinem Wunsch nach 1.14 done).
 
-**Schritte:**
-1. RimWorld starten, neues Game beginnen (Phase 1 colony, Bot Off oder Advisory).
-2. Quest auslösen — entweder:
-   - Dev-Mode aktivieren → Debug-Menu → "Execute incident: GiveQuest_*" auswählen, ODER
-   - Organische Quest abwarten (Vanilla-Quest-Spawn alle ~3-15 Tage In-Game-Zeit, Speed-3 nutzen).
-3. ~21 Sekunden warten (PollIntervalTicks=1250 @ 60TPS).
-4. **Player.log** öffnen: `%APPDATA%\..\LocalLow\Ludeon Studios\RimWorld\Player.log`
-5. Suchen nach:
-   - Keine `[RimWorldBot]`-Exception (sollte BotSafe.SafeTick abfangen).
-   - Falls Debug-Logging aktiv: Eintrag dass `QuestOfferEvent` enqueued wurde.
-6. Quest verwerfen (Reject) oder ablaufen lassen → erneut ~21s warten.
-7. **Player.log:** `QuestRemovedEvent` enqueued.
-8. Save + Load: persistent `lastSeenQuestIds` verhindert Re-Detection bestehender Quests.
+**Setup:** RimWorld einmal starten (du hast nach MT-2 RimWorld eh offen).
 
-**Was zurückmelden:** „PASS" oder Player.log-Excerpt mit `[RimWorldBot]`-Lines + welche Schritte fehlgeschlagen sind.
+**Schritte (reihe nach abklingen, je 1× klicken/triggern):**
 
-### MT-2: Story 1.14 Game-Test (TC-14-PRODUCTION-LOAD) — **PFLICHT für Story 1.14 done**
-**Wann:** Nachdem ich Production-csproj refactored habe (Krafs.Rimworld.Ref weg, echte Game-DLLs als Refs). Bevor Story 1.14 done werden kann.
+1. **Stories 1.1-1.3 (Init/Component):** schon implizit verifiziert via MT-2 (`[RimWorldBot] initialized` + `BotGameComponent registered` Player.log-Lines).
 
-**Warum:** Refactor ändert die Build-Pipeline der Production-DLL. Wir müssen sicherstellen dass die Mod weiterhin in RimWorld lädt — wenn Krafs-Stubs und echte RimWorld-Assemblies signature-mäßig leicht abweichen, könnten Verse-API-Calls bei Runtime crashen (`MissingMethodException` / `TypeLoadException`).
+2. **Story 1.4 Master-Toggle-Button** (Bottom-Bar „Bot"-Button, schon getestet aber Re-Verifikation wegen Refactor):
+   - 1× Bot-Button klicken → State-Change-Log in Player.log.
+   - Alle 3 States durchklicken: Off → Advisory → On → Off.
 
-**Schritte:**
-1. RimWorld starten (komplett neu, falls schon offen).
-2. Im Hauptmenü → Mods → "RimWorld Bot" muss in der Mod-Liste auftauchen.
-3. Mod aktivieren falls nicht aktiv → RimWorld-Restart.
-4. Neues Game beginnen (irgendeine Map, Phase 1 reicht).
-5. **Player.log** prüfen: `%APPDATA%\..\LocalLow\Ludeon Studios\RimWorld\Player.log`
-6. Erwartet:
-   - `[RimWorldBot] skeleton loaded` o.ä. Init-Log
-   - Keine `MissingMethodException`, keine `TypeLoadException`, keine `[RimWorldBot]` Errors
-7. Master-Toggle testen: Top-Bar-Button drücken → State-Wechsel-Log in Player.log.
-8. Game schließen.
+3. **Story 1.5 Ctrl+K-Keybinding:**
+   - Ctrl+K drücken (Modifier zwingend, sonst kollidiert mit Vanilla Misc8).
+   - Erwartet: gleiches State-Change-Log wie Button-Klick.
 
-**Was zurückmelden:** „MT-2 PASS" oder Player.log-Excerpt + welcher Schritt fehlgeschlagen ist.
+4. **Story 1.6 Per-Pawn-Toggle:**
+   - Einen Pawn anklicken (Inspector öffnet sich).
+   - **„Bot"-Tab** im Pawn-Inspector suchen (zwischen Health/Gear/Social).
+   - Klick → Per-Pawn-Toggle-UI mit `playerUse`-Checkbox.
+   - 1× toggle → Player.log sollte Decision-Log-Eintrag haben (oder zumindest kein Crash).
+
+5. **Story 1.7 Settings-Window:**
+   - Hauptmenü → Options → Mod Settings → "RimWorld Bot" auswählen.
+   - 5 Sektionen sichtbar (Master, Ending-Strategy, Phase, Risk, Debug).
+   - 1× Setting ändern + Apply → schließen + wieder öffnen → Wert persistiert.
+
+6. **Story 1.8 Localization DE/EN:**
+   - Sprache umstellen Hauptmenü → Options → Sprache → English.
+   - Alles sollte englisch sein (kein „MissingTranslation"-Marker).
+   - Zurück auf Deutsch.
+
+7. **Story 1.12 QuestManager-Polling (MT-1 ehemals optional):**
+   - Dev-Mode aktivieren (Options → Dev Mode).
+   - Top-Bar Debug-Menu (Käfer-Icon) → "Execute incident" → "GiveQuest_*" auswählen (egal welche).
+   - Quest-Letter erscheint.
+   - ~21s warten (Bot pollt alle 1250 Ticks).
+   - Player.log auf `QuestOfferEvent`/Quest-relevante Bot-Logs prüfen — Note: aktuell wird das nur queued, kein Consumer (Story 7.7/7.9 noch nicht da). Wichtig: **kein Crash**.
+
+8. **Smoke-Save-Load:**
+   - Save Game → Load Game.
+   - Player.log: kein `[RimWorldBot] Migrate failure` o.ä.
+   - Master-State und Per-Pawn-Toggle erhalten.
+
+**Was zurückmelden:** „MT-3 PASS" plus den letzten Player.log-Stand. Falls einzelne Schritte fehlschlagen: nur die Schritt-Nummer + relevante `[RimWorldBot]`-Logs zitieren, ich fixe es.
 
 ---
 
 ## 🔵 Geplant nach Epic 1 (User-Wunsch 2026-04-25)
 
-### Epic-1-Abschluss-Test-Marathon
-**Wann:** Nach Story 1.14 done (= Epic 1 komplett).
-**Was:** Du willst alle deferred + nicht-game-getesteten Stories durchprobieren bevor wir Epic 2 starten. Dazu gehören:
-
-- **MT-1** (Story 1.12 QuestManager-Polling) — Game-Test wie unten beschrieben
-- **MT-2** (Story 1.14 Production-Load) — Refactor-Verifikation
-- **Stories 1.9 + 1.10 + 1.11** — Cross-Cutting-Infra ohne UI, gemeinsam mit MT-1/MT-2 als Smoke-Test (kein Crash bei Game-Start beweist dass SchemaRegistry/BotSafe/PlanArbiter geladen werden)
-- Falls du willst: Re-Verifikation Stories 1.4-1.8 (UI-Stories) — Master-Toggle, Ctrl+K, Per-Pawn-ITab, Settings-Window, Localization DE/EN
-
-Ich erstelle pro Story einen kompakten Test-Schritt + erwartetes Player.log-Output und sammle die Liste hier in einer "MT-3"-Sektion sobald 1.14 done ist.
+_(Konsolidiert in MT-3 oben.)_
 
 ---
 
@@ -79,6 +85,7 @@ _(Aktuell keine.)_
 
 - **2026-04-25** — D-1 entschieden: **Option A** (Production-csproj refactoren mit Game-Install-Refs, Krafs.Rimworld.Ref weg). Begründung: Standard-Setup für RimWorld-Mods, was getestet wird = was published wird.
 - **2026-04-25** — D-2 implizit entschieden: **Variante A** (Story 1.14 sofort starten). MT-1 (Story 1.12 Game-Test) bleibt optional.
+- **2026-04-25** — **MT-2 PASS** (Story 1.14 TC-14-PRODUCTION-LOAD): Player.log clean — `[RimWorldBot] initialized`, 5× State-Change-Logs (Off↔Advisory↔On), keine `MissingMethodException`/`TypeLoadException`. Story 1.14 → done. **Epic 1 komplett (14/14 Stories done).**
 
 ---
 
