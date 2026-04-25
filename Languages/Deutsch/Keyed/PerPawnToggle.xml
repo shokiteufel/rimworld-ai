@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot.PerPawn.TabLabel>Bot</RimWorldBot.PerPawn.TabLabel>
+  <RimWorldBot.PerPawn.PlayerUseLabel>Spieler steuert</RimWorldBot.PerPawn.PlayerUseLabel>
+  <RimWorldBot.PerPawn.HelpText>Bei aktivierter Checkbox steuert der Spieler diesen Pawn manuell — auch wenn der Master-Bot oben in der Top-Bar auf "An" steht. Der Bot übernimmt nur die Pawns ohne diesen Override. Standard: deaktiviert (Bot steuert).</RimWorldBot.PerPawn.HelpText>
+  <RimWorldBot.PerPawn.NotLoaded>RimWorldBot: Spielzustand wird geladen…</RimWorldBot.PerPawn.NotLoaded>
+
+</LanguageData>

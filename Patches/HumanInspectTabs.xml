@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <!--
+    Story 1.6: fügt unseren Per-Pawn-Toggle-Tab zur inspectorTabs-Liste hinzu.
+
+    WICHTIG (Runtime-Finding 2026-04-25): PatchOperationAdd läuft VOR Inheritance-Flattening
+    bei DefDatabase-Population. Human hat KEINEN eigenen `<inspectorTabs>`-Knoten — die Liste
+    wird von BasePawn (Races_Animal_Base.xml, Name="BasePawn" Abstract="True") vererbt.
+    Patch auf `Defs/ThingDef[defName="Human"]/inspectorTabs` schlägt fehl ("XPath findet nichts").
+
+    Lösung: Patch auf BasePawn direkt — Animals + Mechanoids erben den Eintrag dann auch,
+    aber `ITab_Pawn_BotControl.IsVisible` filtert auf `Faction.IsPlayer + RaceProps.Humanlike`,
+    sodass der Tab UI-seitig nur bei Player-Faction-Humans erscheint.
+
+    Performance: jeder Pawn iteriert seine inspectorTabs-Liste beim Inspector-Refresh; ein zusätzlicher
+    Eintrag fügt O(1) Lookup hinzu, IsVisible-Check ist konstant. Vernachlässigbar.
+  -->
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[@Name="BasePawn"]/inspectorTabs</xpath>
+    <value>
+      <li>RimWorldBot.UI.ITab_Pawn_BotControl</li>
+    </value>
+  </Operation>
+
+</Patch>

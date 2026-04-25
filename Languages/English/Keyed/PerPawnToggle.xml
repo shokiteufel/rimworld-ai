@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <RimWorldBot.PerPawn.TabLabel>Bot</RimWorldBot.PerPawn.TabLabel>
+  <RimWorldBot.PerPawn.PlayerUseLabel>Player controls</RimWorldBot.PerPawn.PlayerUseLabel>
+  <RimWorldBot.PerPawn.HelpText>When checked, the player controls this pawn manually — even if the master bot toggle in the top bar is set to "On". The bot only manages pawns without this override. Default: unchecked (bot controls).</RimWorldBot.PerPawn.HelpText>
+  <RimWorldBot.PerPawn.NotLoaded>RimWorldBot: game state loading…</RimWorldBot.PerPawn.NotLoaded>
+
+</LanguageData>

@@ -17,8 +17,8 @@ Als **Spieler** möchte ich **pro Pawn eine Checkbox „Player Use" im Pawn-Insp
 ## Acceptance Criteria
 
 1. **`Source/UI/ITab_Pawn_BotControl.cs`** implementiert `ITab_Pawn_BotControl : ITab` (eigener ITab, **kein** Patch auf `ITab_Pawn_Character` — D-13 H8 entfernt)
-2. **`Defs/ITabDefs.xml`** registriert `ITab_Pawn_BotControl` als `InspectTabBase` (Def-Konvention statt direkte XML-Patch — funktioniert für eigene ITabs)
-3. **`Patches/HumanInspectTabs.xml`** fügt via `<Operation Class="PatchOperationAdd">` die ITab-Reference zu `Human.inspectorTabs` hinzu (und analog zu `Colonist`, falls separate Liste in 1.6-Defs)
+2. ~~`Defs/ITabDefs.xml` registriert `ITab_Pawn_BotControl` als `InspectTabBase`~~ — **Retroaktiv 2026-04-25 entfernt**: `InspectTabBase`-Def-Typ existiert in RimWorld 1.6 nicht. ITabs werden direkt als FullClassName-String in `inspectorTabs`-Liste referenziert (keine Def-Registrierung nötig).
+3. **`Patches/HumanInspectTabs.xml`** fügt via `<Operation Class="PatchOperationAdd">` `<li>RimWorldBot.UI.ITab_Pawn_BotControl</li>` zu `Defs/ThingDef[defName="Human"]/inspectorTabs` hinzu. Vanilla `inspectorTabs` ist auf `BasePawn`-Abstract definiert; PatchOperationAdd auf `Human` läuft nach Inheritance-Flattening und ergänzt die geerbte Liste.
 4. **ITab-Tab-Label** „Bot" (lokalisiert), Tab-Icon optional (default ok)
 5. **Tab-Content** zeigt Checkbox „Player Use" — `true` = Spieler steuert manuell, `false` = Bot darf steuern; plus kurzer Hilfstext
 6. **Persistenz** über `BotGameComponent.perPawnPlayerUse: Dictionary<string, bool>` keyed by `pawn.GetUniqueLoadID()` (AI-4/D-14)
