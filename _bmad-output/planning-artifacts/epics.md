@@ -66,9 +66,10 @@ Ein lauffähiger, leerer RimWorld-Mod mit Harmony-Init, Toggle-Button in der Top
 - Story 1.11: Plan-Arbiter (AI-7 Layer-Präzedenz) (neu D-31, CC-STORIES-04)
 - Story 1.12: QuestManager-Polling-Infrastruktur (neu D-31, CC-STORIES-09)
 - Story 1.13: Test-Infrastructure (FakeSnapshotProvider, Testable Seams) (neu D-31, CC-STORIES-13)
+- Story 1.14: Test-Runtime-Infrastructure-Refactor (neu D-37 2026-04-25) — fixt Krafs-mscorlib-vs-Microsoft-mscorlib Type-Identity-Mismatch der Production-DLL im xUnit-Runner; ermöglicht BotSafe + QuestManagerPoller + BoundedEventQueue Tests die in 1.13 deferred wurden
 
 ### Dependencies
-Keine (erstes Epic).
+Keine (erstes Epic). Story 1.14 hängt nur von 1.13 (Test-Framework-Setup) + 1.10 + 1.12 (zu testende Module) ab.
 
 ### Launch-critical: yes
 

@@ -13,7 +13,8 @@ namespace RimWorldBot.Data
     {
         // schemaVersion pro-Map: v1 hatte nur analysisSummary; v2 kamen Goal-Tag-Dicts dazu;
         // v3 (Story 1.3 AC 16) fügt excludedCells hinzu. Migrate füllt fehlende Felder mit Defaults.
-        const int CurrentSchemaVersion = 3;
+        // CR Story 1.13 HIGH-2-Fix: internal statt private (siehe BotGameComponent für Details).
+        internal const int CurrentSchemaVersion = 3;
         int schemaVersion = CurrentSchemaVersion;
 
         public MapAnalysisSummary analysisSummary;   // schlank: Top-3-Sites, KEIN Per-Cell (§5)

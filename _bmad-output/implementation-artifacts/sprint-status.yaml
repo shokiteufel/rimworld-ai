@@ -12,7 +12,7 @@ sub_phase: EPIC_1_DEV
 
 current_sprint:
   number: 2
-  goal: "Epic 1 (Mod-Skeleton & Toggle) — 13 Stories 1.1-1.13 durchentwickeln mit CR+VR-Loops"
+  goal: "Epic 1 (Mod-Skeleton & Toggle) — 14 Stories 1.1-1.14 durchentwickeln mit CR+VR-Loops (1.14 hinzugefügt 2026-04-25 via D-37)"
   started: 2026-04-24
 
 previous_sprint:
@@ -50,7 +50,8 @@ development_status:
   1-10-exception-wrapper-pattern: done  # CR APPROVE-WITH-CHANGES (2 HIGH + 2 MED + LOW) → Fixes (Time.realtimeSinceStartup statt GenTicks für Pause-resistente Sliding-Windows, AC 6 Unit-Tests verschoben auf 1.13 als Carry-Over, AI-4-Doku, Caller-Pattern, LogOnceWarning) → R2 APPROVE; retroaktive Migration Story 1.5 GameComponentUpdate auf BotSafe.SafeTick, BotSafe.Clear-Hook in LoadedGame/StartedNewGame. 2026-04-25
   1-11-plan-arbiter: done  # CR APPROVE-WITH-CHANGES (1 HIGH + 2 MED + 2 LOW) → Fixes (Cross-Layer-Override-Log, BuildPlan-Comment, WorkPriority-Perf-Comment, TODO-Marker, csproj-DLL-Liste) → R2 APPROVE; Plan-Records aus §2.3a vorgezogen + System.Collections.Immutable bundled (~545KB). Unit-Tests Carry-Over auf 1.13. 2026-04-25
   1-12-quest-manager-polling: done  # CR APPROVE-WITH-CHANGES (2 HIGH + 3 MED + 5 LOW) → Fixes (PollIntervalTicks 2500→1250 vs StalenessThreshold, defensive null-init in Tick, UnknownQuestDef-Konstante, UnionWith-Idiom, Story-AC-Reformulierung Producer-Scope+Test-Defer, SchemaRegistry v3→v4 Slot-Reorganisation D-36) → R2 APPROVE; Game-Test deferred (Quest-Trigger-Workflow). Unit-Tests Carry-Over auf 1.13. 2026-04-25
-  1-13-test-infrastructure: in-progress  # 2026-04-25: gestartet nach 1.12-Push, Carry-Over aus 1.9 (Schema-Tests) + 1.10 (BotSafe-Tests) + 1.12 (Quest-Poller-Tests)
+  1-13-test-infrastructure: done  # CR APPROVE-WITH-CHANGES (4 HIGH + 5 MED + 4 LOW) → Fixes (Story 1.14 angelegt + sprint+epics+count, InternalsVisibleTo + Drift-Test gegen Component-const, null/empty Edge-Cases, PlanArbiter-Coverage 5→13 + 2 Skip-deferred, csproj parametrisiert + README, Test-Run committed, Spec-Lock-Comments, AC-3 Enforcement-Pfad, ImmutableCollections-Roundtrip via BuildPlan, Sprint-Goal-Update) → R2 APPROVE; xUnit 28 grun + 2 Skip-deferred (Logging-Tests). AC 1/2/4 deferred zu 2.1, BotSafe+QuestPoller-Tests deferred zu 1.14 (D-37). 2026-04-25
+  1-14-test-runtime-infrastructure-refactor: ready-for-dev  # 2026-04-25: neu via D-37, fixt Krafs-mscorlib-vs-Microsoft-mscorlib Type-Identity-Mismatch der Production-DLL im xUnit-Runner
 
   # Epic 2 — Map-Analyzer (MVP, Launch-critical)
   2-1-map-cell-data-basic-scan: ready-for-dev
@@ -215,7 +216,7 @@ last_updated: 2026-04-25
 pass2_completed: 2026-04-24
 pass3_completed: 2026-04-24
 re_review_round_2_completed: 2026-04-24
-story_count: 99
+story_count: 100  # D-37 2026-04-25: +Story 1.14 (Test-Runtime-Infrastructure-Refactor)
 total_findings_addressed:
   round_1_high_cross_cutting: 7  # CC-01 bis CC-07
   round_1_high_individual: 13  # 1.3, 1.5, 2.3, 3.4, 3.7, 4.3, 4.7, 5.3, 5.4, 5.8, 7.9, 7.14, 8.1

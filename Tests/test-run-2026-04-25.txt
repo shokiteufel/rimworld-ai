@@ -1,0 +1,50 @@
+  Alle Projekte sind für die Wiederherstellung auf dem neuesten Stand.
+  RimWorldBot -> D:\SteamLibrary\steamapps\common\RimWorld\Mods\RimWorld Bot\Assemblies\RimWorldBot.dll
+  RimWorldBot.Tests -> D:\SteamLibrary\steamapps\common\RimWorld\Mods\RimWorld Bot\Tests\bin\Debug\net472\RimWorldBot.Tests.dll
+Testlauf für "D:\SteamLibrary\steamapps\common\RimWorld\Mods\RimWorld Bot\Tests\bin\Debug\net472\RimWorldBot.Tests.dll" (.NETFramework,Version=v4.7.2)
+Insgesamt 1 Testdateien stimmten mit dem angegebenen Muster überein.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET Framework 4.8.9325.0)
+[xUnit.net 00:00:00.87]   Discovering: RimWorldBot.Tests
+[xUnit.net 00:00:00.93]   Discovered:  RimWorldBot.Tests
+[xUnit.net 00:00:00.94]   Starting:    RimWorldBot.Tests
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.Theory_Discovery_Works(a: 0, b: 0, sum: 0) [171 ms]
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.Theory_Discovery_Works(a: 1, b: 1, sum: 2) [1 ms]
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.Theory_Discovery_Works(a: 2, b: 3, sum: 5) [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.Story_4_3_Bump_Shifted_To_v4_v5 [176 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.LatestAppliedVersion_UnknownComponent_ReturnsBaselineOne [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.Bumps_NoVersionGapBetweenAppliedAndPlanned [4 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.Bumps_ChainIsContiguous_PerComponent [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.LatestAppliedVersion_BotMap_MatchesComponentConst [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.LatestAppliedVersion_EmptyString_ReturnsBaselineOne [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.Story_1_12_Bump_Is_Applied [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.LatestAppliedVersion_NullComponent_ReturnsBaselineOne [1 ms]
+  Bestanden RimWorldBot.Tests.Data.SchemaRegistryTests.LatestAppliedVersion_BotGame_MatchesComponentConst [1 ms]
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.ImmutableCollections_RoundtripThroughProductionRecord_Works [15 ms]
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.Xunit_Discovery_Works [1 ms]
+  Bestanden RimWorldBot.Tests.Meta.TestFrameworkMetaTest.ImmutableCollections_Available_OnNet472 [701 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_RetreatPoint_HighestLayerWins [943 ms]
+[xUnit.net 00:00:01.96]     RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_CrossLayerOverride_LogsOverride [SKIP]
+[xUnit.net 00:00:01.96]       Defer zu Story 1.14: RecentDecisionsBuffer hat Verse-IExposable-Dep (D-37).
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBillPlan_DifferentWorkbenches_BothPersist [10 ms]
+  Übersprungen RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_CrossLayerOverride_LogsOverride [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_NoProducers_ReturnsEmpty [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBillPlan_SameWorkbenchDifferentRecipes_BothPersist [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_FocusedFireTargets_HigherLayerOverrides [9 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBillPlan_SameKeyHigherLayerWins [5 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_HigherLayerWins [7 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateDraftOrder_AssignedPositions_HigherLayerOverrides [13 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateWorkPriorityPlan_NullPriorities_Skipped [23 ms]
+[xUnit.net 00:00:02.02]     RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBuildPlan_SameLayerConflict_LogsToDecisionLog [SKIP]
+[xUnit.net 00:00:02.02]       Defer zu Story 1.14: RecentDecisionsBuffer hat Verse-IExposable-Dep → TypeLoadException im xUnit (D-37 mscorlib-Mismatch).
+[xUnit.net 00:00:02.03]   Finished:    RimWorldBot.Tests
+  Übersprungen RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBuildPlan_SameLayerConflict_LogsToDecisionLog [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateWorkPriorityPlan_HigherLayerOverridesPriority [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBuildPlan_SameLayerConflict_FirstProducerWins [6 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBuildPlan_SameCellHigherLayerWins [1 ms]
+  Bestanden RimWorldBot.Tests.Decision.PlanArbiterTests.ArbitrateBuildPlan_DifferentCellsBothPersist [1 ms]
+
+Der Testlauf war erfolgreich.
+Gesamtzahl Tests: 30
+     Bestanden: 28
+    Übersprungen: 2
+ Gesamtzeit: 2,6323 Sekunden

@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>RimWorldBot.Tests</RootNamespace>
+    <AssemblyName>RimWorldBot.Tests</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <!-- WICHTIG: NICHT in Assemblies/ ausgeben — RimWorld würde Test-DLL als Mod-Code laden.
+         Default bin/-Output ist hier korrekt. -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Pfad zum RimWorld-Game-Install fuer echte Verse/Unity-Assemblies (siehe <Reference> unten).
+         KEIN Krafs.Rimworld.Ref-PackageReference hier weil das Reference-Assemblies liefert
+         (ReferenceAssembly-Attribute, .NET-Runtime weigert sich die zu laden).
+         CR Story 1.13 MED-1: Property kann ueberschrieben werden via:
+           dotnet test -p:RimWorldManagedDir="C:\Path\To\RimWorld\RimWorldWin64_Data\Managed"
+         oder via Environment-Variable MSBUILD_RIMWORLD_MANAGED_DIR. Default ist Steam-Library
+         auf D:\ — siehe Tests/README.md fuer Cross-Dev-Setup. -->
+    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == '' AND '$(MSBUILD_RIMWORLD_MANAGED_DIR)' != ''">$(MSBUILD_RIMWORLD_MANAGED_DIR)</RimWorldManagedDir>
+    <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManagedDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Source\RimWorldBot.csproj">
+      <Private>true</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!-- Echte RimWorld-Runtime-DLLs aus Game-Install referenzieren + ins Test-bin kopieren.
+       Reference-Items mit Private=true funktionieren hier (im Gegensatz zum frueheren Versuch),
+       weil keine PackageReference dieselbe Assembly bereits beansprucht.
+       Pre-Requisite: RimWorld muss installiert sein unter $(RimWorldManagedDir). Wenn nicht,
+       schlaegt der Build mit Resolve-Fehler fehl — eindeutiges Signal an den Dev.
+       CR Story 1.13 LOW-3: aktuell genutzt nur indirekt fuer Type-Resolve der Production-DLL —
+       SchemaRegistry/PlanArbiter brauchen sie nicht direkt. Spaetere Tests (BotSafe etc., Story 1.14)
+       werden Verse-/Unity-Statics direkt aufrufen. -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -14,7 +14,10 @@ namespace RimWorldBot.Data
     // AI-4: einziger statischer Singleton ist RimWorldBotMod.Instance; BotGameComponent ist per-Game-Instanz.
     public class BotGameComponent : GameComponent
     {
-        const int CurrentSchemaVersion = 4;   // Story 1.12: +lastSeenQuestIds (Schema-Bump v3→v4)
+        // CR Story 1.13 HIGH-2-Fix: internal statt private damit Tests die Drift
+        // CurrentSchemaVersion ↔ SchemaRegistry.LatestAppliedVersion erkennen können
+        // ohne Reflection. InternalsVisibleTo("RimWorldBot.Tests") in AssemblyInfo.cs.
+        internal const int CurrentSchemaVersion = 4;   // Story 1.12: +lastSeenQuestIds (Schema-Bump v3→v4)
         int schemaVersion = CurrentSchemaVersion;
 
         // --- Private Runtime-Felder (F-ARCH-15) ---

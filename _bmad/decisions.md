@@ -15,6 +15,33 @@ Konsequenzen: ...
 
 ---
 
+## D-37: Story 1.13 Scope-Cut — Test-Runtime-Limit + AC-Defer zu 2.1 + neue Story 1.14
+Datum: 2026-04-25
+Status: accepted
+Kontext: Story 1.13 (Test-Infrastructure) sollte FakeSnapshotProvider/TestSnapshotBuilder/MockResolvers liefern + Carry-Over-Tests aus 1.9 (SchemaRegistry), 1.10 (BotSafe), 1.11 (PlanArbiter), 1.12 (QuestManagerPoller). Bei der Implementation sind zwei strukturelle Issues aufgetreten:
+
+1. **Forward-Dependency auf 2.1**: Snapshot-Helpers brauchen `ISnapshotProvider` + `ColonySnapshot`/`PawnSnapshot`/`CellSnapshot`-Records, die in Story 2.1 (Map-Cell-Data-Basic-Scan) definiert werden. Story 1.13 Dev Notes hat "Vorausgesetzt: 2.1" bereits dokumentiert. Implementation in 1.13 ist nicht möglich ohne Type-Definitionen aus 2.1.
+2. **mscorlib-Type-Identity-Mismatch in xUnit-Runner**: Production-DLL wird via `Krafs.Rimworld.Ref`-NuGet-Pkg gegen Mono-style mscorlib (Krafs Stub) kompiliert. xUnit-Test-Runner läuft unter Microsoft .NET Framework 4.7.2 mit Microsoft mscorlib. Identische Types (`Queue<T>`, `Dictionary<T,U>`, `HashSet<T>`) haben in den beiden mscorlib-Assemblies unterschiedliche Type-Identity → Production-DLL-Klassen die diese Types intern nutzen werfen `TypeLoadException` beim Laden im Test-AppDomain. Konkret betroffen: `BoundedEventQueue<T>` (Queue), `BotSafe` (Dictionary/List/HashSet), `QuestManagerPoller` (HashSet/List). Pure-Logic-Module ohne Mono-Type-Use (SchemaRegistry, PlanArbiter mit decisionLog=null) laufen unter xUnit problemlos.
+
+Entscheidung:
+1. **Story 1.13 AC-1, AC-2, AC-4 deferred zu Story 2.1** — Story-File entsprechend aktualisiert. AC-3 (Pflicht-Template für Unit-Test-ACs ab 2.1) bleibt verbindlich.
+2. **Story 1.13 Carry-Over reduziert** auf SchemaRegistry (1.9 ✅) + PlanArbiter (1.11 ✅, vorgezogen). BotSafe + QuestManagerPoller-Tests deferred zur neuen **Story 1.14 Test-Runtime-Infrastructure-Refactor**.
+3. **Neue Story 1.14** in Sprint 2 backlog: Production-DLL-Build-Pipeline so anpassen dass Microsoft net472 mscorlib-Refs verwendet werden, Krafs.Rimworld.Ref nur für Verse/Unity-Stubs. Fix-Optionen (in Reihenfolge der Präferenz):
+   - **Option A**: Production-csproj refactoren — Krafs.Rimworld.Ref entfernen, manuelle `<Reference>` zu `Assembly-CSharp.dll` + `UnityEngine.*.dll` (HintPath via Game-Install-Property). Tradeoff: Build erfordert RimWorld-Install (akzeptabel für Dev-Maschine; CI braucht RimWorld-Headless-Setup).
+   - **Option B**: Dual-Target Production csproj — Standard-Build mit Krafs (Distribution-DLL), Test-Build mit Game-Install-Refs. Tradeoff: doppelte Build-Pipeline, mehr CI-Komplexität.
+   - **Option C**: Mono-Test-Runner statt Microsoft xUnit. Tradeoff: ungewöhnliches Setup, weniger IDE-Integration.
+4. **Tests-Pipeline jetzt deliverable**: 19/19 grün (SchemaRegistry 7, PlanArbiter 7, Meta 3, ImmutableCollections-Smoke 2 — Theory mit InlineData zählt mehrfach).
+5. **Test-Assembly-Layout**: `Tests/RimWorldBot.Tests.csproj` separat von `Source/RimWorldBot.csproj`, eigene bin/-Output (nicht in `Assemblies/` weil RimWorld die Test-DLL sonst als Mod laden würde). Dependencies: xUnit 2.9.0, Microsoft.NET.Test.Sdk 17.10, ProjectReference Production-DLL, manuelle Reference auf 3 Game-Install-DLLs (Assembly-CSharp, UnityEngine, UnityEngine.CoreModule) mit Private=true.
+
+Begründung: Strict BMAD verlangt "alle ACs erfüllen". Forward-Dependency-AC kann nicht in 1.13 erfüllt werden — Defer mit Decision-Log ist legitim. mscorlib-Mismatch ist reales Build-Pipeline-Problem das eigene Story (1.14) verdient — pragmatisch wäre "BotSafe nicht testen" aber Guardian Rule 4 verbietet "akzeptiert/known issue" ohne expliziten Fix-Plan. Story 1.14 IST der Fix-Plan.
+
+Konsequenzen:
+- Sprint 2 wird um Story 1.14 erweitert (Story-Count Epic 1: 13 → 14).
+- Stories 2.1, 3.x, 4.x etc. die Unit-Test-ACs haben können diese erst nach 1.14-Completion erfüllen — bis dahin Tests deferred-Pattern.
+- Improvement-Agent-Escalation gelogged via guardian-log: nightly run kann Mono-mscorlib-Fix-Patterns vorschlagen.
+
+---
+
 ## D-36: Story 1.12 AC-Anpassungen (Test-Defer + Producer-Scope) und Schema-Slot-Reservierung
 Datum: 2026-04-24
 Status: accepted
